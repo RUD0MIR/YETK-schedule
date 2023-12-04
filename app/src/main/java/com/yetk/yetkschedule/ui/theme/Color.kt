@@ -11,6 +11,7 @@ val Gray90 = Color(0xFFF5F5F5)
 val DarkRed = Color(0xFFB3261E)
 val Red = Color(0xFFDC362E)
 val White = Color(0xFFFFFFFF)
+val Blue = Color(0xFF003DC8)
 
 val Gray50Disabled = Color(0xFFB8B8BB)
 val Gray70Disabled = Color(0xFFD4D4D4)

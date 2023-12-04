@@ -28,16 +28,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.lessonsschedulemanagerv2.R
+import com.yetk.yetkschedule.R
 import com.example.lessonsschedulemanagerv2.data.local.model.Homework
 import com.yetk.yetkschedule.ui.AutocompleteTextField
 import com.yetk.yetkschedule.other.filterDropdownMenu
 import com.yetk.yetkschedule.ui.ButtonSection
-import com.example.lessonsschedulemanagerv2.ui.theme.Gray50
-import com.example.lessonsschedulemanagerv2.ui.theme.Gray70
-import com.example.lessonsschedulemanagerv2.ui.theme.Gray80
-import com.example.lessonsschedulemanagerv2.ui.theme.Gray90
-import com.example.lessonsschedulemanagerv2.ui.theme.Green
+import com.yetk.yetkschedule.ui.theme.Gray50
+import com.yetk.yetkschedule.ui.theme.Gray70
+import com.yetk.yetkschedule.ui.theme.Gray80
+import com.yetk.yetkschedule.ui.theme.Gray90
+import com.yetk.yetkschedule.ui.theme.Green
 
 private const val TAG = "HomeworkDetailScreen"
 

@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">YetkSchedule</string>
+    <array name="week_days">
+        <item>MON</item>
+        <item>TUE</item>
+        <item>WED</item>
+        <item>THU</item>
+        <item>FRI</item>
+        <item>SAT</item>
+    </array>
 </resources>

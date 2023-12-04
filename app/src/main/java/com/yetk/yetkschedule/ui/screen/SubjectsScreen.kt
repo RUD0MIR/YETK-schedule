@@ -1,4 +1,4 @@
-package com.example.lessonsschedulemanagerv2.ui.screen
+package com.yetk.yetkschedule.ui.screen
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarDuration
@@ -9,7 +9,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.example.lessonsschedulemanagerv2.data.local.model.Subject
 import com.yetk.yetkschedule.ui.TextFieldListItemWithRevealSwipe
-import com.example.lessonsschedulemanagerv2.ui.ListItemsScreen
 import kotlinx.coroutines.launch
 
 private val subjectsList = mutableListOf(
@@ -26,36 +25,36 @@ fun SubjectsScreen(bottomBarPadding: PaddingValues) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    ListItemsScreen(
-        bottomBarPadding = bottomBarPadding,
-        snackbarHostState = snackbarHostState,
-        screenTitle = "Subjects",
-        items = subjectsList,
-        tempListItemPlaceholder = "New subject"
-    ) { subject ->
-        TextFieldListItemWithRevealSwipe(
-            text = subject.name,
-            onBackgroundEndClick = {
-                //TODO hide item
-                //TODO make slide action close if other slide actions is opened
-                scope.launch {
-                    val result = snackbarHostState
-                        .showSnackbar(
-                            message = "Subject removed.",
-                            actionLabel = "Undo",
-                            duration = SnackbarDuration.Short
-                        )
-                    when (result) {
-                        SnackbarResult.ActionPerformed -> {
-                            //TODO show item
-                        }
-
-                        SnackbarResult.Dismissed -> {
-                            //TODO delete item
-                        }
-                    }
-                }
-            }
-        )
-    }
+//    ListItemsScreen(
+//        bottomBarPadding = bottomBarPadding,
+//        snackbarHostState = snackbarHostState,
+//        screenTitle = "Subjects",
+//        items = subjectsList,
+//        tempListItemPlaceholder = "New subject"
+//    ) { subject ->
+//        TextFieldListItemWithRevealSwipe(
+//            text = subject.name,
+//            onBackgroundEndClick = {
+//                //TODO hide item
+//                //TODO make slide action close if other slide actions is opened
+//                scope.launch {
+//                    val result = snackbarHostState
+//                        .showSnackbar(
+//                            message = "Subject removed.",
+//                            actionLabel = "Undo",
+//                            duration = SnackbarDuration.Short
+//                        )
+//                    when (result) {
+//                        SnackbarResult.ActionPerformed -> {
+//                            //TODO show item
+//                        }
+//
+//                        SnackbarResult.Dismissed -> {
+//                            //TODO delete item
+//                        }
+//                    }
+//                }
+//            }
+//        )
+//    }
 }
