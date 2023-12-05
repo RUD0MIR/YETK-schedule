@@ -9,14 +9,6 @@ fun List<String>.filterDropdownMenu(value: TextFieldValue): List<String> {
     }.take(3)
 }
 
-fun WeekState.name() : String {
-    return when(this) {
-        WeekState.EVERY_WEEK -> "Every week"
-        WeekState.UPPER_WEEK -> "Upper week"
-        WeekState.LOWER_WEEK -> "Lower week"
-    }
-}
-
 fun Duration.parseNhNmin() : String {
     return this.toComponents { hours, minutes, _, _ ->
         var time = ""

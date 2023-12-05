@@ -1,6 +1,7 @@
-package com.example.lessonsschedulemanagerv2.data.local.model
+package com.yetk.yetkschedule.data.local.model
 
-import com.yetk.yetkschedule.other.WeekState
+import com.yetk.yetkschedule.other.LessonWeekState
+
 
 data class Lesson(
     val id: Int,
@@ -10,7 +11,6 @@ data class Lesson(
     val startTime: String,//replace with LessonTime
     val endTime: String,//
     val dayOfWeek: Int,
-    val weekState: WeekState,
-    val hasHomework: Boolean,
+    val weekState: LessonWeekState,
     val isDisabled: Boolean
     )

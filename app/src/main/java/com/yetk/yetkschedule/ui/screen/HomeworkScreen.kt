@@ -37,7 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.yetk.yetkschedule.R
-import com.example.lessonsschedulemanagerv2.data.local.model.Homework
+import com.yetk.yetkschedule.data.local.model.Homework
 import com.yetk.yetkschedule.other.SwipeableSnackbarHost
 import com.example.lessonsschedulemanagerv2.ui.dragdrop.DragDropList
 import com.example.lessonsschedulemanagerv2.ui.dragdrop.move

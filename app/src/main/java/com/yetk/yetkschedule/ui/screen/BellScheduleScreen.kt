@@ -40,7 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yetk.yetkschedule.R
-import com.example.lessonsschedulemanagerv2.data.local.model.LessonTime
+import com.yetk.yetkschedule.data.local.model.LessonTime
 import com.yetk.yetkschedule.other.SwipeableSnackbarHost
 import com.yetk.yetkschedule.other.parseNhNmin
 import com.yetk.yetkschedule.ui.TimePickerDialog

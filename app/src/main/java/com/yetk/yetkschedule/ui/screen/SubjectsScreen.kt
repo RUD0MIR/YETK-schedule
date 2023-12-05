@@ -1,15 +1,11 @@
 package com.yetk.yetkschedule.ui.screen
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.example.lessonsschedulemanagerv2.data.local.model.Subject
-import com.yetk.yetkschedule.ui.TextFieldListItemWithRevealSwipe
-import kotlinx.coroutines.launch
+import com.yetk.yetkschedule.data.local.model.Subject
 
 private val subjectsList = mutableListOf(
     Subject(id = 0, "Subject 1"),
