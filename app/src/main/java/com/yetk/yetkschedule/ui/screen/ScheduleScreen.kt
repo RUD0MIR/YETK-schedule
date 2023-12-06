@@ -1,8 +1,8 @@
 package com.yetk.yetkschedule.ui.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,19 +15,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -47,29 +43,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yetk.yetkschedule.R
-import com.yetk.yetkschedule.data.local.model.Lesson
-import com.yetk.yetkschedule.other.NoRippleInteractionSource
-import com.yetk.yetkschedule.other.WeekState
-import com.example.lessonsschedulemanagerv2.ui.dragdrop.DragDropList
-import com.example.lessonsschedulemanagerv2.ui.dragdrop.move
-import com.yetk.yetkschedule.ui.theme.Gray50
-import com.yetk.yetkschedule.ui.theme.Gray70
-import com.yetk.yetkschedule.ui.theme.Gray90
-import com.yetk.yetkschedule.ui.theme.Green
-import com.yetk.yetkschedule.ui.theme.Red
-import com.yetk.yetkschedule.ui.theme.White
-import com.yetk.yetkschedule.ui.theme.WhiteDisabled
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.yetk.yetkschedule.R
 import com.yetk.yetkschedule.data.local.FakeData
+import com.yetk.yetkschedule.data.local.model.Lesson
 import com.yetk.yetkschedule.other.LessonWeekState
+import com.yetk.yetkschedule.other.NoRippleInteractionSource
+import com.yetk.yetkschedule.other.WeekState
 import com.yetk.yetkschedule.other.name
 import com.yetk.yetkschedule.ui.theme.Blue
+import com.yetk.yetkschedule.ui.theme.Gray50
+import com.yetk.yetkschedule.ui.theme.Gray70
+import com.yetk.yetkschedule.ui.theme.Gray80
+import com.yetk.yetkschedule.ui.theme.Gray90
 import com.yetk.yetkschedule.ui.theme.Inter
-import de.charlex.compose.RevealDirection
-import de.charlex.compose.RevealSwipe
+import com.yetk.yetkschedule.ui.theme.White
+import com.yetk.yetkschedule.ui.theme.WhiteDisabled
 import kotlinx.coroutines.launch
 
 
@@ -167,7 +158,7 @@ fun ScheduleScreen(
                 fontFamily = Inter,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = if(previewWeekState == actualWeekState) Blue else Gray70
+                color = if (previewWeekState == actualWeekState) Blue else Gray70
             )
             Divider(
                 modifier = Modifier
@@ -178,19 +169,37 @@ fun ScheduleScreen(
             HorizontalWeekPager() { currentPage ->
                 val currentLessons = fakeSchedule[currentPage]
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    items(count = currentLessons.size) { i ->
-                        Column() {
-                            LessonListItem(
-                                currentLessons[i],
-                            )
-                            Divider(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp), thickness = 1.dp, color = Gray90
-                            )
+                if (currentLessons.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            modifier = Modifier.width(250.dp),
+                            textAlign = TextAlign.Center,
+                            text = "На сегодня занятий не запланированно",
+                            fontFamily = Inter,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 20.sp,
+                            color = Gray80
+                        )
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        items(count = currentLessons.size) { i ->
+                            Column() {
+                                LessonListItem(
+                                    currentLessons[i],
+                                )
+                                Divider(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp), thickness = 1.dp, color = Gray90
+                                )
+                            }
                         }
                     }
                 }

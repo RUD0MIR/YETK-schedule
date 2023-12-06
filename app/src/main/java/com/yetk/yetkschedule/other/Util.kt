@@ -12,9 +12,9 @@ fun List<String>.filterDropdownMenu(value: TextFieldValue): List<String> {
 fun Duration.parseNhNmin() : String {
     return this.toComponents { hours, minutes, _, _ ->
         var time = ""
-        if(hours > 0L) time += "$hours h"
-        if(minutes > 0L) time += "$minutes min"
-        else time = "0"
+        if(hours > 0L) time += "$hours ч "
+        if(minutes > 0L) time += "$minutes мин "
+        else time = "0 "
 
         time
     }
