@@ -45,9 +45,12 @@ private val subjectsList = mutableListOf(
 )
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubjectsScreen(bottomBarPadding: PaddingValues) {
+fun SubjectsScreen(
+    bottomBarPadding: PaddingValues
+) {
     Scaffold(
         modifier = Modifier.padding(bottomBarPadding),
         topBar = {
@@ -91,7 +94,7 @@ fun SubjectListItem(
         mutableStateOf(false)
     }
 
-    val modifier = if (expanded) Modifier.height(72.dp) else Modifier
+    val modifier = if (expanded) Modifier else  Modifier.height(52.dp)
 
     Column(
         modifier = Modifier
@@ -99,15 +102,15 @@ fun SubjectListItem(
         verticalArrangement = Arrangement.Bottom
     ) {
         Row(
-            modifier = modifier.fillMaxSize().padding(vertical = 8.dp),
+            modifier = modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Top
         ) {
             Column(
                 modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.Center
             ) {
                 Text(
+                    modifier = Modifier.padding(top = 16.dp),
                     text = subject.name,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Gray50
@@ -125,10 +128,14 @@ fun SubjectListItem(
 
             }
 
-            IconButton(onClick = { expanded = !expanded }) {
+            IconButton(
+                modifier = Modifier.padding(top = 4.dp),
+                onClick = { expanded = !expanded }
+            ) {
                 Icon(
                     imageVector = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                    contentDescription = if (expanded) "Закрыть" else "Раскрыть"
+                    contentDescription = if (expanded) "Закрыть" else "Раскрыть",
+                    tint = Gray50
                 )
             }
         }

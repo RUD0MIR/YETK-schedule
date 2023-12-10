@@ -30,12 +30,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.lessonsschedulemanagerv2.ui.screen.HomeworkDetailScreen
 import com.yetk.yetkschedule.other.BottomNavigationItem
 import com.yetk.yetkschedule.other.NoRippleInteractionSource
 import com.yetk.yetkschedule.other.Screen
 import com.yetk.yetkschedule.other.shadow
 import com.yetk.yetkschedule.ui.screen.BellScheduleScreen
+import com.yetk.yetkschedule.ui.screen.HomeworkDetailScreen
 import com.yetk.yetkschedule.ui.screen.HomeworkScreen
 import com.yetk.yetkschedule.ui.screen.ScheduleScreen
 import com.yetk.yetkschedule.ui.screen.SubjectsScreen
@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            YetkScheduleTheme {
+            YetkScheduleTheme(dynamicColor = false) {
                 var showBottomBar by remember {
                     mutableStateOf(true)
                 }
@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.secondary
                 ) {
                     Scaffold(
                         bottomBar = {
@@ -173,7 +173,9 @@ class MainActivity : ComponentActivity() {
                                 BellScheduleScreen(PaddingValues(bottom = 60.dp))
                             }
                             composable(route = Screen.SubjectsScreen.route) {
-                                SubjectsScreen(PaddingValues(bottom = 60.dp))
+                                SubjectsScreen(
+                                    PaddingValues(bottom = 60.dp)
+                                )
                             }
                         }
                         unusedPadding

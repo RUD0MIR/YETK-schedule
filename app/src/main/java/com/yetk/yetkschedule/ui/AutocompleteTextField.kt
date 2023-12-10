@@ -26,7 +26,6 @@ import androidx.compose.ui.window.PopupProperties
 import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray80
 import com.yetk.yetkschedule.ui.theme.Gray90
-import com.yetk.yetkschedule.ui.theme.Green
 import com.yetk.yetkschedule.ui.theme.Inter
 
 
@@ -76,9 +75,9 @@ fun AutocompleteTextField(
             ),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Gray90,
-                cursorColor = Green,
-                focusedIndicatorColor = Green,
-                focusedLabelColor = Green,
+                cursorColor = MaterialTheme.colorScheme.secondary,
+                focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
+                focusedLabelColor = MaterialTheme.colorScheme.secondary,
                 unfocusedIndicatorColor = Gray80
             )
         )

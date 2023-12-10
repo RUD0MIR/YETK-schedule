@@ -1,6 +1,5 @@
-package com.example.lessonsschedulemanagerv2.ui.screen
+package com.yetk.yetkschedule.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,14 +29,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.yetk.yetkschedule.R
 import com.yetk.yetkschedule.data.local.model.Homework
-import com.yetk.yetkschedule.ui.AutocompleteTextField
 import com.yetk.yetkschedule.other.filterDropdownMenu
+import com.yetk.yetkschedule.ui.AutocompleteTextField
 import com.yetk.yetkschedule.ui.ButtonSection
 import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray70
 import com.yetk.yetkschedule.ui.theme.Gray80
 import com.yetk.yetkschedule.ui.theme.Gray90
-import com.yetk.yetkschedule.ui.theme.Green
 
 private const val TAG = "HomeworkDetailScreen"
 
@@ -81,7 +79,6 @@ fun HomeworkDetailScreen(
                 navigationIcon = {
                     IconButton(onClick = {
                         onNavigateUp()
-                        Log.d(TAG, "Up on homeworkDetail")
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_arrow_back),
@@ -98,7 +95,7 @@ fun HomeworkDetailScreen(
                                 onCheck()
                             },
                             colors = CheckboxDefaults.colors(
-                                checkedColor = Green,
+                                checkedColor = MaterialTheme.colorScheme.secondary,
                             ),
                         )
 
@@ -141,7 +138,7 @@ fun HomeworkDetailScreen(
                     onDismissRequest = { subjectMenuExpanded = false },
                     dropDownExpanded = subjectMenuExpanded,
                     list = subjectsOptions,
-                    label = "Subject"
+                    label = "Предмет"
                 )
 
                 OutlinedTextField(
@@ -153,7 +150,7 @@ fun HomeworkDetailScreen(
                     onValueChange = { homeworkTfValue = it },
                     placeholder = {
                         Text(
-                            text = "Homewrok",
+                            text = "Домашнее задание",
                             style = MaterialTheme.typography.bodyMedium,
                             color = Gray70
                         )
@@ -161,9 +158,9 @@ fun HomeworkDetailScreen(
                     textStyle = bodyMedium,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         containerColor = Gray90,
-                        cursorColor = Green,
-                        focusedBorderColor = Green,
-                        focusedLabelColor = Green,
+                        cursorColor = MaterialTheme.colorScheme.secondary,
+                        focusedBorderColor = MaterialTheme.colorScheme.secondary,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
                         unfocusedBorderColor = Gray80
                     ),
                 )
@@ -184,9 +181,10 @@ fun HomeworkDetailScreen(
 
                 ButtonSection(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    positiveButtonText = if (homework != null) "Save" else "Add",
-                    negativeButtonText = "Cancel",
+                        .fillMaxWidth()
+                        .padding(end = 16.dp),
+                    positiveButtonText = if (homework != null) "Сохранить" else "Добавить",
+                    negativeButtonText = "Отмена",
                     onPositiveButtonClick = {
                         //TODO  Add homework to db
                         onNavigateUp()

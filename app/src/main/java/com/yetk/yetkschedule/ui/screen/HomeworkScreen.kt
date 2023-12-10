@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -36,14 +36,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.lessonsschedulemanagerv2.ui.dragdrop.DragDropList
+import com.example.lessonsschedulemanagerv2.ui.dragdrop.move
 import com.yetk.yetkschedule.R
 import com.yetk.yetkschedule.data.local.model.Homework
 import com.yetk.yetkschedule.other.SwipeableSnackbarHost
-import com.example.lessonsschedulemanagerv2.ui.dragdrop.DragDropList
-import com.example.lessonsschedulemanagerv2.ui.dragdrop.move
 import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray90
-import com.yetk.yetkschedule.ui.theme.Green
 import com.yetk.yetkschedule.ui.theme.Red
 import com.yetk.yetkschedule.ui.theme.White
 import de.charlex.compose.RevealDirection
@@ -77,7 +76,7 @@ fun HomeworkScreen(bottomBarPadding: PaddingValues, onNavigateToDetailScreen: (i
                     modifier = Modifier.padding(end = 16.dp),
                     title = {
                         Text(
-                            text = "Homework",
+                            text = "Домашние задания",
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.headlineLarge
                         )
@@ -124,8 +123,8 @@ fun HomeworkScreen(bottomBarPadding: PaddingValues, onNavigateToDetailScreen: (i
                         scope.launch {
                             val result = snackbarHostState
                                 .showSnackbar(
-                                    message = "Done homework removed.",
-                                    actionLabel = "Undo",
+                                    message = "Сделанное дз скрыто.",
+                                    actionLabel = "Отмена",
                                     duration = SnackbarDuration.Short
                                 )
                             when (result) {
@@ -148,8 +147,8 @@ fun HomeworkScreen(bottomBarPadding: PaddingValues, onNavigateToDetailScreen: (i
                         scope.launch {
                             val result = snackbarHostState
                                 .showSnackbar(
-                                    message = "Homework removed.",
-                                    actionLabel = "Undo",
+                                    message = "Дз удалено.",
+                                    actionLabel = "Отмена",
                                     duration = SnackbarDuration.Short
                                 )
                             when (result) {
@@ -238,7 +237,7 @@ fun HomeworkListItem(
                         }
                     },
                     colors = CheckboxDefaults.colors(
-                        checkedColor = Green,
+                        checkedColor = MaterialTheme.colorScheme.secondary,
                     ),
                 )
             }

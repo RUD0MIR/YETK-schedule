@@ -8,15 +8,16 @@ import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.IconButton
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -24,8 +25,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.yetk.yetkschedule.ui.theme.Gray80
-import com.yetk.yetkschedule.ui.theme.Green
+import com.yetk.yetkschedule.ui.theme.Gray60
+import com.yetk.yetkschedule.ui.theme.Gray90
 
 enum class SwipeDirection {
     Left,
@@ -71,14 +72,15 @@ fun SwipeableSnackbarHost(hostState: SnackbarHostState) {
                     modifier = Modifier
                         .padding(10.dp)
                         .offset(x = offset),
+                    containerColor = Gray90,
                     contentColor = Color.Black,
                     action = {
                         IconButton(onClick = { snackbarData.performAction() }) {
-                            Text(text = snackbarData.visuals.actionLabel.toString(), color = Green)
+                            Text(text = snackbarData.visuals.actionLabel.toString(), color = MaterialTheme.colorScheme.secondary)
                         }
                     }
                 ) {
-                    Text(text = snackbarData.visuals.message, color = Gray80)
+                    Text(text = snackbarData.visuals.message, color = Gray60)
                 }
         },
         modifier = Modifier

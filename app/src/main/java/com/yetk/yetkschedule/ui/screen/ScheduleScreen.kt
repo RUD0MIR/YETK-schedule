@@ -53,7 +53,6 @@ import com.yetk.yetkschedule.other.LessonWeekState
 import com.yetk.yetkschedule.other.NoRippleInteractionSource
 import com.yetk.yetkschedule.other.WeekState
 import com.yetk.yetkschedule.other.name
-import com.yetk.yetkschedule.ui.theme.Blue
 import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray70
 import com.yetk.yetkschedule.ui.theme.Gray80
@@ -158,7 +157,7 @@ fun ScheduleScreen(
                 fontFamily = Inter,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = if (previewWeekState == actualWeekState) Blue else Gray70
+                color = if (previewWeekState == actualWeekState) MaterialTheme.colorScheme.secondary else Gray70
             )
             Divider(
                 modifier = Modifier
@@ -236,7 +235,7 @@ fun HorizontalWeekPager(pageContent: @Composable (currentPage: Int) -> Unit) {
             ) {
                 Text(
                     text = tab,
-                    color = if (isSelected) Blue else Gray70,
+                    color = if (isSelected) MaterialTheme.colorScheme.secondary else Gray70,
                     style = MaterialTheme.typography.labelLarge
                 )
             }

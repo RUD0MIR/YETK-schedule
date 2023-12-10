@@ -54,7 +54,7 @@ fun BellScheduleScreen(bottomBarPadding: PaddingValues) {
                     modifier = Modifier.padding(end = 16.dp),
                     title = {
                         Text(
-                            text = "Bell schedule",
+                            text = "Расписание звонков",
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.headlineLarge
                         )
@@ -78,7 +78,7 @@ fun BellScheduleScreen(bottomBarPadding: PaddingValues) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Lesson duration: ",
+                            text = "Длительность пар: ",
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Text(

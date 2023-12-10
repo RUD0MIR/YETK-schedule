@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yetk.yetkschedule.ui.theme.Green
+import com.yetk.yetkschedule.ui.theme.Blue
 import com.yetk.yetkschedule.ui.theme.White
 
 @Composable
@@ -32,7 +32,7 @@ fun ButtonSection(
                 onPositiveButtonClick()
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Green
+                containerColor = MaterialTheme.colorScheme.secondary
             )
         ) {
             Text(
@@ -50,7 +50,7 @@ fun ButtonSection(
             Text(
                 text = negativeButtonText,
                 style = MaterialTheme.typography.labelLarge,
-                color = Green
+                color = MaterialTheme.colorScheme.secondary
             )
         }
     }
