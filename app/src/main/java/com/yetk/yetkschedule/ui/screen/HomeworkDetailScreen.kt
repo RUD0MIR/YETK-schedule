@@ -27,8 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.yetk.yetkschedule.HomeworkEvent
+import com.yetk.yetkschedule.HomeworkState
 import com.yetk.yetkschedule.R
-import com.yetk.yetkschedule.data.local.model.Homework
 import com.yetk.yetkschedule.other.filterDropdownMenu
 import com.yetk.yetkschedule.ui.AutocompleteTextField
 import com.yetk.yetkschedule.ui.ButtonSection
@@ -42,23 +43,19 @@ private const val TAG = "HomeworkDetailScreen"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeworkDetailScreen(
-    homeworkId: Int?,
+    homeworkId: Int,
+    state: HomeworkState,
+    onEvent: (HomeworkEvent) -> Unit,
     isChecked: Boolean,
     onCheck: () -> Unit,
     onNavigateUp: () -> Unit
 ) {
-    //TODO get homework by id from db
-    val homework = if (homeworkId != null) Homework(
-        id = homeworkId,
-        content = "some home work ex 1 page 6",
-        "Science"
-    ) else null
+    val homework = if (homeworkId != -1) {
+        state.homeworks[homeworkId]
+    } else null
 
     val bodyMedium = MaterialTheme.typography.bodyMedium
 
-    var subjectTfValue by remember {
-        mutableStateOf(TextFieldValue(text = homework?.subjectName ?: ""))
-    }
     var subjectsOptions by remember {
         mutableStateOf(listOf<String>())
     }
@@ -66,8 +63,8 @@ fun HomeworkDetailScreen(
         mutableStateOf(false)
     }
 
-    var homeworkTfValue by remember {
-        mutableStateOf(homework?.content ?: "")
+    val subjectNameTfValue by remember {
+        mutableStateOf(TextFieldValue(text = state.content))
     }
 
     val all =
@@ -100,7 +97,7 @@ fun HomeworkDetailScreen(
                         )
 
                         IconButton(onClick = {
-                            //TODO delete lesson item from db
+                            onEvent(HomeworkEvent.DeleteHomework(homework))
                         }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_delete),
@@ -128,15 +125,16 @@ fun HomeworkDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     iconId = R.drawable.ic_subject,
-                    value = subjectTfValue,
-                    setValue = { value ->
+                    value = subjectNameTfValue,
+                    setValue = {
                         subjectMenuExpanded = true
-                        subjectTfValue = value
+                        onEvent(HomeworkEvent.UpdateHomework(subjectName = it.text, content = state.content))
                         subjectsOptions =
-                            all.filterDropdownMenu(value)
+                            all.filterDropdownMenu(it)
                     },
                     onDismissRequest = { subjectMenuExpanded = false },
                     dropDownExpanded = subjectMenuExpanded,
+                    isError = state.isSubjectNameTextFieldError,
                     list = subjectsOptions,
                     label = "Предмет"
                 )
@@ -146,8 +144,8 @@ fun HomeworkDetailScreen(
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
                         .padding(bottom = 116.dp),
-                    value = homeworkTfValue,
-                    onValueChange = { homeworkTfValue = it },
+                    value = state.content,
+                    onValueChange = { onEvent(HomeworkEvent.UpdateHomework(subjectName = state.subjectName, content = it)) },
                     placeholder = {
                         Text(
                             text = "Домашнее задание",
@@ -155,6 +153,7 @@ fun HomeworkDetailScreen(
                             color = Gray70
                         )
                     },
+                    isError = state.isContentTextFieldError,
                     textStyle = bodyMedium,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         containerColor = Gray90,
@@ -186,7 +185,7 @@ fun HomeworkDetailScreen(
                     positiveButtonText = if (homework != null) "Сохранить" else "Добавить",
                     negativeButtonText = "Отмена",
                     onPositiveButtonClick = {
-                        //TODO  Add homework to db
+                        onEvent(HomeworkEvent.SaveHomework)
                         onNavigateUp()
                     },
                     onNegativeButtonClick = {

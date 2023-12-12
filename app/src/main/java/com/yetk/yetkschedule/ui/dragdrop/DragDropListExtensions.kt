@@ -1,4 +1,4 @@
-package com.example.lessonsschedulemanagerv2.ui.dragdrop
+package com.yetk.yetkschedule.ui.dragdrop
 
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState

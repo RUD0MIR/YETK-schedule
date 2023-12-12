@@ -5,6 +5,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.geometry.Offset
+import com.yetk.yetkschedule.ui.dragdrop.getVisibleItemInfoFor
+import com.yetk.yetkschedule.ui.dragdrop.offsetEnd
 import kotlinx.coroutines.Job
 
 @Composable

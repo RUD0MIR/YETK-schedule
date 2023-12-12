@@ -32,12 +32,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.lessonsschedulemanagerv2.ui.dragdrop.DragDropList
-import com.example.lessonsschedulemanagerv2.ui.dragdrop.move
+import com.yetk.yetkschedule.HomeworkEvent
+import com.yetk.yetkschedule.HomeworkState
 import com.yetk.yetkschedule.R
 import com.yetk.yetkschedule.data.local.model.Homework
 import com.yetk.yetkschedule.other.SwipeableSnackbarHost
@@ -47,7 +47,6 @@ import com.yetk.yetkschedule.ui.theme.Red
 import com.yetk.yetkschedule.ui.theme.White
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
-import de.charlex.compose.rememberRevealState
 import kotlinx.coroutines.launch
 
 val homeworkList = mutableListOf(
@@ -64,7 +63,12 @@ val homeworkList = mutableListOf(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-fun HomeworkScreen(bottomBarPadding: PaddingValues, onNavigateToDetailScreen: (id: Int) -> Unit) {//onNavigateToDetailScreen
+fun HomeworkScreen(
+    state: HomeworkState,
+    onEvent: (HomeworkEvent) -> Unit,
+    bottomBarPadding: PaddingValues,
+    onNavigateToDetailScreen: (id: Int?) -> Unit
+) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -111,63 +115,71 @@ fun HomeworkScreen(bottomBarPadding: PaddingValues, onNavigateToDetailScreen: (i
             modifier = Modifier
                 .fillMaxSize()
                 .padding(topBarPadding),
-            dataItems = homeworkList,
-            onMove = { fromIndex, toIndex -> homeworkList.move(fromIndex, toIndex) }
-        ) { dataItem ->
-            val revealState = rememberRevealState()
-            Column() {
-                HomeworkListItem(
-                    dataItem,
-                    onCheck = {
-                        //TODO hide homework
-                        scope.launch {
-                            val result = snackbarHostState
-                                .showSnackbar(
-                                    message = "Сделанное дз скрыто.",
-                                    actionLabel = "Отмена",
-                                    duration = SnackbarDuration.Short
-                                )
-                            when (result) {
-                                SnackbarResult.ActionPerformed -> {
-                                    //TODO show homework
-                                }
+            dataItems = state.homeworks,
+            onMove = { fromIndex, toIndex ->
+                //TODO on move mutableList.move(fromIndex, toIndex)
+            }
+        ) { homework ->
+            var isItemVisible by remember {
+                mutableStateOf(true)
+            }
 
-                                SnackbarResult.Dismissed -> {
-                                    //TODO delete homework
+            if(isItemVisible) {
+                Column() {
+                    HomeworkListItem(
+                        homework,
+                        onCheck = {
+                            isItemVisible = false
+
+                            scope.launch {
+                                val result = snackbarHostState
+                                    .showSnackbar(
+                                        message = "Сделанное дз скрыто.",
+                                        actionLabel = "Отмена",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                when (result) {
+                                    SnackbarResult.ActionPerformed -> {
+                                        isItemVisible = true
+                                    }
+
+                                    SnackbarResult.Dismissed -> {
+                                        onEvent(HomeworkEvent.DeleteHomework(homework = homework))
+                                    }
                                 }
                             }
-                        }
-                    },
-                    onItemClick = { homeworkId ->
-                        onNavigateToDetailScreen(homeworkId)
-                    },
-                    onBackgroundEndClick = { id ->
-                        //TODO hide homework
-                        //TODO make slide action close if other slide action is opened
-                        scope.launch {
-                            val result = snackbarHostState
-                                .showSnackbar(
-                                    message = "Дз удалено.",
-                                    actionLabel = "Отмена",
-                                    duration = SnackbarDuration.Short
-                                )
-                            when (result) {
-                                SnackbarResult.ActionPerformed -> {
-                                    //TODO show lesson
-                                }
+                        },
+                        onItemClick = { homeworkId ->
+                            onNavigateToDetailScreen(homeworkId)
+                        },
+                        onBackgroundEndClick = { id ->
+                            isItemVisible = false
+                            //TODO make slide action close if other slide action is opened
+                            scope.launch {
+                                val result = snackbarHostState
+                                    .showSnackbar(
+                                        message = "Дз удалено.",
+                                        actionLabel = "Отмена",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                when (result) {
+                                    SnackbarResult.ActionPerformed -> {
+                                        isItemVisible = true
+                                    }
 
-                                SnackbarResult.Dismissed -> {
-                                    //TODO delete lesson
+                                    SnackbarResult.Dismissed -> {
+                                        onEvent(HomeworkEvent.DeleteHomework(homework = homework))
+                                    }
                                 }
                             }
-                        }
-                    },
-                )
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp), thickness = 1.dp, color = Gray90
-                )
+                        },
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp), thickness = 1.dp, color = Gray90
+                    )
+                }
             }
         }
     }
@@ -184,8 +196,6 @@ fun HomeworkListItem(
     var isChecked by remember {
         mutableStateOf(false)
     }
-
-    val focusManger = LocalFocusManager.current
 
     RevealSwipe(
         modifier = Modifier
@@ -224,8 +234,14 @@ fun HomeworkListItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(modifier = Modifier.fillMaxWidth(0.8f)) {
-                    Text(text = homework.subjectName, style = MaterialTheme.typography.bodyLarge)
-                    Text(text = homework.content, style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = homework.subjectName.toString(),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Text(
+                        text = homework.content.toString(),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
 
                 Checkbox(

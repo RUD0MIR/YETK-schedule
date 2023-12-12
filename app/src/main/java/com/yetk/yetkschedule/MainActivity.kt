@@ -3,6 +3,7 @@ package com.yetk.yetkschedule
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -15,6 +16,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,12 +45,18 @@ import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray80
 import com.yetk.yetkschedule.ui.theme.White
 import com.yetk.yetkschedule.ui.theme.YetkScheduleTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val viewModel by viewModels<HomeworkViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             YetkScheduleTheme(dynamicColor = false) {
+                val state = viewModel.state.collectAsState()
+
                 var showBottomBar by remember {
                     mutableStateOf(true)
                 }
@@ -120,7 +128,7 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
                                 }
-                            }
+                                }
                         }
                     ) { unusedPadding ->
                         NavHost(
@@ -134,7 +142,8 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(route = Screen.HomeworkScreen.route) {
                                 HomeworkScreen(
-                                    PaddingValues(bottom = 60.dp),
+                                    state = state.value,
+                                    onEvent = viewModel::onEvent,
                                     onNavigateToDetailScreen = { homeworkId ->
                                         navController.navigate(
                                             Screen.HomeworkScreen.HomeworkDetailScreen.passArgs(
@@ -142,7 +151,8 @@ class MainActivity : ComponentActivity() {
                                             )
                                         )
                                         showBottomBar = false
-                                    }
+                                    },
+                                    bottomBarPadding = PaddingValues(bottom = 60.dp)
                                 )
                             }
                             composable(
@@ -151,14 +161,15 @@ class MainActivity : ComponentActivity() {
                                     type = NavType.IntType
                                 })
                             ) { backStackEntry ->
-                                //-1 is used to indicate whenever this screen for edit homework or add homework
                                 var isChecked by remember {
                                     mutableStateOf(false)
                                 }
-                                val homeworkId = backStackEntry.arguments?.getInt("homeworkId")
+                                val homeworkId = backStackEntry.arguments?.getInt("homeworkId") ?: -1
 
                                 HomeworkDetailScreen(
-                                    if (homeworkId == -1) null else homeworkId,
+                                    homeworkId,
+                                    state = state.value,
+                                    onEvent = viewModel::onEvent,
                                     isChecked = isChecked,
                                     onNavigateUp = {
                                         navController.navigateUp()
