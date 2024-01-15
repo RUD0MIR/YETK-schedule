@@ -23,7 +23,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -41,13 +40,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.yetk.yetkschedule.R
-import com.yetk.yetkschedule.data.local.FakeData
+import com.yetk.yetkschedule.data.local.Temp
 import com.yetk.yetkschedule.data.local.model.Lesson
 import com.yetk.yetkschedule.other.LessonWeekState
 import com.yetk.yetkschedule.other.NoRippleInteractionSource
@@ -62,18 +62,15 @@ import com.yetk.yetkschedule.ui.theme.White
 import com.yetk.yetkschedule.ui.theme.WhiteDisabled
 import kotlinx.coroutines.launch
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleScreen(
     bottomBarPadding: PaddingValues,
 ) {
-    val fakeSchedule = FakeData.lessonListItems
+    val fakeSchedule = Temp.lessonListItems
     var previewWeekState by remember {
         mutableStateOf(WeekState.LOWER_WEEK)
     }
-    val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
 
     val schedulePeriod by remember {
         mutableStateOf("06.11.23 - 11.11.23")
@@ -93,7 +90,7 @@ fun ScheduleScreen(
                 modifier = Modifier.padding(end = 16.dp),
                 title = {
                     Text(
-                        text = "Schedule",
+                        text = "Расписание",
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.headlineLarge
                     )

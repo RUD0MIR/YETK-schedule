@@ -63,10 +63,6 @@ fun HomeworkDetailScreen(
         mutableStateOf(false)
     }
 
-    val subjectNameTfValue by remember {
-        mutableStateOf(TextFieldValue(text = state.content))
-    }
-
     val all =
         listOf("Math", "Biology", "Physics", "PE", "Science", "English", "Russian")
 
@@ -125,10 +121,10 @@ fun HomeworkDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     iconId = R.drawable.ic_subject,
-                    value = subjectNameTfValue,
+                    value = TextFieldValue(text = state.subjectName),
                     setValue = {
                         subjectMenuExpanded = true
-                        onEvent(HomeworkEvent.UpdateHomework(subjectName = it.text, content = state.content))
+                        onEvent(HomeworkEvent.UpdateSubjectName(subjectName = it.text))
                         subjectsOptions =
                             all.filterDropdownMenu(it)
                     },
@@ -145,7 +141,7 @@ fun HomeworkDetailScreen(
                         .padding(horizontal = 16.dp)
                         .padding(bottom = 116.dp),
                     value = state.content,
-                    onValueChange = { onEvent(HomeworkEvent.UpdateHomework(subjectName = state.subjectName, content = it)) },
+                    onValueChange = { onEvent(HomeworkEvent.UpdateContent(content = it)) },
                     placeholder = {
                         Text(
                             text = "Домашнее задание",

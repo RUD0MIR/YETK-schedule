@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "986848159758",
+    "project_id": "yetk-schedule",
+    "storage_bucket": "yetk-schedule.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986848159758:android:cf0d7629642b929c5df45f",
+        "android_client_info": {
+          "package_name": "com.yetk.yetkschedule"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABJjRlezxqiHxfzKjPhvswpv43FGdcBC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

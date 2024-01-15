@@ -49,18 +49,6 @@ import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
 import kotlinx.coroutines.launch
 
-val homeworkList = mutableListOf(
-    Homework(id = 0, content = "some home work ex 1 page 6", "Physics"),
-    Homework(id = 1, content = "some home work ex 1 page 6", "Math"),
-    Homework(id = 2, content = "some home work ex 1 page 6", "Science"),
-    Homework(id = 3, content = "some home work ex 1 page 6", "PE"),
-    Homework(
-        id = 4,
-        content = "some home work fdsaf sadfsadfasdfhj daskjlfhsadkljfh sadklfjhasldkjfhaskld hfaklsdjhflkasjhdf",
-        "Physics"
-    )
-)
-
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeworkScreen(

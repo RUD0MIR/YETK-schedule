@@ -1,10 +1,10 @@
 package com.yetk.yetkschedule.data.local
 
 import com.yetk.yetkschedule.data.local.model.Lesson
-import com.yetk.yetkschedule.other.Constants
+import com.yetk.yetkschedule.other.DaysOfWeek
 import com.yetk.yetkschedule.other.LessonWeekState
 
-class FakeData {
+class Temp {
     companion object {
         val monItems = mutableListOf(
             Lesson(
@@ -15,7 +15,7 @@ class FakeData {
                 startTime = "11:20",
                 endTime = "12:50",
                 weekState = LessonWeekState.UPPER_WEEK,
-                dayOfWeek = Constants.MON,
+                dayOfWeek = DaysOfWeek.MON,
                 isDisabled = false
             ),
 
@@ -27,7 +27,7 @@ class FakeData {
                 startTime = "13:20",
                 endTime = "14:50",
                 weekState = LessonWeekState.EVERY_WEEK,
-                dayOfWeek = Constants.MON,
+                dayOfWeek = DaysOfWeek.MON,
                 isDisabled = false
             ),
             Lesson(
@@ -38,7 +38,7 @@ class FakeData {
                 startTime = "15:00",
                 endTime = "16:30",
                 weekState = LessonWeekState.EVERY_WEEK,
-                dayOfWeek = Constants.MON,
+                dayOfWeek = DaysOfWeek.MON,
                 isDisabled = false
             ),
             Lesson(
@@ -49,7 +49,7 @@ class FakeData {
                 startTime = "16:40",
                 endTime = "18:10",
                 weekState = LessonWeekState.EVERY_WEEK,
-                dayOfWeek = Constants.MON,
+                dayOfWeek = DaysOfWeek.MON,
                 isDisabled = false
             ),
         )
@@ -62,7 +62,7 @@ class FakeData {
                 startTime = "13:20",
                 endTime = "14:50",
                 weekState = LessonWeekState.EVERY_WEEK,
-                dayOfWeek = Constants.MON,
+                dayOfWeek = DaysOfWeek.MON,
                 isDisabled = false
             ),
             Lesson(
@@ -73,7 +73,7 @@ class FakeData {
                 startTime = "15:00",
                 endTime = "16:30",
                 weekState = LessonWeekState.EVERY_WEEK,
-                dayOfWeek = Constants.MON,
+                dayOfWeek = DaysOfWeek.MON,
                 isDisabled = false
             ),
         )

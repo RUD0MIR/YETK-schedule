@@ -3,7 +3,7 @@ package com.yetk.yetkschedule
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yetk.yetkschedule.data.local.model.Homework
-import com.yetk.yetkschedule.repositories.HomeworkRepository
+import com.yetk.yetkschedule.data.repository.HomeworkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -76,10 +76,16 @@ class HomeworkViewModel @Inject constructor(
                 }
                 _state.update { it.cleanDetailScreenData() }
             }
-            is HomeworkEvent.UpdateHomework -> {
+            is HomeworkEvent.UpdateContent -> {
                 _state.update {
                     it.copy(
                         content = event.content,
+                    )
+                }
+            }
+            is HomeworkEvent.UpdateSubjectName -> {
+                _state.update {
+                    it.copy(
                         subjectName = event.subjectName
                     )
                 }
