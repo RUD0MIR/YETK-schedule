@@ -17,10 +17,10 @@ import javax.inject.Inject
 class HomeworkViewModel @Inject constructor(
     private val repository: HomeworkRepository
 ) : ViewModel() {
-    private val _notes = repository.getAll()
+    private val _homeworks = repository.getAll()
 
     private val _state = MutableStateFlow(HomeworkState())
-    val state = combine(_state, _notes) { state, homeworks ->
+    val state = combine(_state, _homeworks) { state, homeworks ->
         state.copy(
             homeworks = homeworks
         )
@@ -38,15 +38,6 @@ class HomeworkViewModel @Inject constructor(
                 val content = state.value.content
                 val subjectName = state.value.subjectName
 
-                if (content.isBlank()) {
-                    _state.update {
-                        it.copy(
-                            isContentTextFieldError = true
-                        )
-                    }
-                    return
-                }
-
                 if (subjectName.isBlank()) {
                     _state.update {
                         it.copy(
@@ -57,6 +48,7 @@ class HomeworkViewModel @Inject constructor(
                 }
 
                 val homework = Homework(
+                    id = 0,
                     content = content,
                     subjectName = subjectName
                 )
@@ -90,17 +82,20 @@ class HomeworkViewModel @Inject constructor(
                     )
                 }
             }
-
             is HomeworkEvent.HomeworkChecked -> {
                 viewModelScope.launch {
                     repository.deleteHomework(event.homework)
                 }
                 _state.update { it.cleanDetailScreenData() }
             }
-
             is HomeworkEvent.GetHomework -> {
                 viewModelScope.launch {
                     repository.getHomeworkById(event.id)
+                }
+            }
+            is HomeworkEvent.UpdateListIndexes -> {
+                viewModelScope.launch {
+                    repository.updateAll(event.homeworks)
                 }
             }
         }

@@ -4,6 +4,7 @@ import com.yetk.yetkschedule.data.local.model.Homework
 
 sealed interface HomeworkEvent {
     data object SaveHomework : HomeworkEvent
+    data class UpdateListIndexes(val homeworks: List<Homework>): HomeworkEvent
     data class UpdateSubjectName(val subjectName: String): HomeworkEvent
     data class UpdateContent(val content: String): HomeworkEvent
     data class DeleteHomework(val homework: Homework): HomeworkEvent

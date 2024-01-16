@@ -15,5 +15,7 @@ interface HomeworkRepository {
 
     fun getAll(): Flow<List<Homework>>
 
+    suspend fun updateAll(homeworks: List<Homework>)
+
     fun getHomeworkById(id: Int): Flow<Homework>
 }

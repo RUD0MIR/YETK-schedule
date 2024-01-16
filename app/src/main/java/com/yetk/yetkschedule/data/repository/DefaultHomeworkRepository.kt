@@ -21,6 +21,10 @@ class DefaultHomeworkRepository @Inject constructor(
         return dao.getAll()
     }
 
+    override suspend fun updateAll(homeworks: List<Homework>) {
+        dao.updateAll(homeworks)
+    }
+
     override fun getHomeworkById(id: Int): Flow<Homework> {
         return dao.getHomeworkById(id)
     }

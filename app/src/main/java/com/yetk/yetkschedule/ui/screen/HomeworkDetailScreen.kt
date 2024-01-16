@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.yetk.yetkschedule.HomeworkEvent
 import com.yetk.yetkschedule.HomeworkState
 import com.yetk.yetkschedule.R
+import com.yetk.yetkschedule.data.local.model.Homework
 import com.yetk.yetkschedule.other.filterDropdownMenu
 import com.yetk.yetkschedule.ui.AutocompleteTextField
 import com.yetk.yetkschedule.ui.ButtonSection
@@ -43,16 +44,19 @@ private const val TAG = "HomeworkDetailScreen"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeworkDetailScreen(
-    homeworkId: Int,
+    homeworkIndex: Int,
     state: HomeworkState,
     onEvent: (HomeworkEvent) -> Unit,
     isChecked: Boolean,
     onCheck: () -> Unit,
     onNavigateUp: () -> Unit
 ) {
-    val homework = if (homeworkId != -1) {
-        state.homeworks[homeworkId]
-    } else null
+    var homework: Homework? = remember {
+        null
+    }
+    if (homeworkIndex != -1) {
+        homework = state.homeworks[homeworkIndex]
+    }
 
     val bodyMedium = MaterialTheme.typography.bodyMedium
 
@@ -132,7 +136,7 @@ fun HomeworkDetailScreen(
                     dropDownExpanded = subjectMenuExpanded,
                     isError = state.isSubjectNameTextFieldError,
                     list = subjectsOptions,
-                    label = "Предмет"
+                    label = "Предмет",
                 )
 
                 OutlinedTextField(

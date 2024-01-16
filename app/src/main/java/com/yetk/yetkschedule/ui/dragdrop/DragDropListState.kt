@@ -1,12 +1,14 @@
-package com.example.lessonsschedulemanagerv2.ui.dragdrop
+package com.yetk.yetkschedule.ui.dragdrop
 
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
-import com.yetk.yetkschedule.ui.dragdrop.getVisibleItemInfoFor
-import com.yetk.yetkschedule.ui.dragdrop.offsetEnd
 import kotlinx.coroutines.Job
 
 @Composable

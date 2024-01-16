@@ -1,5 +1,6 @@
 package com.yetk.yetkschedule.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -35,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.lessonsschedulemanagerv2.ui.dragdrop.DragDropList
 import com.yetk.yetkschedule.HomeworkEvent
 import com.yetk.yetkschedule.HomeworkState
 import com.yetk.yetkschedule.R
@@ -59,6 +60,7 @@ fun HomeworkScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    Log.d("HomeworkScreen", "homeworks size: ${state.homeworks.size}")
 
     Scaffold(
         modifier = Modifier.padding(bottomBarPadding),
@@ -99,74 +101,75 @@ fun HomeworkScreen(
             }
         },
     ) { topBarPadding ->
-        DragDropList(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(topBarPadding),
-            dataItems = state.homeworks,
-            onMove = { fromIndex, toIndex ->
-                //TODO on move mutableList.move(fromIndex, toIndex)
-            }
-        ) { homework ->
-            var isItemVisible by remember {
-                mutableStateOf(true)
-            }
+        ) {
+            items(state.homeworks.size) {
+                val homework = state.homeworks[it]
+                var isItemVisible by remember {
+                    mutableStateOf(true)
+                }
+                if(isItemVisible) {
+                    Column() {
+                        HomeworkListItem(
+                            homework,
+                            onCheck = {
+                                isItemVisible = false
 
-            if(isItemVisible) {
-                Column() {
-                    HomeworkListItem(
-                        homework,
-                        onCheck = {
-                            isItemVisible = false
+                                scope.launch {
+                                    val result = snackbarHostState
+                                        .showSnackbar(
+                                            message = "Сделанное дз скрыто.",
+                                            actionLabel = "Отмена",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    when (result) {
+                                        SnackbarResult.ActionPerformed -> {
+                                            isItemVisible = true
+                                        }
 
-                            scope.launch {
-                                val result = snackbarHostState
-                                    .showSnackbar(
-                                        message = "Сделанное дз скрыто.",
-                                        actionLabel = "Отмена",
-                                        duration = SnackbarDuration.Short
-                                    )
-                                when (result) {
-                                    SnackbarResult.ActionPerformed -> {
-                                        isItemVisible = true
-                                    }
-
-                                    SnackbarResult.Dismissed -> {
-                                        onEvent(HomeworkEvent.DeleteHomework(homework = homework))
+                                        SnackbarResult.Dismissed -> {
+                                            onEvent(HomeworkEvent.DeleteHomework(homework = homework))
+                                        }
                                     }
                                 }
-                            }
-                        },
-                        onItemClick = { homeworkId ->
-                            onNavigateToDetailScreen(homeworkId)
-                        },
-                        onBackgroundEndClick = { id ->
-                            isItemVisible = false
-                            //TODO make slide action close if other slide action is opened
-                            scope.launch {
-                                val result = snackbarHostState
-                                    .showSnackbar(
-                                        message = "Дз удалено.",
-                                        actionLabel = "Отмена",
-                                        duration = SnackbarDuration.Short
-                                    )
-                                when (result) {
-                                    SnackbarResult.ActionPerformed -> {
-                                        isItemVisible = true
-                                    }
+                            },
+                            onItemClick = {
+                                onNavigateToDetailScreen(it)
+                                onEvent(HomeworkEvent.UpdateSubjectName( homework.subjectName ?: ""))
+                                onEvent(HomeworkEvent.UpdateContent(homework.content ?: ""))
+                            },
+                            onBackgroundEndClick = { id ->
+                                isItemVisible = false
+                                //TODO make slide action close if other slide action is opened
+                                scope.launch {
+                                    val result = snackbarHostState
+                                        .showSnackbar(
+                                            message = "Дз удалено.",
+                                            actionLabel = "Отмена",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    when (result) {
+                                        SnackbarResult.ActionPerformed -> {
+                                            isItemVisible = true
+                                        }
 
-                                    SnackbarResult.Dismissed -> {
-                                        onEvent(HomeworkEvent.DeleteHomework(homework = homework))
+                                        SnackbarResult.Dismissed -> {
+                                            onEvent(HomeworkEvent.DeleteHomework(homework = homework))
+                                            Log.d("HomeworkScreen", "homework ${homework.id} deleted ")
+                                        }
                                     }
                                 }
-                            }
-                        },
-                    )
-                    Divider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp), thickness = 1.dp, color = Gray90
-                    )
+                            },
+                        )
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp), thickness = 1.dp, color = Gray90
+                        )
+                    }
                 }
             }
         }
@@ -178,7 +181,7 @@ fun HomeworkScreen(
 fun HomeworkListItem(
     homework: Homework,
     onBackgroundEndClick: (id: Int) -> Unit,
-    onItemClick: (id: Int) -> Unit,
+    onItemClick: () -> Unit,
     onCheck: () -> Unit
 ) {
     var isChecked by remember {
@@ -214,7 +217,7 @@ fun HomeworkListItem(
             Row(
                 modifier = Modifier
                     .clickable {
-                        onItemClick(homework.id)
+                        onItemClick()
                     }
                     .padding(16.dp)
                     .fillMaxWidth(),
