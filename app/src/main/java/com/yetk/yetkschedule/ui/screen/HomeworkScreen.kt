@@ -48,6 +48,7 @@ import com.yetk.yetkschedule.ui.theme.Red
 import com.yetk.yetkschedule.ui.theme.White
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
@@ -116,9 +117,9 @@ fun HomeworkScreen(
                         HomeworkListItem(
                             homework,
                             onCheck = {
-                                isItemVisible = false
-
                                 scope.launch {
+                                    delay(500)
+                                    isItemVisible = false
                                     val result = snackbarHostState
                                         .showSnackbar(
                                             message = "Сделанное дз скрыто.",
@@ -142,9 +143,10 @@ fun HomeworkScreen(
                                 onEvent(HomeworkEvent.UpdateContent(homework.content ?: ""))
                             },
                             onBackgroundEndClick = { id ->
-                                isItemVisible = false
                                 //TODO make slide action close if other slide action is opened
                                 scope.launch {
+                                    isItemVisible = false
+
                                     val result = snackbarHostState
                                         .showSnackbar(
                                             message = "Дз удалено.",

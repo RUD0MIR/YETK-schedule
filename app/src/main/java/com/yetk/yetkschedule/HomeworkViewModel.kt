@@ -37,6 +37,7 @@ class HomeworkViewModel @Inject constructor(
             HomeworkEvent.SaveHomework -> {
                 val content = state.value.content
                 val subjectName = state.value.subjectName
+                val homeworkId = state.value.homeworkId
 
                 if (subjectName.isBlank()) {
                     _state.update {
@@ -48,7 +49,7 @@ class HomeworkViewModel @Inject constructor(
                 }
 
                 val homework = Homework(
-                    id = 0,
+                    id = if(homeworkId != -1) homeworkId else 0,
                     content = content,
                     subjectName = subjectName
                 )
@@ -57,16 +58,16 @@ class HomeworkViewModel @Inject constructor(
                     repository.upsertHomework(homework)
                 }
 
-                _state.update {
-                    it.copy(
-                        isAddingHomework = false,
-                        content = content,
-                        subjectName = subjectName,
-                        isSubjectNameTextFieldError = false,
-                        isContentTextFieldError = false,
-                    )
-                }
-                _state.update { it.cleanDetailScreenData() }
+//                _state.update {
+//                    it.copy(
+//                        isAddingHomework = false,
+//                        content = content,
+//                        subjectName = subjectName,
+//                        homeworkId = homeworkId,
+//                        isSubjectNameTextFieldError = false,
+//                        isContentTextFieldError = false,
+//                    )
+//                }
             }
             is HomeworkEvent.UpdateContent -> {
                 _state.update {
@@ -82,21 +83,27 @@ class HomeworkViewModel @Inject constructor(
                     )
                 }
             }
+            is HomeworkEvent.UpdateId -> {
+                _state.update {
+                    it.copy(
+                        homeworkId = event.id
+                    )
+                }
+            }
             is HomeworkEvent.HomeworkChecked -> {
                 viewModelScope.launch {
                     repository.deleteHomework(event.homework)
                 }
-                _state.update { it.cleanDetailScreenData() }
+
             }
             is HomeworkEvent.GetHomework -> {
                 viewModelScope.launch {
                     repository.getHomeworkById(event.id)
                 }
             }
-            is HomeworkEvent.UpdateListIndexes -> {
-                viewModelScope.launch {
-                    repository.updateAll(event.homeworks)
-                }
+
+            HomeworkEvent.ClearState -> {
+                _state.update { it.cleanDetailScreenData() }
             }
         }
     }

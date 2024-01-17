@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,11 +52,19 @@ fun HomeworkDetailScreen(
     onCheck: () -> Unit,
     onNavigateUp: () -> Unit
 ) {
-    var homework: Homework? = remember {
-        null
+    var homework: Homework? = null
+
+    LaunchedEffect(key1 = state.homeworkId) {
+        if (homeworkIndex != -1) {
+            homework = state.homeworks[homeworkIndex]
+            onEvent(HomeworkEvent.UpdateId(homework?.id ?: -1))
+        } else {
+            onEvent(HomeworkEvent.ClearState)
+        }
     }
-    if (homeworkIndex != -1) {
-        homework = state.homeworks[homeworkIndex]
+
+    val positiveBtnText = remember {
+        if (homeworkIndex != -1) "Сохранить" else "Добавить"
     }
 
     val bodyMedium = MaterialTheme.typography.bodyMedium
@@ -97,7 +106,7 @@ fun HomeworkDetailScreen(
                         )
 
                         IconButton(onClick = {
-                            onEvent(HomeworkEvent.DeleteHomework(homework))
+                            onEvent(HomeworkEvent.DeleteHomework(homework!!))
                         }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_delete),
@@ -182,7 +191,7 @@ fun HomeworkDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(end = 16.dp),
-                    positiveButtonText = if (homework != null) "Сохранить" else "Добавить",
+                    positiveButtonText = positiveBtnText,
                     negativeButtonText = "Отмена",
                     onPositiveButtonClick = {
                         onEvent(HomeworkEvent.SaveHomework)
