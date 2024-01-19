@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yetk.yetkschedule.ui.theme.Blue
 import com.yetk.yetkschedule.ui.theme.White
 
 @Composable
@@ -20,29 +19,32 @@ fun ButtonSection(
     positiveButtonText: String,
     negativeButtonText: String,
     onPositiveButtonClick: () -> Unit,
-    onNegativeButtonClick: () -> Unit
+    onNegativeButtonClick: () -> Unit,
+    isPositiveButtonVisible: Boolean
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.End
     ) {
-        FilledTonalButton(
-            modifier = Modifier.padding(start = 32.dp, end = 16.dp, bottom = 32.dp),
-            onClick = {
-                onPositiveButtonClick()
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.secondary
-            )
-        ) {
-            Text(
-                text = positiveButtonText,
-                style = MaterialTheme.typography.labelLarge,
-                color = White
-            )
+        if(isPositiveButtonVisible) {
+            FilledTonalButton(
+                onClick = {
+                    onPositiveButtonClick()
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary
+                )
+            ) {
+                Text(
+                    text = positiveButtonText,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = White
+                )
+            }
         }
 
         OutlinedButton(
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
             onClick = {
                 onNegativeButtonClick()
             }

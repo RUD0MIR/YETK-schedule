@@ -25,9 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.yetk.yetkschedule.HomeworkEvent
 import com.yetk.yetkschedule.HomeworkState
@@ -49,13 +47,9 @@ fun HomeworkDetailScreen(
     homeworkIndex: Int,
     state: HomeworkState,
     onEvent: (HomeworkEvent) -> Unit,
-    isChecked: Boolean,
-    onCheck: () -> Unit,
     onNavigateUp: () -> Unit
 ) {
     var homework: Homework? = null
-    val focusManager = LocalFocusManager.current
-
     LaunchedEffect(key1 = state.homeworkId) {
         if (homeworkIndex != -1) {
             homework = state.homeworks[homeworkIndex]
@@ -69,12 +63,8 @@ fun HomeworkDetailScreen(
         if (homeworkIndex != -1) "Сохранить" else "Добавить"
     }
 
-    var subjectNameTfValue by remember {
-        mutableStateOf(
-            TextFieldValue(
-                state.subjectName
-            )
-        )
+    var isCheckBoxChecked by remember {
+        mutableStateOf(false)
     }
 
     val bodyMedium = MaterialTheme.typography.bodyMedium
@@ -104,11 +94,13 @@ fun HomeworkDetailScreen(
                     }
                 },
                 actions = {
-                    if (homework != null) {
+                    if (homeworkIndex != -1) {
                         Checkbox(
-                            checked = isChecked,
+                            checked = isCheckBoxChecked,
                             onCheckedChange = {
-                                onCheck()
+                                isCheckBoxChecked = true
+                                onEvent(HomeworkEvent.HomeworkChecked(state.homeworks[homeworkIndex]))
+                                onNavigateUp()
                             },
                             colors = CheckboxDefaults.colors(
                                 checkedColor = MaterialTheme.colorScheme.secondary,
@@ -116,7 +108,8 @@ fun HomeworkDetailScreen(
                         )
 
                         IconButton(onClick = {
-                            onEvent(HomeworkEvent.DeleteHomework(homework!!))
+                            onEvent(HomeworkEvent.DeleteHomework(state.homeworks[homeworkIndex]))
+                            onNavigateUp()
                         }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_delete),
@@ -144,11 +137,10 @@ fun HomeworkDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     iconId = R.drawable.ic_subject,
-                    value = subjectNameTfValue,
+                    value = state.subjectName,
                     onValueChange = {
-                        subjectMenuExpanded = true
-                        subjectNameTfValue = it
-                        onEvent(HomeworkEvent.UpdateSubjectName(subjectName = it.text))
+                        subjectMenuExpanded = !subjectsOptions.contains(it.text)
+                        onEvent(HomeworkEvent.UpdateSubjectName(subjectName = it))
                         subjectsOptions =
                             all.filterDropdownMenu(
                                 it
@@ -156,7 +148,6 @@ fun HomeworkDetailScreen(
                     },
                     onDismissRequest = { subjectMenuExpanded = false },
                     dropDownExpanded = subjectMenuExpanded,
-                    isError = state.isSubjectNameTextFieldError,
                     list = subjectsOptions,
                     label = "Предмет",
                 )
@@ -175,7 +166,6 @@ fun HomeworkDetailScreen(
                             color = Gray70
                         )
                     },
-                    isError = state.isContentTextFieldError,
                     textStyle = bodyMedium,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         containerColor = Gray90,
@@ -205,10 +195,12 @@ fun HomeworkDetailScreen(
                         .fillMaxWidth()
                         .padding(end = 16.dp),
                     positiveButtonText = positiveBtnText,
+                    isPositiveButtonVisible = state.subjectName.text.isNotBlank() || state.content.isNotBlank(),
                     negativeButtonText = "Отмена",
                     onPositiveButtonClick = {
                         onEvent(HomeworkEvent.SaveHomework)
                         onNavigateUp()
+
                     },
                     onNegativeButtonClick = {
                         onNavigateUp()

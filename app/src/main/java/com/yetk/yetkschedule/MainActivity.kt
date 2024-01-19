@@ -161,23 +161,16 @@ class MainActivity : ComponentActivity() {
                                     type = NavType.IntType
                                 })
                             ) { backStackEntry ->
-                                var isChecked by remember {
-                                    mutableStateOf(false)
-                                }
                                 val homeworkId = backStackEntry.arguments?.getInt("homeworkId") ?: -1
 
                                 HomeworkDetailScreen(
                                     homeworkId,
                                     state = state.value,
                                     onEvent = viewModel::onEvent,
-                                    isChecked = isChecked,
                                     onNavigateUp = {
                                         navController.navigateUp()
                                         showBottomBar = true
                                     },
-                                    onCheck = {
-                                        isChecked = !isChecked
-                                    }
                                 )
                             }
                             composable(route = Screen.BellScreen.route) {

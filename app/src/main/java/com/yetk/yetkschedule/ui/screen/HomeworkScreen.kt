@@ -35,7 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.yetk.yetkschedule.HomeworkEvent
 import com.yetk.yetkschedule.HomeworkState
@@ -139,7 +141,7 @@ fun HomeworkScreen(
                             },
                             onItemClick = {
                                 onNavigateToDetailScreen(it)
-                                onEvent(HomeworkEvent.UpdateSubjectName( homework.subjectName ?: ""))
+                                onEvent(HomeworkEvent.UpdateSubjectName( TextFieldValue(homework.subjectName ?: "")))
                                 onEvent(HomeworkEvent.UpdateContent(homework.content ?: ""))
                             },
                             onBackgroundEndClick = { id ->
@@ -229,11 +231,15 @@ fun HomeworkListItem(
                 Column(modifier = Modifier.fillMaxWidth(0.8f)) {
                     Text(
                         text = homework.subjectName.toString(),
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 2
                     )
                     Text(
                         text = homework.content.toString(),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 5
                     )
                 }
 

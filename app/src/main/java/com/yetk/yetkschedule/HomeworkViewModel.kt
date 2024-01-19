@@ -39,35 +39,19 @@ class HomeworkViewModel @Inject constructor(
                 val subjectName = state.value.subjectName
                 val homeworkId = state.value.homeworkId
 
-                if (subjectName.isBlank()) {
-                    _state.update {
-                        it.copy(
-                            isSubjectNameTextFieldError = true
-                        )
-                    }
+                if (subjectName.text.isBlank() && content.isBlank()) {
                     return
                 }
 
                 val homework = Homework(
                     id = if(homeworkId != -1) homeworkId else 0,
                     content = content,
-                    subjectName = subjectName
+                    subjectName = subjectName.text
                 )
 
                 viewModelScope.launch {
                     repository.upsertHomework(homework)
                 }
-
-//                _state.update {
-//                    it.copy(
-//                        isAddingHomework = false,
-//                        content = content,
-//                        subjectName = subjectName,
-//                        homeworkId = homeworkId,
-//                        isSubjectNameTextFieldError = false,
-//                        isContentTextFieldError = false,
-//                    )
-//                }
             }
             is HomeworkEvent.UpdateContent -> {
                 _state.update {

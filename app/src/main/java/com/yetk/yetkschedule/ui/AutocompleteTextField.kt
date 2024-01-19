@@ -36,7 +36,6 @@ fun AutocompleteTextField(
     value: TextFieldValue,
     @DrawableRes
     iconId: Int,
-    isError: Boolean,
     onValueChange: (TextFieldValue) -> Unit,
     onDismissRequest: () -> Unit,
     dropDownExpanded: Boolean,
@@ -56,7 +55,6 @@ fun AutocompleteTextField(
                 },
             value = value,
             onValueChange = onValueChange,
-            isError = isError,
             label = {
                 Text(
                     text = label,
@@ -102,7 +100,6 @@ fun AutocompleteTextField(
                                 selection = TextRange(text.length)
                             )
                         )
-                        onDismissRequest()
                     },
                     text = {
                         Text(text = text)
