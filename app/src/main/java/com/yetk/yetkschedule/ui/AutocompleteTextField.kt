@@ -37,7 +37,7 @@ fun AutocompleteTextField(
     @DrawableRes
     iconId: Int,
     isError: Boolean,
-    setValue: (TextFieldValue) -> Unit,
+    onValueChange: (TextFieldValue) -> Unit,
     onDismissRequest: () -> Unit,
     dropDownExpanded: Boolean,
     list: List<String>,
@@ -55,7 +55,7 @@ fun AutocompleteTextField(
                         onDismissRequest()
                 },
             value = value,
-            onValueChange = setValue,
+            onValueChange = onValueChange,
             isError = isError,
             label = {
                 Text(
@@ -96,12 +96,13 @@ fun AutocompleteTextField(
             list.forEach { text ->
                 DropdownMenuItem(
                     onClick = {
-                        setValue(
+                        onValueChange(
                             TextFieldValue(
-                                text,
-                                TextRange(text.length)
+                                text = text,
+                                selection = TextRange(text.length)
                             )
                         )
+                        onDismissRequest()
                     },
                     text = {
                         Text(text = text)

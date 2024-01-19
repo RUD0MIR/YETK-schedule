@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -53,6 +54,7 @@ fun HomeworkDetailScreen(
     onNavigateUp: () -> Unit
 ) {
     var homework: Homework? = null
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = state.homeworkId) {
         if (homeworkIndex != -1) {
@@ -65,6 +67,14 @@ fun HomeworkDetailScreen(
 
     val positiveBtnText = remember {
         if (homeworkIndex != -1) "Сохранить" else "Добавить"
+    }
+
+    var subjectNameTfValue by remember {
+        mutableStateOf(
+            TextFieldValue(
+                state.subjectName
+            )
+        )
     }
 
     val bodyMedium = MaterialTheme.typography.bodyMedium
@@ -134,12 +144,15 @@ fun HomeworkDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     iconId = R.drawable.ic_subject,
-                    value = TextFieldValue(text = state.subjectName),
-                    setValue = {
+                    value = subjectNameTfValue,
+                    onValueChange = {
                         subjectMenuExpanded = true
+                        subjectNameTfValue = it
                         onEvent(HomeworkEvent.UpdateSubjectName(subjectName = it.text))
                         subjectsOptions =
-                            all.filterDropdownMenu(it)
+                            all.filterDropdownMenu(
+                                it
+                            )
                     },
                     onDismissRequest = { subjectMenuExpanded = false },
                     dropDownExpanded = subjectMenuExpanded,
