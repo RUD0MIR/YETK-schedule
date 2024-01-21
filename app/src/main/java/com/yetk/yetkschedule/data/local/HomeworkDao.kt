@@ -14,6 +14,9 @@ interface HomeworkDao {
     @Upsert
     suspend fun upsertHomework(homework: Homework)
 
+    @Update
+    suspend fun updateHomework(homework: Homework)
+
     @Delete
     suspend fun deleteHomework(homework: Homework)
 
@@ -22,6 +25,8 @@ interface HomeworkDao {
 
     @Update
     suspend fun updateAll(homeworks: List<Homework>)
+
+
 
     @Query("SELECT * FROM homework WHERE homework.id = :id")
     fun getHomeworkById(id: Int): Flow<Homework>

@@ -14,16 +14,18 @@ sealed class Screen(val route: String) {
 
     fun withArgs(vararg args: String): String {
         return buildString {
+            append(this@Screen.route)
             args.forEach { arg ->
-                append("${this@Screen.route}/{$arg}")
+                append("/{$arg}")
             }
         }
     }
 
     fun passArgs(vararg args: String): String {
         return buildString {
+            append(this@Screen.route)
             args.forEach { arg ->
-                append("${this@Screen.route}/$arg")
+                append("/$arg")
             }
         }
     }

@@ -85,7 +85,28 @@ class HomeworkViewModel @Inject constructor(
                     repository.getHomeworkById(event.id)
                 }
             }
-
+            is HomeworkEvent.ShowHomework -> {
+                val homework = Homework(
+                    id = event.homework.id,
+                    content = event.homework.content,
+                    subjectName = event.homework.subjectName,
+                    isVisible = true
+                )
+                viewModelScope.launch {
+                    repository.updateHomework(homework)
+                }
+            }
+            is HomeworkEvent.HideHomework -> {
+                val homework = Homework(
+                    id = event.homework.id,
+                    content = event.homework.content,
+                    subjectName = event.homework.subjectName,
+                    isVisible = false
+                )
+                viewModelScope.launch {
+                    repository.updateHomework(homework)
+                }
+            }
             HomeworkEvent.ClearState -> {
                 _state.update { it.cleanDetailScreenData() }
             }

@@ -1,6 +1,5 @@
 package com.yetk.yetkschedule.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,16 +20,13 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,20 +46,18 @@ import com.yetk.yetkschedule.ui.theme.Red
 import com.yetk.yetkschedule.ui.theme.White
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeworkScreen(
     state: HomeworkState,
+    snackbarHostState: SnackbarHostState,
     onEvent: (HomeworkEvent) -> Unit,
+    onHomeworkCheck: (homework: Homework) -> Unit,
+    onHomeworkDelete: (homework: Homework) -> Unit,
     bottomBarPadding: PaddingValues,
-    onNavigateToDetailScreen: (id: Int?) -> Unit
+    onNavigateToDetailScreen: (id: Int?) -> Unit,
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-    Log.d("HomeworkScreen", "homeworks size: ${state.homeworks.size}")
 
     Scaffold(
         modifier = Modifier.padding(bottomBarPadding),
@@ -111,33 +105,13 @@ fun HomeworkScreen(
         ) {
             items(state.homeworks.size) {
                 val homework = state.homeworks[it]
-                var isItemVisible by remember {
-                    mutableStateOf(true)
-                }
-                if(isItemVisible) {
+                if(homework.isVisible) {
                     Column() {
                         HomeworkListItem(
                             homework,
                             onCheck = {
-                                scope.launch {
-                                    delay(500)
-                                    isItemVisible = false
-                                    val result = snackbarHostState
-                                        .showSnackbar(
-                                            message = "Сделанное дз скрыто.",
-                                            actionLabel = "Отмена",
-                                            duration = SnackbarDuration.Short
-                                        )
-                                    when (result) {
-                                        SnackbarResult.ActionPerformed -> {
-                                            isItemVisible = true
-                                        }
+                                onHomeworkCheck(homework)
 
-                                        SnackbarResult.Dismissed -> {
-                                            onEvent(HomeworkEvent.DeleteHomework(homework = homework))
-                                        }
-                                    }
-                                }
                             },
                             onItemClick = {
                                 onNavigateToDetailScreen(it)
@@ -145,27 +119,7 @@ fun HomeworkScreen(
                                 onEvent(HomeworkEvent.UpdateContent(homework.content ?: ""))
                             },
                             onBackgroundEndClick = { id ->
-                                //TODO make slide action close if other slide action is opened
-                                scope.launch {
-                                    isItemVisible = false
-
-                                    val result = snackbarHostState
-                                        .showSnackbar(
-                                            message = "Дз удалено.",
-                                            actionLabel = "Отмена",
-                                            duration = SnackbarDuration.Short
-                                        )
-                                    when (result) {
-                                        SnackbarResult.ActionPerformed -> {
-                                            isItemVisible = true
-                                        }
-
-                                        SnackbarResult.Dismissed -> {
-                                            onEvent(HomeworkEvent.DeleteHomework(homework = homework))
-                                            Log.d("HomeworkScreen", "homework ${homework.id} deleted ")
-                                        }
-                                    }
-                                }
+                                onHomeworkDelete(homework)
                             },
                         )
                         Divider(

@@ -47,7 +47,9 @@ fun HomeworkDetailScreen(
     homeworkIndex: Int,
     state: HomeworkState,
     onEvent: (HomeworkEvent) -> Unit,
-    onNavigateUp: () -> Unit
+    onNavigateUp: () -> Unit,
+    onHomeworkCheck: (homework: Homework) -> Unit,
+    onHomeworkDelete: (homework: Homework) -> Unit
 ) {
     var homework: Homework? = null
     LaunchedEffect(key1 = state.homeworkId) {
@@ -98,9 +100,9 @@ fun HomeworkDetailScreen(
                         Checkbox(
                             checked = isCheckBoxChecked,
                             onCheckedChange = {
-                                isCheckBoxChecked = true
-                                onEvent(HomeworkEvent.HomeworkChecked(state.homeworks[homeworkIndex]))
+                                onHomeworkCheck(state.homeworks[homeworkIndex])
                                 onNavigateUp()
+
                             },
                             colors = CheckboxDefaults.colors(
                                 checkedColor = MaterialTheme.colorScheme.secondary,
@@ -108,7 +110,7 @@ fun HomeworkDetailScreen(
                         )
 
                         IconButton(onClick = {
-                            onEvent(HomeworkEvent.DeleteHomework(state.homeworks[homeworkIndex]))
+                            onHomeworkDelete(state.homeworks[homeworkIndex])
                             onNavigateUp()
                         }) {
                             Icon(

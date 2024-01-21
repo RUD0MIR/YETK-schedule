@@ -11,4 +11,5 @@ data class Homework(
     val content: String?,
     @ColumnInfo(name = "subject_name")
     val subjectName: String?,
+    val isVisible: Boolean = true
 )
