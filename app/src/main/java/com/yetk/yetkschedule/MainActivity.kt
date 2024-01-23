@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.yetk.yetkschedule.data.local.viewmodel.HomeworkViewModel
 import com.yetk.yetkschedule.ui.NavHost
 import com.yetk.yetkschedule.ui.theme.YetkScheduleTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             YetkScheduleTheme(dynamicColor = false) {
                 NavHost(viewModel = homeworkViewModel)
+
             }
         }
     }

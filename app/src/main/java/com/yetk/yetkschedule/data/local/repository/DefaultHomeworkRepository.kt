@@ -1,4 +1,4 @@
-package com.yetk.yetkschedule.data.repository
+package com.yetk.yetkschedule.data.local.repository
 
 import com.yetk.yetkschedule.data.local.HomeworkDao
 import com.yetk.yetkschedule.data.local.model.Homework

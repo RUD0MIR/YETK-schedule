@@ -16,36 +16,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.yetk.yetkschedule.data.local.model.LessonTime
+import com.yetk.yetkschedule.data.remote.model.LessonTime
+import com.yetk.yetkschedule.data.remote.viewmodel.BellScheduleState
 import com.yetk.yetkschedule.other.parseNhNmin
 import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray90
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
-
-private val lessonTimes = listOf(
-    LessonTime(id = 0, number = 1, startTime = "08:00", endTime = "09:40"),
-    LessonTime(id = 1, number = 2, startTime = "08:00", endTime = "09:40"),
-    LessonTime(id = 2, number = 3, startTime = "08:00", endTime = "09:40"),
-    LessonTime(id = 3, number = 4, startTime = "08:00", endTime = "09:40"),
-    LessonTime(id = 4, number = 5, startTime = "08:00", endTime = "09:40"),
-    LessonTime(id = 5, number = 6, startTime = "08:00", endTime = "09:40"),
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BellScheduleScreen(bottomBarPadding: PaddingValues) {
-    val lessonDuration by remember {
-        mutableStateOf(Duration.ZERO.plus(90L.minutes))
-    }
-
+fun BellScheduleScreen(state: BellScheduleState, bottomBarPadding: PaddingValues) {
     Scaffold(
         modifier = Modifier.padding(bottomBarPadding),
         topBar = {
@@ -82,16 +65,19 @@ fun BellScheduleScreen(bottomBarPadding: PaddingValues) {
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Text(
-                            text = lessonDuration.parseNhNmin(),
+                            text = state.lessonDurationMin.parseNhNmin(),
                             style = MaterialTheme.typography.labelLarge,
                             color = Gray50
                         )
                     }
                 }
 
-                items(lessonTimes.size) {
+                items(state.lessonsTime.size) {
                     BellScheduleListItem(
-                        lessonTime = lessonTimes[it],
+                        lessonsTime = LessonTime(
+                            number = it + 1,
+                            time = state.lessonsTime[it]
+                        ),
                     )
                 }
             }
@@ -101,7 +87,7 @@ fun BellScheduleScreen(bottomBarPadding: PaddingValues) {
 
 @Composable
 fun BellScheduleListItem(
-    lessonTime: LessonTime,
+    lessonsTime: LessonTime,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -115,12 +101,12 @@ fun BellScheduleListItem(
             Row {
                 Text(
                     modifier = Modifier.padding(end = 16.dp),
-                    text = lessonTime.number.toString(),
+                    text = lessonsTime.number.toString(),
                     style = MaterialTheme.typography.labelLarge,
                     color = Gray50
                 )
                 Text(
-                    text = lessonTime.getTimeRange(),
+                    text = lessonsTime.time,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

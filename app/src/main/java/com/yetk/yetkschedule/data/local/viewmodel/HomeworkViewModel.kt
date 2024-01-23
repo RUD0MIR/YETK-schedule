@@ -1,9 +1,9 @@
-package com.yetk.yetkschedule
+package com.yetk.yetkschedule.data.local.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yetk.yetkschedule.data.local.model.Homework
-import com.yetk.yetkschedule.data.repository.HomeworkRepository
+import com.yetk.yetkschedule.data.local.repository.HomeworkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

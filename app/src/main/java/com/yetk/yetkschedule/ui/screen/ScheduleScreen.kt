@@ -40,7 +40,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -48,7 +47,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.yetk.yetkschedule.R
 import com.yetk.yetkschedule.data.local.Temp
-import com.yetk.yetkschedule.data.local.model.Lesson
+import com.yetk.yetkschedule.data.remote.model.Lesson
 import com.yetk.yetkschedule.other.LessonWeekState
 import com.yetk.yetkschedule.other.NoRippleInteractionSource
 import com.yetk.yetkschedule.other.WeekState

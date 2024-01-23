@@ -1,6 +1,6 @@
 package com.yetk.yetkschedule.data.local
 
-import com.yetk.yetkschedule.data.local.model.Lesson
+import com.yetk.yetkschedule.data.remote.model.Lesson
 import com.yetk.yetkschedule.other.DaysOfWeek
 import com.yetk.yetkschedule.other.LessonWeekState
 

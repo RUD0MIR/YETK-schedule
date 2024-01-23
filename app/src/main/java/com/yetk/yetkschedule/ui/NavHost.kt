@@ -30,9 +30,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.yetk.yetkschedule.HomeworkEvent
-import com.yetk.yetkschedule.HomeworkViewModel
 import com.yetk.yetkschedule.R
+import com.yetk.yetkschedule.data.local.viewmodel.HomeworkEvent
+import com.yetk.yetkschedule.data.local.viewmodel.HomeworkViewModel
 import com.yetk.yetkschedule.other.BottomNavigationItem
 import com.yetk.yetkschedule.other.NoRippleInteractionSource
 import com.yetk.yetkschedule.other.Screen

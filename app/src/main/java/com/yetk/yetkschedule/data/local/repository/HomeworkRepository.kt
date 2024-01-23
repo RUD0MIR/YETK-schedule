@@ -1,4 +1,4 @@
-package com.yetk.yetkschedule.data.repository
+package com.yetk.yetkschedule.data.local.repository
 
 import com.yetk.yetkschedule.data.local.model.Homework
 import kotlinx.coroutines.flow.Flow

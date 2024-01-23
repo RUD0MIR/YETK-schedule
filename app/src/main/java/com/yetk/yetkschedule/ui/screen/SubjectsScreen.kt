@@ -30,8 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.yetk.yetkschedule.data.local.model.Subject
-import com.yetk.yetkschedule.data.local.model.Teacher
+import com.yetk.yetkschedule.data.remote.model.Subject
+import com.yetk.yetkschedule.data.remote.model.Teacher
 import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray60
 import com.yetk.yetkschedule.ui.theme.Gray90

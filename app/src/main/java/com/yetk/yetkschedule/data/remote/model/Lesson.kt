@@ -1,4 +1,4 @@
-package com.yetk.yetkschedule.data.local.model
+package com.yetk.yetkschedule.data.remote.model
 
 import com.yetk.yetkschedule.other.LessonWeekState
 

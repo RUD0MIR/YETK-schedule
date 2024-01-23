@@ -1,4 +1,4 @@
-package com.yetk.yetkschedule
+package com.yetk.yetkschedule.data.local.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.yetk.yetkschedule.data.local.model.Homework

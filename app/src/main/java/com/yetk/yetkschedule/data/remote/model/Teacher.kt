@@ -1,4 +1,4 @@
-package com.yetk.yetkschedule.data.local.model
+package com.yetk.yetkschedule.data.remote.model
 
 data class Teacher(
     val id: Int,

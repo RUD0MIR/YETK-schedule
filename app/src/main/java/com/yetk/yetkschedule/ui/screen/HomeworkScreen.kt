@@ -35,10 +35,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.yetk.yetkschedule.HomeworkEvent
-import com.yetk.yetkschedule.HomeworkState
 import com.yetk.yetkschedule.R
 import com.yetk.yetkschedule.data.local.model.Homework
+import com.yetk.yetkschedule.data.local.viewmodel.HomeworkEvent
+import com.yetk.yetkschedule.data.local.viewmodel.HomeworkState
 import com.yetk.yetkschedule.other.SwipeableSnackbarHost
 import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray90
