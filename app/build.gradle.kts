@@ -74,6 +74,8 @@ dependencies {
     //Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.48")
     ksp("com.google.dagger:hilt-compiler:2.48")
+    //Hilt Navigation Compose
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     // Room
     val roomVersion = "2.6.1"//2.5.2

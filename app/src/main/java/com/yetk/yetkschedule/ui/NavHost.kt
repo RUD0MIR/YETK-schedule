@@ -49,8 +49,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun NavHost(viewModel: HomeworkViewModel) {
-    val state = viewModel.state.collectAsState()
+fun NavHost(
+    homeworkViewModel: HomeworkViewModel
+) {
+    val homeworkState = homeworkViewModel.state.collectAsState()
+
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     var showBottomBar by remember {
@@ -140,8 +143,8 @@ fun NavHost(viewModel: HomeworkViewModel) {
                     route = Screen.HomeworkScreen.route,
                 ) {
                     HomeworkScreen(
-                        state = state.value,
-                        onEvent = viewModel::onEvent,
+                        state = homeworkState.value,
+                        onEvent = homeworkViewModel::onEvent,
                         onNavigateToDetailScreen = { homeworkId ->
                             navController.navigate(
                                 Screen.HomeworkScreen.HomeworkDetailScreen.passArgs(
@@ -154,7 +157,7 @@ fun NavHost(viewModel: HomeworkViewModel) {
                         bottomBarPadding = PaddingValues(bottom = 60.dp),
                         onHomeworkDelete = { homework ->
                             scope.launch {
-                                viewModel.onEvent(HomeworkEvent.HideHomework(homework))
+                                homeworkViewModel.onEvent(HomeworkEvent.HideHomework(homework))
                                 val result = snackbarHostState
                                     .showSnackbar(
                                         message = "Дз удалено.",
@@ -163,11 +166,11 @@ fun NavHost(viewModel: HomeworkViewModel) {
                                     )
                                 when (result) {
                                     SnackbarResult.ActionPerformed -> {
-                                        viewModel.onEvent(HomeworkEvent.ShowHomework(homework))
+                                        homeworkViewModel.onEvent(HomeworkEvent.ShowHomework(homework))
                                     }
 
                                     SnackbarResult.Dismissed -> {
-                                        viewModel.onEvent(HomeworkEvent.DeleteHomework(homework = homework))
+                                        homeworkViewModel.onEvent(HomeworkEvent.DeleteHomework(homework = homework))
                                     }
                                 }
                             }
@@ -175,7 +178,7 @@ fun NavHost(viewModel: HomeworkViewModel) {
                         onHomeworkCheck = { homework ->
                             scope.launch {
                                 delay(400)
-                                viewModel.onEvent(HomeworkEvent.HideHomework(homework))
+                                homeworkViewModel.onEvent(HomeworkEvent.HideHomework(homework))
                                 val result = snackbarHostState
                                     .showSnackbar(
                                         message = "Сделанное дз скрыто.",
@@ -184,11 +187,11 @@ fun NavHost(viewModel: HomeworkViewModel) {
                                     )
                                 when (result) {
                                     SnackbarResult.ActionPerformed -> {
-                                        viewModel.onEvent(HomeworkEvent.ShowHomework(homework))
+                                        homeworkViewModel.onEvent(HomeworkEvent.ShowHomework(homework))
                                     }
 
                                     SnackbarResult.Dismissed -> {
-                                        viewModel.onEvent(HomeworkEvent.DeleteHomework(homework = homework))
+                                        homeworkViewModel.onEvent(HomeworkEvent.DeleteHomework(homework = homework))
                                     }
                                 }
                             }
@@ -204,15 +207,15 @@ fun NavHost(viewModel: HomeworkViewModel) {
                     val homeworkId = backStackEntry.arguments?.getInt("homeworkId") ?: -1
                     HomeworkDetailScreen(
                         homeworkId,
-                        state = state.value,
-                        onEvent = viewModel::onEvent,
+                        state = homeworkState.value,
+                        onEvent = homeworkViewModel::onEvent,
                         onNavigateUp = {
                             navController.navigateUp()
                             showBottomBar = true
                         },
                         onHomeworkDelete = { homework ->
                             scope.launch {
-                                viewModel.onEvent(HomeworkEvent.HideHomework(homework))
+                                homeworkViewModel.onEvent(HomeworkEvent.HideHomework(homework))
                                 val result = snackbarHostState
                                     .showSnackbar(
                                         message = "Дз удалено.",
@@ -221,11 +224,11 @@ fun NavHost(viewModel: HomeworkViewModel) {
                                     )
                                 when (result) {
                                     SnackbarResult.ActionPerformed -> {
-                                        viewModel.onEvent(HomeworkEvent.ShowHomework(homework))
+                                        homeworkViewModel.onEvent(HomeworkEvent.ShowHomework(homework))
                                     }
 
                                     SnackbarResult.Dismissed -> {
-                                        viewModel.onEvent(HomeworkEvent.DeleteHomework(homework = homework))
+                                        homeworkViewModel.onEvent(HomeworkEvent.DeleteHomework(homework = homework))
                                     }
                                 }
                             }
@@ -233,7 +236,7 @@ fun NavHost(viewModel: HomeworkViewModel) {
                         onHomeworkCheck = { homework ->
                             scope.launch {
                                 delay(400)
-                                viewModel.onEvent(HomeworkEvent.HideHomework(homework))
+                                homeworkViewModel.onEvent(HomeworkEvent.HideHomework(homework))
                                 val result = snackbarHostState
                                     .showSnackbar(
                                         message = "Сделанное дз скрыто.",
@@ -242,11 +245,11 @@ fun NavHost(viewModel: HomeworkViewModel) {
                                     )
                                 when (result) {
                                     SnackbarResult.ActionPerformed -> {
-                                        viewModel.onEvent(HomeworkEvent.ShowHomework(homework))
+                                        homeworkViewModel.onEvent(HomeworkEvent.ShowHomework(homework))
                                     }
 
                                     SnackbarResult.Dismissed -> {
-                                        viewModel.onEvent(HomeworkEvent.DeleteHomework(homework = homework))
+                                        homeworkViewModel.onEvent(HomeworkEvent.DeleteHomework(homework = homework))
                                     }
                                 }
                             }
@@ -254,7 +257,7 @@ fun NavHost(viewModel: HomeworkViewModel) {
                     )
                 }
                 composable(route = Screen.BellScreen.route) {
-                    BellScheduleScreen(PaddingValues(bottom = 60.dp))
+                    BellScheduleScreen(bottomBarPadding =  PaddingValues(bottom = 60.dp))
                 }
                 composable(route = Screen.SubjectsScreen.route) {
                     SubjectsScreen(

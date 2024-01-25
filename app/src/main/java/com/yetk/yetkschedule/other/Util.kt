@@ -1,5 +1,6 @@
 package com.yetk.yetkschedule.other
 
+import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -8,6 +9,10 @@ fun List<String>.filterDropdownMenu(value: TextFieldValue): List<String> {
     return this.filter {
         it.startsWith(value.text, ignoreCase = true) && it != value.text
     }.take(3)
+}
+
+fun print(tag: String, e: Exception?) = e?.apply {
+    Log.e(tag, stackTraceToString())
 }
 
 fun Int.parseNhNmin() : String {

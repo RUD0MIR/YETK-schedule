@@ -11,6 +11,7 @@ import com.yetk.yetkschedule.ui.NavHost
 import com.yetk.yetkschedule.ui.theme.YetkScheduleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val TAG = "MainActivity"
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -19,8 +20,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             YetkScheduleTheme(dynamicColor = false) {
-                NavHost(viewModel = homeworkViewModel)
-
+                NavHost(
+                    homeworkViewModel = homeworkViewModel,
+                )
             }
         }
     }

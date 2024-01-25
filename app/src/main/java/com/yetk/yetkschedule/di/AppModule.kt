@@ -3,11 +3,14 @@ package com.yetk.yetkschedule.di
 import android.app.Application
 import androidx.room.Room
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.yetk.yetkschedule.data.local.HomeworkDao
 import com.yetk.yetkschedule.data.local.HomeworkDatabase
 import com.yetk.yetkschedule.data.local.repository.DefaultHomeworkRepository
 import com.yetk.yetkschedule.data.local.repository.HomeworkRepository
+import com.yetk.yetkschedule.data.remote.repository.DefaultFirestoreRepository
+import com.yetk.yetkschedule.data.remote.repository.FirestoreRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,4 +43,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFirestore() = Firebase.firestore
+
+    @Provides
+    @Singleton
+    fun provideDefaultFirestoreRepository(
+        firestore: FirebaseFirestore
+    ) = DefaultFirestoreRepository(firestore) as FirestoreRepository
 }
