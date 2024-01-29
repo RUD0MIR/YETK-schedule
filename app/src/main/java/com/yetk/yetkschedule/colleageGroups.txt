@@ -1,0 +1,41 @@
+group1
+-----
+id = ??
+login = 20kis-1
+name =
+password = 1234
+relevantFromTo = 22.01.24 - 27.01.24
+lessons =
+    subject = "Английский язык"
+        rooms = 304 108
+        teachers = "Колобова Р.В." "Фомина Р.И."
+        number = 1
+        dayOfWeek = 0
+        weekState = 0
+        isCanceled = false
+    subject = "Физкультура"
+        rooms = 300
+        teachers = "Иванов И.И."
+        number = 2
+        dayOfWeek = 0
+        weekState = 1
+        isCanceled = false
+    subject = "Информационные технологии"
+        rooms = 304 108
+        teachers = "Никулина Р.И."
+        number = 3
+        dayOfWeek = 1
+        weekState = -1
+        isCanceled = false
+subjects =
+    name = "Английский язык"
+        teachers = "Колобова Р.В." "Фомина Р.И."
+    name = "Физкультура"
+        teachers = "Иванов И.И."
+    name = "Информационные технологии"
+        teachers = "Никулина Р.И."
+
+
+
+		
+

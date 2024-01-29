@@ -3,8 +3,10 @@ package com.yetk.yetkschedule.data.remote.repository
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.yetk.yetkschedule.data.remote.model.BellSchedule
+import com.yetk.yetkschedule.data.remote.model.CollegeGroup
 import com.yetk.yetkschedule.data.remote.model.Response
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
@@ -13,30 +15,25 @@ private const val TAG = "DefaultBellScheduleRepo"
 class DefaultFirestoreRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : FirestoreRepository {
-//    override fun getBellScheduleData(groupId: String): BellSchedule? {
-//        var bellSchedule: BellSchedule? = null
-//        firestore.collection("bell_schedule").document("Y07qotzCQaQEQY7ROCSB")
-////            .whereEqualTo("group", groupId)
-//            .get()
-//            .addOnSuccessListener { document ->
-//                if (document != null) {
-////                    bellSchedule = document.documents[0].toObject<BellSchedule>()
-//                    bellSchedule = document.toObject<BellSchedule>()
-//                    Log.d(TAG, "Success: $bellSchedule")
-//                } else {
-//                    Log.d(TAG, "No such document")
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d(TAG, "get failed with ", exception)
-//            }
-//
-//
-//        Log.d(TAG, "Success actually returns: $bellSchedule")
-//        return bellSchedule
-//    }
+    override fun getCollegeGroupData(groupId: String) = callbackFlow {
+        val snapshotListener = firestore
+            .document("CollegeGroup/$groupId")
+            .addSnapshotListener { snapshot, e ->
+                val response = if (snapshot != null) {
+                    val collegeGroupData = snapshot.toObject<CollegeGroup>()
+                    Response.Success(collegeGroupData)
+                } else {
+                    Response.Failure(e)
+                }
+                trySend(response as Response<CollegeGroup>)
+            }
+        awaitClose {
+            snapshotListener.remove()
+        }
+    }
 
-    override fun getBellScheduleData(groupId: String) = callbackFlow<Response<BellSchedule>> {
+
+    override fun getBellSchedule() = callbackFlow {
         val snapshotListener = firestore
             .document("bell_schedule/Y07qotzCQaQEQY7ROCSB")
             .addSnapshotListener { snapshot, e ->
@@ -53,7 +50,20 @@ class DefaultFirestoreRepository @Inject constructor(
         }
     }
 
-    override fun getAuthedGroupId(login: String, password: String): String {
-        TODO("Not yet implemented")
+    override fun isLowerWeek() = callbackFlow {
+        val snapshotListener = firestore
+            .document("weekState/x0n1HLLyjHwNQsSWugj7")
+            .addSnapshotListener { snapshot, e ->
+                val response = if (snapshot != null) {
+                    val bellSchedule = snapshot["isLowerWeek"] as Boolean
+                    Response.Success(bellSchedule)
+                } else {
+                    Response.Failure(e)
+                }
+                trySend(response as Response<Boolean>)
+            }
+        awaitClose {
+            snapshotListener.remove()
+        }
     }
 }

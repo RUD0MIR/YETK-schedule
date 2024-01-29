@@ -10,4 +10,31 @@ sealed class Response<out T> {
     data class Failure(
         val e: Exception?
     ): Response<Nothing>()
+
+    fun <T>isSuccess(vararg values: Response<T>): Boolean{
+        values.forEach {
+            if(it !is Success) {
+                return false
+            }
+        }
+        return true
+    }
+
+    fun <T>isFailure(vararg values: Response<T>): Boolean{
+        values.forEach {
+            if(it !is Failure) {
+                return false
+            }
+        }
+        return true
+    }
+
+    fun <T>isLoading(vararg values: Response<T>): Boolean{
+        values.forEach {
+            if(it !is Loading) {
+                return false
+            }
+        }
+        return true
+    }
 }

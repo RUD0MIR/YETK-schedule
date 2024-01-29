@@ -30,57 +30,58 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.yetk.yetkschedule.data.remote.model.Response
 import com.yetk.yetkschedule.data.remote.model.Subject
-import com.yetk.yetkschedule.data.remote.model.Teacher
+import com.yetk.yetkschedule.data.remote.viewmodel.MainViewModel
+import com.yetk.yetkschedule.ui.ProgressBar
 import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray60
 import com.yetk.yetkschedule.ui.theme.Gray90
 
-private val subjectsList = mutableListOf(
-    Subject(id = 0, "Subject 1", listOf(Teacher(0, "Колобова Р.В."), Teacher(0, "Колобова Р.В."))),
-    Subject(id = 1, "Subject 2", listOf(Teacher(1, "Меркушев Мечеслав Николаевич"))),
-    Subject(id = 2, "Subject 3", listOf(Teacher(2, "Колобова Р.В."))),
-    Subject(id = 3, "Subject 4", listOf(Teacher(3, "Меркушев Мечеслав Николаевич"))),
-    Subject(id = 4, "Subject 5", listOf(Teacher(4, "Колобова Р.В."))),
-)
-
-
-
+private const val TAG = "SubjectsScreen"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubjectsScreen(
-    bottomBarPadding: PaddingValues
+    bottomBarPadding: PaddingValues,
+    viewModel: MainViewModel = hiltViewModel()
 ) {
-    Scaffold(
-        modifier = Modifier.padding(bottomBarPadding),
-        topBar = {
-            Column() {
-                TopAppBar(
-                    modifier = Modifier.padding(end = 16.dp),
-                    title = {
-                        Text(
-                            text = "Предметы",
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.headlineLarge
+    when (val collegeGroupData = viewModel.collegeGroup.value) {
+        is Response.Loading -> ProgressBar()
+        is Response.Failure -> com.yetk.yetkschedule.other.print(TAG, collegeGroupData.e)
+        is Response.Success -> {
+            Scaffold(
+                modifier = Modifier.padding(bottomBarPadding),
+                topBar = {
+                    Column() {
+                        TopAppBar(
+                            modifier = Modifier.padding(end = 16.dp),
+                            title = {
+                                Text(
+                                    text = "Предметы",
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.headlineLarge
+                                )
+                            },
                         )
-                    },
-                )
-                Divider(
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp), thickness = 1.dp, color = Gray90
+                        )
+                    }
+                },
+            ) { topBarPadding ->
+                LazyColumn(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp), thickness = 1.dp, color = Gray90
-                )
-            }
-        },
-    ) { topBarPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(topBarPadding)
-                .padding(start = 16.dp)
-        ) {
-            items(subjectsList.size) {
-                SubjectListItem(subjectsList[it])
+                        .fillMaxSize()
+                        .padding(topBarPadding)
+                        .padding(start = 16.dp)
+                ) {
+                    items(collegeGroupData.data.subjects.size) {
+                        SubjectListItem(collegeGroupData.data.subjects[it])
+                    }
+                }
             }
         }
     }
@@ -119,7 +120,7 @@ fun SubjectListItem(
                         subject.teachers.forEach {
                             Text(
                                 modifier = Modifier.padding(top = 8.dp),
-                                text = it.fullName,
+                                text = it,
                                 style = MaterialTheme.typography.bodySmall,
                                 color = Gray60
                             )

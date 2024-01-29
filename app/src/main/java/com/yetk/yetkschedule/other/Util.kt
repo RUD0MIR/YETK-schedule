@@ -15,6 +15,20 @@ fun print(tag: String, e: Exception?) = e?.apply {
     Log.e(tag, stackTraceToString())
 }
 
+fun Int.matches(isLowerWeek: Boolean): Boolean {
+    return when(this) {
+        1 -> {
+            !isLowerWeek
+        }
+        -1 -> {
+            isLowerWeek
+        }
+        else -> {
+            true
+        }
+    }
+}
+
 fun Int.parseNhNmin() : String {
     return this.toDuration(DurationUnit.MINUTES).toComponents { hours, minutes, _, _ ->
         var time = ""

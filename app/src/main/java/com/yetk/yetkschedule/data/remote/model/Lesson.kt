@@ -4,13 +4,11 @@ import com.yetk.yetkschedule.other.LessonWeekState
 
 
 data class Lesson(
-    val id: Int,
-    val subject: String,
-    val room: String,
-    val teacher: String,
-    val startTime: String,//replace with LessonTime
-    val endTime: String,//
-    val dayOfWeek: Int,
-    val weekState: LessonWeekState,
-    val isDisabled: Boolean
+    val subject: String = "",
+    val rooms: List<String> = emptyList(),
+    val teachers: List<String> = emptyList(),
+    val number: Int = 1,
+    val dayOfWeek: Int = 0,
+    val weekState: Int = 0,
+    val isCanceled: Boolean = false
     )
