@@ -34,7 +34,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yetk.yetkschedule.data.remote.model.Response
 import com.yetk.yetkschedule.data.remote.model.Subject
 import com.yetk.yetkschedule.data.remote.viewmodel.MainViewModel
-import com.yetk.yetkschedule.ui.ProgressBar
+import com.yetk.yetkschedule.ui.ErrorScreen
+import com.yetk.yetkschedule.ui.LoadingScreen
 import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray60
 import com.yetk.yetkschedule.ui.theme.Gray90
@@ -47,8 +48,11 @@ fun SubjectsScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     when (val collegeGroupData = viewModel.collegeGroup.value) {
-        is Response.Loading -> ProgressBar()
-        is Response.Failure -> com.yetk.yetkschedule.other.print(TAG, collegeGroupData.e)
+        is Response.Loading -> LoadingScreen(topBarTitle = "Предметы")
+        is Response.Failure -> {
+            ErrorScreen(topBarTitle = "Предметы")
+            com.yetk.yetkschedule.other.print(TAG, collegeGroupData.e)
+        }
         is Response.Success -> {
             Scaffold(
                 modifier = Modifier.padding(bottomBarPadding),

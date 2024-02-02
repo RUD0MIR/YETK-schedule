@@ -1,5 +1,6 @@
 package com.yetk.yetkschedule.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,18 +48,17 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.yetk.yetkschedule.R
+import com.yetk.yetkschedule.data.remote.model.CollegeGroup
 import com.yetk.yetkschedule.data.remote.model.Lesson
 import com.yetk.yetkschedule.data.remote.model.Response
 import com.yetk.yetkschedule.data.remote.model.Response.Loading.isFailure
 import com.yetk.yetkschedule.data.remote.model.Response.Loading.isLoading
 import com.yetk.yetkschedule.data.remote.model.Response.Loading.isSuccess
 import com.yetk.yetkschedule.data.remote.viewmodel.MainViewModel
-import com.yetk.yetkschedule.other.LessonWeekState
 import com.yetk.yetkschedule.other.NoRippleInteractionSource
-import com.yetk.yetkschedule.other.WeekState
 import com.yetk.yetkschedule.other.matches
-import com.yetk.yetkschedule.other.name
-import com.yetk.yetkschedule.ui.ProgressBar
+import com.yetk.yetkschedule.ui.ErrorScreen
+import com.yetk.yetkschedule.ui.LoadingScreen
 import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray70
 import com.yetk.yetkschedule.ui.theme.Gray80
@@ -76,26 +76,36 @@ fun ScheduleScreen(
     bottomBarPadding: PaddingValues,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    val collegeGroupData = viewModel.collegeGroup.value
+    val collegeGroup = viewModel.collegeGroup.value
+    Log.d(TAG, "collegeGroup:${viewModel.collegeGroup.value}")
     val isLowerWeek = viewModel.isLowerWeek.value
+
+    var isLowerWeekPreview by remember {
+        mutableStateOf<Boolean?>(null)
+    }
+    var collegeGroupData by remember {
+        mutableStateOf(CollegeGroup())
+    }
+    var isLowerWeekValue by remember {
+        mutableStateOf<Boolean?>(null)
+    }
+
     when {
-        isLoading(collegeGroupData, isLowerWeek) -> {
-            ProgressBar()
+        isLoading(collegeGroup, isLowerWeek) -> {
+            LoadingScreen(topBarTitle = "Расписание")
+            Log.d(TAG, "Loading")
         }
-        isFailure(collegeGroupData, isLowerWeek) -> {
-            collegeGroupData as Response.Failure
-            isLowerWeek as Response.Failure
-            com.yetk.yetkschedule.other.print(TAG, collegeGroupData.e)
-            com.yetk.yetkschedule.other.print(TAG, isLowerWeek.e)
-
+        isFailure(collegeGroup, isLowerWeek) -> {
+            com.yetk.yetkschedule.other.print(TAG, (collegeGroup as Response.Failure).e)
+            com.yetk.yetkschedule.other.print(TAG, (isLowerWeek as Response.Failure).e)
+            Log.d(TAG, "Failure")
+            ErrorScreen(message = "Хмм... что-то пошло не так", topBarTitle = "Расписание")
         }
-        isSuccess(collegeGroupData, isLowerWeek) -> {
-            collegeGroupData as Response.Success
-            isLowerWeek as Response.Success
-
-            var isLowerWeekPreview by remember {
-                mutableStateOf(isLowerWeek.data)
-            }
+        isSuccess(collegeGroup, isLowerWeek) -> {
+            Log.d(TAG, "Success")
+            collegeGroupData = (collegeGroup as Response.Success).data
+            isLowerWeekPreview = (isLowerWeek as Response.Success).data
+            isLowerWeekValue = (isLowerWeek as Response.Success).data
 
             Scaffold(
                 modifier = Modifier.padding(bottomBarPadding),
@@ -111,26 +121,28 @@ fun ScheduleScreen(
                                 )
                             },
                             actions = {
-                                IconButton(onClick = {
-                                    isLowerWeekPreview = !isLowerWeekPreview
-                                }
-                                ) {
-                                    if (!isLowerWeekPreview) {
-                                        Icon(
-                                            modifier = Modifier.size(32.dp),
-                                            painter = painterResource(id = R.drawable.to_lower_week),
-                                            contentDescription = "To lower week",
-                                            tint = Gray50
-                                        )
-                                    } else {
-                                        Icon(
-                                            modifier = Modifier.size(32.dp),
-                                            painter = painterResource(id = R.drawable.ic_to_upper_week),
-                                            contentDescription = "To upper week",
-                                            tint = Gray50
-                                        )
+                                if (isLowerWeekPreview != null) {
+                                    IconButton(onClick = {
+                                        isLowerWeekPreview = !isLowerWeekPreview!!
                                     }
+                                    ) {
+                                        if (!isLowerWeekPreview!!) {
+                                            Icon(
+                                                modifier = Modifier.size(32.dp),
+                                                painter = painterResource(id = R.drawable.to_lower_week),
+                                                contentDescription = "To lower week",
+                                                tint = Gray50
+                                            )
+                                        } else {
+                                            Icon(
+                                                modifier = Modifier.size(32.dp),
+                                                painter = painterResource(id = R.drawable.ic_to_upper_week),
+                                                contentDescription = "To upper week",
+                                                tint = Gray50
+                                            )
+                                        }
 
+                                    }
                                 }
                             }
                         )
@@ -145,7 +157,7 @@ fun ScheduleScreen(
                                     .padding(start = 16.dp)
                             ) {
                                 Text(
-                                    text = collegeGroupData.data.relevantFromTo,
+                                    text = collegeGroupData.relevantFromTo,
                                     fontFamily = Inter,
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
@@ -153,7 +165,7 @@ fun ScheduleScreen(
                                 )
                                 Spacer(modifier = Modifier.width(20.dp))
                                 Text(
-                                    text = collegeGroupData.data.name,
+                                    text = collegeGroupData.name,
                                     fontFamily = Inter,
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
@@ -161,14 +173,16 @@ fun ScheduleScreen(
                                 )
                             }
 
-                            Text(
-                                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
-                                text = if (isLowerWeek.data) "Нижняя неделя" else "Верхняя неделя",
-                                fontFamily = Inter,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = if (isLowerWeek.data == isLowerWeekPreview) MaterialTheme.colorScheme.secondary else Gray70
-                            )
+                            if (isLowerWeekValue != null) {
+                                Text(
+                                    modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
+                                    text = if (isLowerWeekValue!!) "Нижняя неделя" else "Верхняя неделя",
+                                    fontFamily = Inter,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = if (isLowerWeekValue == isLowerWeekPreview) MaterialTheme.colorScheme.secondary else Gray70
+                                )
+                            }
                         }
 
                         Divider(
@@ -182,9 +196,14 @@ fun ScheduleScreen(
                 HorizontalWeekPager(
                     modifier = Modifier.padding(top = 150.dp)
                 ) { currentPage ->
-                    val currentLessons = collegeGroupData.data.lessons.filter {
-                        it.dayOfWeek == currentPage && it.weekState.matches(isLowerWeekPreview)
+                    var currentLessons = emptyList<Lesson>()
+
+                    if(isLowerWeekPreview != null) {
+                        currentLessons = collegeGroupData.lessons.filter {
+                            it.dayOfWeek == currentPage && it.weekState.matches(isLowerWeekPreview!!)
+                        }
                     }
+
 
                     if (currentLessons.isEmpty()) {
                         Box(
@@ -228,25 +247,6 @@ fun ScheduleScreen(
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ScheduleAppBar(
-    viewModel: MainViewModel,
-    groupName: String,
-    relevantFromTo: String
-) {
-    when (val isLowerWeek = viewModel.isLowerWeek.value) {
-        is Response.Loading -> ProgressBar()
-        is Response.Failure -> com.yetk.yetkschedule.other.print(TAG, isLowerWeek.e)
-        is Response.Success -> {
-
-
-
-        }
-    }
-}
-
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable

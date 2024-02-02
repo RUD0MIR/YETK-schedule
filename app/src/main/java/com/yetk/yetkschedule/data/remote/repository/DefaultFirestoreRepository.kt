@@ -1,5 +1,6 @@
 package com.yetk.yetkschedule.data.remote.repository
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.yetk.yetkschedule.data.remote.model.BellSchedule
@@ -21,7 +22,12 @@ class DefaultFirestoreRepository @Inject constructor(
             .addSnapshotListener { snapshot, e ->
                 val response = if (snapshot != null) {
                     val collegeGroupData = snapshot.toObject<CollegeGroup>()
-                    Response.Success(collegeGroupData)
+                    if(collegeGroupData != null) {
+                        Response.Success(collegeGroupData)
+                    }
+                    else{
+                        Response.Failure(e)
+                    }
                 } else {
                     Response.Failure(e)
                 }
@@ -39,11 +45,16 @@ class DefaultFirestoreRepository @Inject constructor(
             .addSnapshotListener { snapshot, e ->
                 val response = if (snapshot != null) {
                     val bellSchedule = snapshot.toObject<BellSchedule>()
-                    Response.Success(bellSchedule)
+                    if(bellSchedule != null) {
+                        Response.Success(bellSchedule)
+                    }
+                    else {
+                        Response.Failure(e)
+                    }
                 } else {
                     Response.Failure(e)
                 }
-                trySend(response as Response<BellSchedule>)
+                trySend(response)
             }
         awaitClose {
             snapshotListener.remove()
@@ -55,8 +66,12 @@ class DefaultFirestoreRepository @Inject constructor(
             .document("weekState/x0n1HLLyjHwNQsSWugj7")
             .addSnapshotListener { snapshot, e ->
                 val response = if (snapshot != null) {
-                    val bellSchedule = snapshot["isLowerWeek"] as Boolean
-                    Response.Success(bellSchedule)
+                    val bellSchedule = snapshot["isLowerWeek"]
+                    if(bellSchedule != null) {
+                        Response.Success(bellSchedule)
+                    } else {
+                        Response.Failure(e)
+                    }
                 } else {
                     Response.Failure(e)
                 }

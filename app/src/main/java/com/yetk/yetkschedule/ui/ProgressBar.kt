@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import com.yetk.yetkschedule.ui.theme.Gray80
 
 @Composable
-fun ProgressBar() {
+fun ProgressBar(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
         CircularProgressIndicator(

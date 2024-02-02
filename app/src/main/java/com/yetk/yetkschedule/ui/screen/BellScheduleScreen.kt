@@ -26,7 +26,8 @@ import com.yetk.yetkschedule.data.remote.model.Response
 import com.yetk.yetkschedule.data.remote.viewmodel.MainViewModel
 import com.yetk.yetkschedule.other.parseNhNmin
 import com.yetk.yetkschedule.other.print
-import com.yetk.yetkschedule.ui.ProgressBar
+import com.yetk.yetkschedule.ui.ErrorScreen
+import com.yetk.yetkschedule.ui.LoadingScreen
 import com.yetk.yetkschedule.ui.theme.Gray50
 import com.yetk.yetkschedule.ui.theme.Gray90
 
@@ -42,7 +43,11 @@ fun BellScheduleScreen(
         viewModel.fetchBellScheduleData()
     }
     when (val bellSchedule = viewModel.bellSchedule.value) {
-        is Response.Loading -> ProgressBar()
+        is Response.Loading -> LoadingScreen(topBarTitle = "Расписание звонков")
+        is Response.Failure -> {
+            ErrorScreen(topBarTitle = "Расписание звонков")
+            print(TAG, bellSchedule.e)
+        }
         is Response.Success -> {
             val lessonDurationMin = bellSchedule.data.lesson_duration_min.parseNhNmin()
             val lessonsTime = bellSchedule.data.lessons_time
@@ -99,8 +104,6 @@ fun BellScheduleScreen(
                 }
             }
         }
-
-        is Response.Failure -> print(TAG, bellSchedule.e)
     }
 }
 
