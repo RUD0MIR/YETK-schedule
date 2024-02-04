@@ -48,6 +48,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.yetk.yetkschedule.R
+import com.yetk.yetkschedule.data.remote.model.BellSchedule
 import com.yetk.yetkschedule.data.remote.model.CollegeGroup
 import com.yetk.yetkschedule.data.remote.model.Lesson
 import com.yetk.yetkschedule.data.remote.model.Response
@@ -77,8 +78,8 @@ fun ScheduleScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val collegeGroup = viewModel.collegeGroup.value
-    Log.d(TAG, "collegeGroup:${viewModel.collegeGroup.value}")
     val isLowerWeek = viewModel.isLowerWeek.value
+    val bellSchedule = viewModel.bellSchedule.value
 
     var isLowerWeekPreview by remember {
         mutableStateOf<Boolean?>(null)
@@ -89,23 +90,27 @@ fun ScheduleScreen(
     var isLowerWeekValue by remember {
         mutableStateOf<Boolean?>(null)
     }
+    var bellScheduleData by remember {
+        mutableStateOf(BellSchedule())
+    }
 
     when {
-        isLoading(collegeGroup, isLowerWeek) -> {
+        isLoading(collegeGroup, isLowerWeek, bellSchedule) -> {
             LoadingScreen(topBarTitle = "Расписание")
             Log.d(TAG, "Loading")
         }
-        isFailure(collegeGroup, isLowerWeek) -> {
+        isFailure(collegeGroup, isLowerWeek, bellSchedule) -> {
             com.yetk.yetkschedule.other.print(TAG, (collegeGroup as Response.Failure).e)
             com.yetk.yetkschedule.other.print(TAG, (isLowerWeek as Response.Failure).e)
             Log.d(TAG, "Failure")
             ErrorScreen(message = "Хмм... что-то пошло не так", topBarTitle = "Расписание")
         }
-        isSuccess(collegeGroup, isLowerWeek) -> {
+        isSuccess(collegeGroup, isLowerWeek, bellSchedule) -> {
             Log.d(TAG, "Success")
             collegeGroupData = (collegeGroup as Response.Success).data
-            isLowerWeekPreview = (isLowerWeek as Response.Success).data
             isLowerWeekValue = (isLowerWeek as Response.Success).data
+            bellScheduleData = (bellSchedule as Response.Success).data
+            isLowerWeekPreview = isLowerWeekValue
 
             Scaffold(
                 modifier = Modifier.padding(bottomBarPadding),
@@ -229,6 +234,7 @@ fun ScheduleScreen(
                                 Column() {
                                     LessonListItem(
                                         currentLessons[i],
+                                        bellScheduleData
                                     )
                                     Divider(
                                         modifier = Modifier
@@ -300,6 +306,7 @@ fun HorizontalWeekPager(modifier: Modifier = Modifier, pageContent: @Composable 
 @Composable
 fun LessonListItem(
     lesson: Lesson,
+    bellSchedule: BellSchedule
 ) {
     Card(
         modifier = Modifier
@@ -324,13 +331,13 @@ fun LessonListItem(
             ) {
                 Text(
                     modifier = Modifier.height(16.dp),
-                    text = "--",
+                    text = lesson.startTime(bellSchedule),
                     style = MaterialTheme.typography.labelMedium,
                     color = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
                 )
                 Text(
                     modifier = Modifier.height(13.dp),
-                    text = "--",
+                    text = lesson.endTime(bellSchedule),
                     style = MaterialTheme.typography.labelSmall,
                     color = if (lesson.isCanceled) Gray70.copy(alpha = 0.38f) else Gray70
                 )

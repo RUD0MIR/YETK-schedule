@@ -26,6 +26,7 @@ class MainViewModel @Inject constructor(
     init {
         fetchCollegeGroupData("6wBXWrOgataTaazTBhBn")
         fetchIsLowerWeek()
+        fetchBellScheduleData()
     }
 
     private fun fetchCollegeGroupData(groupId: String) = viewModelScope.launch {
@@ -40,7 +41,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun fetchBellScheduleData() = viewModelScope.launch {
+    private fun fetchBellScheduleData() = viewModelScope.launch {
         repository.getBellSchedule().collect { response ->
             bellSchedule.value = response
         }

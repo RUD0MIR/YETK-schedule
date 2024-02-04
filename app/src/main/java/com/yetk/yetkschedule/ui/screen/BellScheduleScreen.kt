@@ -16,7 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -39,9 +38,6 @@ fun BellScheduleScreen(
     viewModel: MainViewModel = hiltViewModel(),
     bottomBarPadding: PaddingValues
 ) {
-    LaunchedEffect(key1 = null) {
-        viewModel.fetchBellScheduleData()
-    }
     when (val bellSchedule = viewModel.bellSchedule.value) {
         is Response.Loading -> LoadingScreen(topBarTitle = "Расписание звонков")
         is Response.Failure -> {

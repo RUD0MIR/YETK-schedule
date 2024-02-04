@@ -1,13 +1,11 @@
 package com.yetk.yetkschedule.data.remote.repository
 
-import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.yetk.yetkschedule.data.remote.model.BellSchedule
 import com.yetk.yetkschedule.data.remote.model.CollegeGroup
 import com.yetk.yetkschedule.data.remote.model.Response
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
