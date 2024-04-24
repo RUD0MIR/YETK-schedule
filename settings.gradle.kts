@@ -16,4 +16,6 @@ dependencyResolutionManagement {
 rootProject.name = "YetkSchedule"
 include(":app")
 include(":for_student")
-include(":design_system")
+include(":model")
+include(":ui")
+include(":designsystem")

@@ -3,26 +3,19 @@ package com.yetk.yetkschedule
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.yetk.yetkschedule.data.local.viewmodel.HomeworkViewModel
-import com.yetk.yetkschedule.ui.NavHost
-import com.yetk.yetkschedule.ui.theme.YetkScheduleTheme
+import com.yetk.designsystem.theme.YetkScheduleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "MainActivity"
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    private val homeworkViewModel by viewModels<HomeworkViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            YetkScheduleTheme(dynamicColor = false) {
-                NavHost(
-                    homeworkViewModel = homeworkViewModel,
-                )
+            com.yetk.designsystem.theme.YetkScheduleTheme(dynamicColor = false) {
+                NavHost()
             }
         }
     }
@@ -31,6 +24,6 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    YetkScheduleTheme {
+    com.yetk.designsystem.theme.YetkScheduleTheme {
     }
 }
