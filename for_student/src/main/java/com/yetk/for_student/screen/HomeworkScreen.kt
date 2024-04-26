@@ -14,15 +14,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,31 +26,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.yetk.yetkschedule.R
-import com.yetk.model.Homework
+import com.yetk.designsystem.component.YetkAddButton
+import com.yetk.designsystem.component.YetkDivider
+import com.yetk.designsystem.component.YetkTopBar
+import com.yetk.designsystem.icon.YetkIcon
+import com.yetk.designsystem.theme.Red
+import com.yetk.designsystem.theme.White
 import com.yetk.for_student.data.local.viewmodel.HomeworkEvent
 import com.yetk.for_student.data.local.viewmodel.HomeworkState
-import com.yetk.yetkschedule.other.SwipeableSnackbarHost
-import com.yetk.yetkschedule.ui.theme.Gray50
-import com.yetk.yetkschedule.ui.theme.Gray90
-import com.yetk.yetkschedule.ui.theme.Red
-import com.yetk.yetkschedule.ui.theme.White
+import com.yetk.model.Homework
+import com.yetk.ui.SwipeableSnackbarHost
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeworkScreen(
-    state: com.yetk.for_student.data.local.viewmodel.HomeworkState,
+    state: HomeworkState,
     snackbarHostState: SnackbarHostState,
-    onEvent: (com.yetk.for_student.data.local.viewmodel.HomeworkEvent) -> Unit,
-    onHomeworkCheck: (homework: com.yetk.model.Homework) -> Unit,
-    onHomeworkDelete: (homework: com.yetk.model.Homework) -> Unit,
+    onEvent: (HomeworkEvent) -> Unit,
+    onHomeworkCheck: (homework: Homework) -> Unit,
+    onHomeworkDelete: (homework: Homework) -> Unit,
     bottomBarPadding: PaddingValues,
     onNavigateToDetailScreen: (id: Int?) -> Unit,
 ) {
@@ -62,40 +57,13 @@ fun HomeworkScreen(
     Scaffold(
         modifier = Modifier.padding(bottomBarPadding),
         topBar = {
-            Column() {
-                TopAppBar(
-                    modifier = Modifier.padding(end = 16.dp),
-                    title = {
-                        Text(
-                            text = "Домашние задания",
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.headlineLarge
-                        )
-                    },
-                )
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp), thickness = 1.dp, color = Gray90
-                )
-            }
+            YetkTopBar(text = "Домашние задания") {}
         },
         snackbarHost = {
             SwipeableSnackbarHost(snackbarHostState)
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    onNavigateToDetailScreen(-1)
-                },
-                containerColor = White
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_add),
-                    contentDescription = "Add",
-                    tint = Gray50
-                )
-            }
+            YetkAddButton() { onNavigateToDetailScreen(-1) }
         },
     ) { topBarPadding ->
         LazyColumn(
@@ -111,7 +79,6 @@ fun HomeworkScreen(
                             homework,
                             onCheck = {
                                 onHomeworkCheck(homework)
-
                             },
                             onItemClick = {
                                 onNavigateToDetailScreen(it)
@@ -122,11 +89,7 @@ fun HomeworkScreen(
                                 onHomeworkDelete(homework)
                             },
                         )
-                        Divider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp), thickness = 1.dp, color = Gray90
-                        )
+                        YetkDivider()
                     }
                 }
             }
@@ -137,7 +100,7 @@ fun HomeworkScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeworkListItem(
-    homework: com.yetk.model.Homework,
+    homework: Homework,
     onBackgroundEndClick: (id: Int) -> Unit,
     onItemClick: () -> Unit,
     onCheck: () -> Unit
@@ -157,7 +120,7 @@ fun HomeworkListItem(
         hiddenContentEnd = {
             androidx.compose.material.Icon(
                 modifier = Modifier.padding(horizontal = 25.dp),
-                painter = painterResource(id = R.drawable.ic_delete),
+                imageVector = YetkIcon.Delete,
                 contentDescription = null,
                 tint = White
             )

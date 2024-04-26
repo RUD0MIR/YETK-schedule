@@ -1,6 +1,5 @@
 package com.yetk.for_student.screen
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,10 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.IconButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +24,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,11 +42,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.yetk.designsystem.component.LowerUpperWeekToggle
+import com.yetk.designsystem.component.YetkDivider
+import com.yetk.designsystem.component.YetkTopBar
+import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.Gray50
 import com.yetk.designsystem.theme.Gray70
 import com.yetk.designsystem.theme.Gray80
-import com.yetk.designsystem.theme.Gray90
 import com.yetk.designsystem.theme.Inter
+import com.yetk.designsystem.theme.White
 import com.yetk.designsystem.theme.WhiteDisabled
 import com.yetk.for_student.R
 import com.yetk.for_student.matches
@@ -95,14 +94,11 @@ fun ScheduleScreen(
     when {
         isLoading(collegeGroup, isLowerWeek, bellSchedule) -> {
             LoadingScreen(topBarTitle = "Расписание")
-            Log.d(TAG, "Loading")
         }
         isFailure(collegeGroup, isLowerWeek, bellSchedule) -> {
-            Log.d(TAG, "Failure")
             ErrorScreen(message = "Хмм... что-то пошло не так", topBarTitle = "Расписание")
         }
         isSuccess(collegeGroup, isLowerWeek, bellSchedule) -> {
-            Log.d(TAG, "Success")
             collegeGroupData = (collegeGroup as Response.Success).data
             isLowerWeekValue = (isLowerWeek as Response.Success).data
             bellScheduleData = (bellSchedule as Response.Success).data
@@ -112,41 +108,13 @@ fun ScheduleScreen(
                 modifier = Modifier.padding(bottomBarPadding),
                 topBar = {
                     Column(Modifier.fillMaxWidth()) {
-                        TopAppBar(
-                            modifier = Modifier.padding(end = 16.dp),
-                            title = {
-                                Text(
-                                    text = "Расписание",
-                                    textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.headlineLarge
-                                )
-                            },
-                            actions = {
-                                if (isLowerWeekPreview != null) {
-                                    IconButton(onClick = {
-                                        isLowerWeekPreview = !isLowerWeekPreview!!
-                                    }
-                                    ) {
-                                        if (!isLowerWeekPreview!!) {
-                                            Icon(
-                                                modifier = Modifier.size(32.dp),
-                                                painter = painterResource(id = R.drawable.to_lower_week),
-                                                contentDescription = "To lower week",
-                                                tint = Gray50
-                                            )
-                                        } else {
-                                            Icon(
-                                                modifier = Modifier.size(32.dp),
-                                                painter = painterResource(id = R.drawable.ic_to_upper_week),
-                                                contentDescription = "To upper week",
-                                                tint = Gray50
-                                            )
-                                        }
-
-                                    }
+                        YetkTopBar(text = "Расписание") {
+                            if (isLowerWeekPreview != null) {
+                                LowerUpperWeekToggle(isLowerWeek = isLowerWeekPreview!!) {
+                                    isLowerWeekPreview = !isLowerWeekPreview!!
                                 }
                             }
-                        )
+                        }
 
                         Column(
                             modifier = Modifier
@@ -186,11 +154,7 @@ fun ScheduleScreen(
                             }
                         }
 
-                        Divider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp), thickness = 1.dp, color = Gray90
-                        )
+                        YetkDivider()
                     }
                 },
             ) { topBarPadding ->
@@ -204,7 +168,6 @@ fun ScheduleScreen(
                             it.dayOfWeek == currentPage && it.weekState.matches(isLowerWeekPreview!!)
                         }
                     }
-
 
                     if (currentLessons.isEmpty()) {
                         Box(
@@ -232,13 +195,7 @@ fun ScheduleScreen(
                                         currentLessons[i],
                                         bellScheduleData
                                     )
-                                    Divider(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(horizontal = 16.dp),
-                                        thickness = 1.dp,
-                                        color = Gray90
-                                    )
+                                    YetkDivider()
                                 }
                             }
                         }
@@ -287,11 +244,7 @@ fun HorizontalWeekPager(modifier: Modifier = Modifier, pageContent: @Composable 
             }
         }
 
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp), thickness = 1.dp, color = Gray90
-        )
+        YetkDivider()
 
         HorizontalPager(modifier = Modifier, state = pagerState) { page ->
             pageContent(page)
@@ -357,7 +310,7 @@ fun LessonListItem(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 modifier = Modifier.size(12.dp),
-                                painter = painterResource(id = R.drawable.ic_location),
+                                imageVector = YetkIcon.LocationOn,
                                 contentDescription = "Room",
                                 tint = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
                             )
@@ -371,7 +324,7 @@ fun LessonListItem(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 modifier = Modifier.size(12.dp),
-                                painter = painterResource(R.drawable.ic_person),
+                                imageVector = YetkIcon.Person,
                                 contentDescription = "Teacher",
                                 tint = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
                             )
@@ -388,14 +341,14 @@ fun LessonListItem(
                             0 -> {}
                             1 -> {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.ic_clock_upper_week),
+                                    imageVector = YetkIcon.ClockUpperWeek,
                                     contentDescription = "Upper week",
                                     tint = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
                                 )
                             }
                             -1 -> {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.ic_clock_lower_week),
+                                    imageVector = YetkIcon.ClockLowerWeek,
                                     contentDescription = "Lower week",
                                     tint = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
                                 )
