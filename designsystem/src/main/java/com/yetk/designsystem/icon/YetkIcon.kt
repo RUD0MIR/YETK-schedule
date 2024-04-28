@@ -17,7 +17,7 @@ import androidx.compose.material.icons.twotone.Notifications
 import androidx.compose.material.icons.twotone.Person
 import androidx.compose.material.icons.twotone.Visibility
 import androidx.compose.material.icons.twotone.VisibilityOff
-import com.hsk.designsystem.R
+import com.yetk.designsystem.R
 
 object YetkIcon {
     val VisibilityOff = Icons.TwoTone.VisibilityOff

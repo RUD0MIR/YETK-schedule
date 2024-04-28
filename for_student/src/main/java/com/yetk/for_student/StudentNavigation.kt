@@ -4,11 +4,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -36,10 +31,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.Gray50
 import com.yetk.designsystem.theme.Gray80
 import com.yetk.for_student.data.local.viewmodel.HomeworkViewModel
-import com.yetk.model.BottomNavigationItem
+import com.yetk.ui.BottomNavigationItem
 import com.yetk.ui.NoRippleInteractionSource
 import com.yetk.ui.shadow
 import kotlinx.coroutines.delay
@@ -60,21 +56,21 @@ fun StudentNavigation(
     val bottomBarItems = listOf(
         BottomNavigationItem(
             title = "Lessons",
-            icon =Icons.Filled.DateRange,
+            icon = YetkIcon.Schedule,
             route = Screen.ScheduleScreen.route
         ),
         BottomNavigationItem(
             title = "Homework",
-            icon = Icons.Filled.Home,
+            icon = YetkIcon.Homework,
             route = Screen.HomeworkScreen.route
         ),
         BottomNavigationItem(
             title = "Bell schedule",
-            icon = Icons.Filled.Notifications,
+            icon = YetkIcon.BellSchedule,
             route = Screen.BellScreen.route
         ), BottomNavigationItem(
             title = "Subjects",
-            icon = Icons.Filled.List,
+            icon = YetkIcon.Subjects,
             route = Screen.SubjectsScreen.route
         )
     )

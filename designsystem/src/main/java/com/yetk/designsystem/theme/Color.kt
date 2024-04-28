@@ -1,6 +1,5 @@
 package com.yetk.designsystem.theme
 
-import android.graphics.Color
 import androidx.compose.ui.graphics.Color
 
 val Green = Color(0xFFB5D800)

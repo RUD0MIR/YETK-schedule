@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.yetk.yetkschedule"
-        minSdk = 24
+        minSdk = 33
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -63,6 +63,8 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation(project(":model"))
     implementation(project(":for_student"))
+    implementation(project(":designsystem"))
+    implementation(project(":ui"))
 
     //Test & Debug
     testImplementation("junit:junit:4.13.2")
@@ -94,9 +96,6 @@ dependencies {
 
     //Swipe actions
     implementation("me.saket.swipe:swipe:1.2.0")
-
-    //Reveal swipe
-    implementation("de.charlex.compose:revealswipe:1.0.0")
 
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))

@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
-import androidx.compose.material.IconButton
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -25,14 +25,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.yetk.yetkschedule.ui.theme.Gray60
-import com.yetk.yetkschedule.ui.theme.Gray90
+import com.yetk.designsystem.theme.Gray60
+import com.yetk.designsystem.theme.Gray90
 
 enum class SwipeDirection {
     Left,
     Initial,
     Right,
 }
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

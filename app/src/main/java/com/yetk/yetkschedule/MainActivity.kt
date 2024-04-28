@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.yetk.designsystem.theme.YetkScheduleTheme
+import com.yetk.for_student.StudentNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "MainActivity"
@@ -14,8 +15,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            com.yetk.designsystem.theme.YetkScheduleTheme(dynamicColor = false) {
-                NavHost()
+            YetkScheduleTheme(dynamicColor = false) {
+                StudentNavigation()
             }
         }
     }
@@ -24,6 +25,6 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    com.yetk.designsystem.theme.YetkScheduleTheme {
+    YetkScheduleTheme {
     }
 }

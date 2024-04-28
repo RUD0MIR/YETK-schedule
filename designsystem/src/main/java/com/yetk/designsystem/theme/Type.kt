@@ -1,14 +1,12 @@
 package com.yetk.designsystem.theme
 
-import android.graphics.fonts.Font
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.hsk.designsystem.R
-import com.yetk.yetkschedule.R
+import com.yetk.designsystem.R
 
 val Inter = FontFamily(
     listOf(

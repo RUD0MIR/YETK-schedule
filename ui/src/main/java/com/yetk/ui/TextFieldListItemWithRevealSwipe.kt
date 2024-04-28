@@ -15,11 +15,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.yetk.yetkschedule.ui.theme.Gray90
-import com.yetk.yetkschedule.ui.theme.Red
-import com.yetk.yetkschedule.ui.theme.White
+import com.yetk.designsystem.icon.YetkIcon
+import com.yetk.designsystem.theme.Gray90
+import com.yetk.designsystem.theme.Red
+import com.yetk.designsystem.theme.White
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
 
@@ -43,8 +43,8 @@ fun TextFieldListItemWithRevealSwipe(
         hiddenContentEnd = {
             Icon(
                 modifier = Modifier.padding(horizontal = 25.dp),
-                painter = painterResource(id = R.drawable.ic_delete),
-                contentDescription = null,
+                imageVector = YetkIcon.Delete,
+                contentDescription = "delete",
                 tint = White
             )
         },

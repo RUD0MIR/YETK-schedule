@@ -46,7 +46,7 @@ fun BellScheduleScreen(
             Scaffold(
                 modifier = Modifier.padding(bottomBarPadding),
                 topBar = {
-                    YetkTopBar(text = "Расписание звонков")
+                    YetkTopBar(text = "Расписание звонков") {}
                 },
             ) { topBarPadding ->
                 Box(modifier = Modifier.fillMaxSize()) {
