@@ -3,15 +3,12 @@ package com.yetk.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,18 +21,8 @@ import com.yetk.designsystem.theme.Inter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ErrorScreen(modifier: Modifier = Modifier, message: String = "Хмм... что-то пошло не так", topBarTitle: String) {
+fun ErrorScreen(modifier: Modifier = Modifier, message: String = "Хмм... что-то пошло не так") {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        TopAppBar(
-            modifier = Modifier.padding(end = 16.dp).align(Alignment.TopCenter),
-            title = {
-                Text(
-                    text = topBarTitle,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineLarge
-                )
-            }
-        )
         Column(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally

@@ -14,10 +14,10 @@ import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.Gray50
 
 @Composable
-fun LowerUpperWeekToggle(isLowerWeek: Boolean, onValueChange: () -> Unit) {
-    IconButton(onClick = {
-        onValueChange()
-    }
+fun LowerUpperWeekToggle(modifier: Modifier, isLowerWeek: Boolean, onValueChange: () -> Unit) {
+    IconButton(
+        modifier = modifier,
+        onClick = { onValueChange() }
     ) {
         if (!isLowerWeek) {
             Icon(

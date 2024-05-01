@@ -36,9 +36,9 @@ fun BellScheduleScreen(
     bottomBarPadding: PaddingValues
 ) {
     when (val bellSchedule = viewModel.bellSchedule.value) {
-        is Response.Loading -> LoadingScreen(topBarTitle = "Расписание звонков")
+        is Response.Loading -> LoadingScreen()
         is Response.Failure -> {
-            ErrorScreen(topBarTitle = "Расписание звонков")
+            ErrorScreen()
         }
         is Response.Success -> {
             val lessonDurationMin = bellSchedule.data.lesson_duration_min.parseNhNmin()

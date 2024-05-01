@@ -40,9 +40,9 @@ fun SubjectsScreen(
     viewModel: com.yetk.for_student.data.remote.viewmodel.StudentViewModel = hiltViewModel()
 ) {
     when (val collegeGroupData = viewModel.collegeGroup.value) {
-        is Response.Loading -> LoadingScreen(topBarTitle = "Предметы")
+        is Response.Loading -> LoadingScreen()
         is Response.Failure -> {
-            ErrorScreen(topBarTitle = "Предметы")
+            ErrorScreen()
         }
         is Response.Success -> {
             Scaffold(

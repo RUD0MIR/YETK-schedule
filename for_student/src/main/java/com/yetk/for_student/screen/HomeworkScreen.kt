@@ -3,7 +3,6 @@ package com.yetk.for_student.screen
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,9 +16,9 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,39 +28,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.yetk.designsystem.component.YetkAddButton
 import com.yetk.designsystem.component.YetkDivider
-import com.yetk.designsystem.component.YetkTopBar
 import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.Red
 import com.yetk.designsystem.theme.White
 import com.yetk.for_student.data.local.viewmodel.HomeworkEvent
 import com.yetk.for_student.data.local.viewmodel.HomeworkState
+import com.yetk.for_student.data.local.viewmodel.HomeworkViewModel
 import com.yetk.model.Homework
-import com.yetk.ui.SwipeableSnackbarHost
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
+
+@Composable
+internal fun HomeworkRoute(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
+    onNavigateToDetailScreen: (id: Int?) -> Unit,
+    viewModel: HomeworkViewModel = hiltViewModel(),
+) {
+    HomeworkScreen(
+        state = viewModel.state.collectAsState().value,
+        onEvent = viewModel::onEvent,
+        onNavigateToDetailScreen = onNavigateToDetailScreen,
+        onShowSnackbar = onShowSnackbar
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeworkScreen(
     state: HomeworkState,
-    snackbarHostState: SnackbarHostState,
     onEvent: (HomeworkEvent) -> Unit,
-    onHomeworkCheck: (homework: Homework) -> Unit,
-    onHomeworkDelete: (homework: Homework) -> Unit,
-    bottomBarPadding: PaddingValues,
     onNavigateToDetailScreen: (id: Int?) -> Unit,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
 ) {
-
     Scaffold(
-        modifier = Modifier.padding(bottomBarPadding),
-        topBar = {
-            YetkTopBar(text = "Домашние задания") {}
-        },
-        snackbarHost = {
-            SwipeableSnackbarHost(snackbarHostState)
-        },
         floatingActionButton = {
             YetkAddButton() { onNavigateToDetailScreen(-1) }
         },
@@ -78,7 +80,7 @@ fun HomeworkScreen(
                         HomeworkListItem(
                             homework,
                             onCheck = {
-                                onHomeworkCheck(homework)
+                                onEvent(HomeworkEvent.HomeworkChecked(homework))
                             },
                             onItemClick = {
                                 onNavigateToDetailScreen(it)
@@ -86,7 +88,7 @@ fun HomeworkScreen(
                                 onEvent(HomeworkEvent.UpdateContent(homework.content ?: ""))
                             },
                             onBackgroundEndClick = { id ->
-                                onHomeworkDelete(homework)
+                                onEvent(HomeworkEvent.DeleteHomework(homework))
                             },
                         )
                         YetkDivider()

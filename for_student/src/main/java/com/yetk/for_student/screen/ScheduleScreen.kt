@@ -4,9 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,10 +15,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -44,7 +40,6 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.yetk.designsystem.component.LowerUpperWeekToggle
 import com.yetk.designsystem.component.YetkDivider
-import com.yetk.designsystem.component.YetkTopBar
 import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.Gray50
 import com.yetk.designsystem.theme.Gray70
@@ -53,6 +48,7 @@ import com.yetk.designsystem.theme.Inter
 import com.yetk.designsystem.theme.White
 import com.yetk.designsystem.theme.WhiteDisabled
 import com.yetk.for_student.R
+import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
 import com.yetk.for_student.matches
 import com.yetk.model.BellSchedule
 import com.yetk.model.CollegeGroup
@@ -68,16 +64,24 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "ScheduleScreen"
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun ScheduleRoute(
+    viewModel: StudentViewModel = hiltViewModel(),
+) {
+    ScheduleScreen(
+        collegeGroup = viewModel.collegeGroup.value,
+        isLowerWeek = viewModel.isLowerWeek.value,
+        bellSchedule = viewModel.bellSchedule.value
+    )
+}
+
 @Composable
 fun ScheduleScreen(
-    bottomBarPadding: PaddingValues,
-    viewModel: com.yetk.for_student.data.remote.viewmodel.StudentViewModel = hiltViewModel()
-) {
-    val collegeGroup = viewModel.collegeGroup.value
-    val isLowerWeek = viewModel.isLowerWeek.value
-    val bellSchedule = viewModel.bellSchedule.value
+    collegeGroup: Response<CollegeGroup>,
+    isLowerWeek: Response<Boolean>,
+    bellSchedule: Response<BellSchedule>,
 
+    ) {
     var isLowerWeekPreview by remember {
         mutableStateOf<Boolean?>(null)
     }
@@ -93,77 +97,32 @@ fun ScheduleScreen(
 
     when {
         isLoading(collegeGroup, isLowerWeek, bellSchedule) -> {
-            LoadingScreen(topBarTitle = "Расписание")
+            LoadingScreen()
         }
         isFailure(collegeGroup, isLowerWeek, bellSchedule) -> {
-            ErrorScreen(message = "Хмм... что-то пошло не так", topBarTitle = "Расписание")
+            ErrorScreen(message = "Хмм... что-то пошло не так")
         }
         isSuccess(collegeGroup, isLowerWeek, bellSchedule) -> {
             collegeGroupData = (collegeGroup as Response.Success).data
             isLowerWeekValue = (isLowerWeek as Response.Success).data
             bellScheduleData = (bellSchedule as Response.Success).data
             isLowerWeekPreview = isLowerWeekValue
-
-            Scaffold(
-                modifier = Modifier.padding(bottomBarPadding),
-                topBar = {
-                    Column(Modifier.fillMaxWidth()) {
-                        YetkTopBar(text = "Расписание") {
-                            if (isLowerWeekPreview != null) {
-                                LowerUpperWeekToggle(isLowerWeek = isLowerWeekPreview!!) {
-                                    isLowerWeekPreview = !isLowerWeekPreview!!
-                                }
-                            }
-                        }
-
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 16.dp)
-                            ) {
-                                Text(
-                                    text = collegeGroupData.relevantFromTo,
-                                    fontFamily = Inter,
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = Gray70
-                                )
-                                Spacer(modifier = Modifier.width(20.dp))
-                                Text(
-                                    text = collegeGroupData.name,
-                                    fontFamily = Inter,
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = Gray70
-                                )
-                            }
-
-                            if (isLowerWeekValue != null) {
-                                Text(
-                                    modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
-                                    text = if (isLowerWeekValue!!) "Нижняя неделя" else "Верхняя неделя",
-                                    fontFamily = Inter,
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = if (isLowerWeekValue == isLowerWeekPreview) MaterialTheme.colorScheme.secondary else Gray70
-                                )
-                            }
-                        }
-
-                        YetkDivider()
+            //TODO LowerUpeerWeekToggle doesn't working, check is isLowerWeekPreview == null
+            Column(Modifier.fillMaxSize()) {
+                ScheduleDataSection(
+                    isLowerWeekPreview = isLowerWeekPreview ?: false,
+                    isLowerWeekValue = isLowerWeekValue ?: false,
+                    collegeGroupData = collegeGroupData
+                ) {
+                    if (isLowerWeekPreview != null) {
+                        isLowerWeekPreview = !isLowerWeekPreview!!
                     }
-                },
-            ) { topBarPadding ->
-                HorizontalWeekPager(
-                    modifier = Modifier.padding(top = 150.dp)
-                ) { currentPage ->
+                }
+
+                HorizontalWeekPager { currentPage ->
                     var currentLessons = emptyList<Lesson>()
 
-                    if(isLowerWeekPreview != null) {
+                    if (isLowerWeekPreview != null) {
                         currentLessons = collegeGroupData.lessons.filter {
                             it.dayOfWeek == currentPage && it.weekState.matches(isLowerWeekPreview!!)
                         }
@@ -201,7 +160,6 @@ fun ScheduleScreen(
                         }
                     }
                 }
-                topBarPadding
             }
         }
     }
@@ -209,7 +167,10 @@ fun ScheduleScreen(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HorizontalWeekPager(modifier: Modifier = Modifier, pageContent: @Composable (currentPage: Int) -> Unit) {
+fun HorizontalWeekPager(
+    modifier: Modifier = Modifier,
+    pageContent: @Composable (currentPage: Int) -> Unit
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val weekTabsTitles = context.resources.getStringArray(R.array.week_days)
@@ -346,6 +307,7 @@ fun LessonListItem(
                                     tint = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
                                 )
                             }
+
                             -1 -> {
                                 Icon(
                                     imageVector = YetkIcon.ClockLowerWeek,
@@ -357,6 +319,55 @@ fun LessonListItem(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ScheduleDataSection(
+    isLowerWeekPreview: Boolean,
+    isLowerWeekValue: Boolean,
+    collegeGroupData: CollegeGroup,
+    onWeekToggle: () -> Unit
+) {
+    Row(
+        Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(
+            Modifier.padding(start = 16.dp),
+        ) {
+            Text(
+                text = collegeGroupData.relevantFromTo,
+                fontFamily = Inter,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Gray70
+            )
+
+            Text(
+                text = collegeGroupData.name,
+                fontFamily = Inter,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Gray70
+            )
+
+            Text(
+                text = if (isLowerWeekValue) "Нижняя неделя" else "Верхняя неделя",
+                fontFamily = Inter,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = if (isLowerWeekValue == isLowerWeekPreview) MaterialTheme.colorScheme.secondary else Gray70
+            )
+        }
+
+        LowerUpperWeekToggle(
+            modifier = Modifier.padding(end = 12.dp),
+            isLowerWeek = isLowerWeekPreview
+        ) {
+            onWeekToggle()
         }
     }
 }
