@@ -18,8 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.yetk.designsystem.component.YetkCheckBox
 import com.yetk.designsystem.component.YetkFilledButton
 import com.yetk.designsystem.component.YetkLogoImage
@@ -27,10 +27,20 @@ import com.yetk.designsystem.component.YetkPasswordField
 import com.yetk.designsystem.component.YetkTextField
 import com.yetk.designsystem.theme.White
 import com.yetk.designsystem.theme.YetkScheduleTheme
+import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
 
-@Preview
 @Composable
-fun AuthorizationScreen() {
+internal fun AuthorizationRoute(
+    viewModel: StudentViewModel = hiltViewModel(),
+) {
+    AuthorizationRoute()
+}
+
+//TODO add all this state to StudentViewModel
+@Composable
+fun AuthorizationScreen(
+
+) {
     YetkScheduleTheme {
         var login by remember {
             mutableStateOf("")

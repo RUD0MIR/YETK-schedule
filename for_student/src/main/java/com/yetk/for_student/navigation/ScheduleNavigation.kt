@@ -16,8 +16,6 @@ fun NavGraphBuilder.scheduleScreen() {
     composable(
         route = scheduleNavigationRoute,
     ) {
-        ScheduleRoute(
-
-        )
+        ScheduleRoute()
     }
 }

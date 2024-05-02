@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.yetk.designsystem.component.YetkAutocompleteTextField
 import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.component.YetkFilledButton
@@ -32,20 +34,37 @@ import com.yetk.designsystem.component.YetkTopBar
 import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.Gray50
 import com.yetk.for_student.data.local.viewmodel.HomeworkEvent
+import com.yetk.for_student.data.local.viewmodel.HomeworkState
+import com.yetk.for_student.data.local.viewmodel.HomeworkViewModel
 import com.yetk.for_student.filterDropdownMenu
 import com.yetk.model.Homework
 
 private const val TAG = "HomeworkDetailScreen"
 
+@Composable
+internal fun HomeworkDetailRoute(
+    onNavigateUp: () -> Unit,
+    viewModel: HomeworkViewModel = hiltViewModel(),
+) {
+    HomeworkDetailScreen(
+        homeworkIndex = 1,
+        state = viewModel.state.collectAsState().value,
+        onEvent = viewModel::onEvent ,
+        onNavigateUp = onNavigateUp,
+        onHomeworkCheck = { HomeworkEvent.HomeworkChecked(it) },
+        onHomeworkDelete = { HomeworkEvent.DeleteHomework(it)}
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeworkDetailScreen(
     homeworkIndex: Int,
-    state: com.yetk.for_student.data.local.viewmodel.HomeworkState,
-    onEvent: (com.yetk.for_student.data.local.viewmodel.HomeworkEvent) -> Unit,
+    state: HomeworkState,
+    onEvent: (HomeworkEvent) -> Unit,
     onNavigateUp: () -> Unit,
-    onHomeworkCheck: (homework: com.yetk.model.Homework) -> Unit,
-    onHomeworkDelete: (homework: com.yetk.model.Homework) -> Unit
+    onHomeworkCheck: (homework: Homework) -> Unit,
+    onHomeworkDelete: (homework: Homework) -> Unit
 ) {
     var homework: Homework? = null
     LaunchedEffect(key1 = state.homeworkId) {
@@ -122,7 +141,6 @@ fun HomeworkDetailScreen(
                     .align(Alignment.TopCenter)
                     .fillMaxSize()
             ) {
-
                 YetkAutocompleteTextField(
                     value = state.subjectName,
                     label = "Предмет",

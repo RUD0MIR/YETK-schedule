@@ -2,7 +2,6 @@ package com.yetk.for_student.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,42 +22,42 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.component.YetkExpandToggle
-import com.yetk.designsystem.component.YetkTopBar
 import com.yetk.designsystem.theme.Gray50
 import com.yetk.designsystem.theme.Gray60
+import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
+import com.yetk.model.CollegeGroup
 import com.yetk.model.Response
 import com.yetk.model.Subject
 import com.yetk.ui.ErrorScreen
 import com.yetk.ui.LoadingScreen
 
 private const val TAG = "SubjectsScreen"
+
+@Composable
+internal fun SubjectsRoute(
+    viewModel: StudentViewModel = hiltViewModel(),
+) {
+    SubjectsScreen(
+        viewModel.collegeGroup.value
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubjectsScreen(
-    bottomBarPadding: PaddingValues,
-    viewModel: com.yetk.for_student.data.remote.viewmodel.StudentViewModel = hiltViewModel()
+    collegeGroupData: Response<CollegeGroup>
 ) {
-    when (val collegeGroupData = viewModel.collegeGroup.value) {
+    when (collegeGroupData) {
         is Response.Loading -> LoadingScreen()
-        is Response.Failure -> {
-            ErrorScreen()
-        }
+        is Response.Failure -> ErrorScreen()
         is Response.Success -> {
-            Scaffold(
-                modifier = Modifier.padding(bottomBarPadding),
-                topBar = {
-                    YetkTopBar(text = "Предметы") {}
-                },
-            ) { topBarPadding ->
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(topBarPadding)
-                        .padding(start = 16.dp)
-                ) {
-                    items(collegeGroupData.data.subjects.size) {
-                        SubjectListItem(collegeGroupData.data.subjects[it])
-                    }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 16.dp)
+            ) {
+                items(collegeGroupData.data.subjects.size) {
+                    SubjectListItem(collegeGroupData.data.subjects[it])
                 }
             }
         }
@@ -74,7 +72,7 @@ fun SubjectListItem(
         mutableStateOf(false)
     }
 
-    val modifier = if (expanded) Modifier else  Modifier.height(52.dp)
+    val modifier = if (expanded) Modifier else Modifier.height(52.dp)
 
     Column(
         modifier = Modifier
@@ -95,16 +93,16 @@ fun SubjectListItem(
                     style = MaterialTheme.typography.bodyMedium,
                     color = Gray50
                 )
-                    Column(modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)) {
-                        subject.teachers.forEach {
-                            Text(
-                                modifier = Modifier.padding(top = 8.dp),
-                                text = it,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = Gray60
-                            )
-                        }
+                Column(modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)) {
+                    subject.teachers.forEach {
+                        Text(
+                            modifier = Modifier.padding(top = 8.dp),
+                            text = it,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Gray60
+                        )
                     }
+                }
 
             }
 

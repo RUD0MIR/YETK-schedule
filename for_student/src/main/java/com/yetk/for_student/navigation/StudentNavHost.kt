@@ -18,10 +18,14 @@ fun StudentNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
+        authorizationScreen()
         scheduleScreen()
         homeworkScreen(
             onShowSnackbar = onShowSnackbar,
-            onNavigateToDetailScreen = {},
+            onNavigateToDetailScreen = { },
         )
+        homeworkDetailScreen(navController::popBackStack)
+        bellScheduleScreen()
+        subjectsScreen()
     }
 }
