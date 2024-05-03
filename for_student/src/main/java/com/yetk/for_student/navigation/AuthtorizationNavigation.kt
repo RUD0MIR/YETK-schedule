@@ -6,17 +6,18 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.yetk.for_student.screen.AuthorizationRoute
 
-const val AuthorizationNavigationRoute = "authorization"
+const val authorizationNavigationRoute = "authorization"
 
 fun NavController.navigateToAuthorization(navOptions: NavOptions? = null) {
-    this.navigate(AuthorizationNavigationRoute, navOptions)
+    this.navigate(authorizationNavigationRoute, navOptions)
 }
 
 fun NavGraphBuilder.authorizationScreen(
+    onNavigate: () -> Unit
 ) {
     composable(
-        route = AuthorizationNavigationRoute,
+        route = authorizationNavigationRoute,
     ) {
-        AuthorizationRoute()
+        AuthorizationRoute(onNavigate)
     }
 }

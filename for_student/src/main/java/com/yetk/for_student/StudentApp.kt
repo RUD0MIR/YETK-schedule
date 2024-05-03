@@ -24,8 +24,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.yetk.designsystem.component.YetkNavigationBar
@@ -43,22 +41,22 @@ fun StudentApp(
     appState: StudentAppState = rememberStudentAppState()
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val showBottomBar = appState.currentDestination?.route != "authorization"
+                && appState.currentDestination?.route != "homeworkDetail"
 
     Scaffold(
-        modifier = Modifier.semantics {
-            testTagsAsResourceId = true
-        },
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
-            StudentBottomBar(
-                destinations = appState.topLevelDestinations,
-                onNavigateToDestination = appState::navigateToTopLevelDestination,
-                currentDestination = appState.currentDestination,
-                modifier = Modifier.testTag("StudentBottomBar"),
-            )
+            if (showBottomBar) {
+                StudentBottomBar(
+                    destinations = appState.topLevelDestinations,
+                    onNavigateToDestination = appState::navigateToTopLevelDestination,
+                    currentDestination = appState.currentDestination,
+                    modifier = Modifier.testTag("StudentBottomBar"),
+                )
+            }
         },
     ) { padding ->
         Row(

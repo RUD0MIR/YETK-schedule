@@ -35,11 +35,13 @@ fun YetkTextField(
     text: String,
     supportingText: String = "",
     placeholderText: String = "",
+    isError: Boolean = false,
     onTextChange: (String) -> Unit
 ) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = text,
+        isError = isError,
         onValueChange = { onTextChange(it) },
         colors = TextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.secondary,
@@ -62,12 +64,14 @@ fun YetkPasswordField(
     supportingText: String = "",
     placeholderText: String = "",
     passwordVisible: Boolean,
+    isError: Boolean = false,
     onTextChange: (String) -> Unit,
     onIconClick: () -> Unit
 ) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = text,
+        isError = isError,
         onValueChange = { onTextChange(it) },
         colors = TextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.secondary,

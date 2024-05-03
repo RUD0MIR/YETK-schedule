@@ -12,10 +12,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.yetk.for_student.navigation.TopLevelDestination
+import com.yetk.for_student.navigation.bellScheduleNavigationRoute
 import com.yetk.for_student.navigation.homeworkNavigationRoute
+import com.yetk.for_student.navigation.navigateToBellSchedule
 import com.yetk.for_student.navigation.navigateToHomework
 import com.yetk.for_student.navigation.navigateToSchedule
+import com.yetk.for_student.navigation.navigateToSubjects
 import com.yetk.for_student.navigation.scheduleNavigationRoute
+import com.yetk.for_student.navigation.subjectsNavigationRoute
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -47,6 +51,8 @@ class StudentAppState(
         @Composable get() = when (currentDestination?.route) {
             scheduleNavigationRoute -> TopLevelDestination.SCHEDULE
             homeworkNavigationRoute -> TopLevelDestination.HOMEWORK
+            bellScheduleNavigationRoute -> TopLevelDestination.BELL_SCHEDULE
+            subjectsNavigationRoute -> TopLevelDestination.SUBJECTS
             else -> null
         }
 
@@ -82,6 +88,8 @@ class StudentAppState(
             when (topLevelDestination) {
                 TopLevelDestination.SCHEDULE -> navController.navigateToSchedule(topLevelNavOptions)
                 TopLevelDestination.HOMEWORK -> navController.navigateToHomework(topLevelNavOptions)
+                TopLevelDestination.BELL_SCHEDULE -> navController.navigateToBellSchedule(topLevelNavOptions)
+                TopLevelDestination.SUBJECTS -> navController.navigateToSubjects(topLevelNavOptions)
                 else -> {}
             }
         }
