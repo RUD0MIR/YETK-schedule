@@ -1,5 +1,6 @@
 package com.yetk.for_student.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -83,7 +84,7 @@ fun ScheduleScreen(
 
     ) {
     var isLowerWeekPreview by remember {
-        mutableStateOf<Boolean?>(null)
+        mutableStateOf(false)
     }
     var collegeGroupData by remember {
         mutableStateOf(CollegeGroup())
@@ -99,24 +100,25 @@ fun ScheduleScreen(
         isLoading(collegeGroup, isLowerWeek, bellSchedule) -> {
             LoadingScreen()
         }
+
         isFailure(collegeGroup, isLowerWeek, bellSchedule) -> {
             ErrorScreen(message = "Хмм... что-то пошло не так")
         }
+
         isSuccess(collegeGroup, isLowerWeek, bellSchedule) -> {
             collegeGroupData = (collegeGroup as Response.Success).data
             isLowerWeekValue = (isLowerWeek as Response.Success).data
             bellScheduleData = (bellSchedule as Response.Success).data
-            isLowerWeekPreview = isLowerWeekValue
-            //TODO LowerUpeerWeekToggle doesn't working, check is isLowerWeekPreview == null
+
+            //TODO make isLowerWeekPreview depends on isLowerWeekValue
             Column(Modifier.fillMaxSize()) {
                 ScheduleDataSection(
-                    isLowerWeekPreview = isLowerWeekPreview ?: false,
-                    isLowerWeekValue = isLowerWeekValue ?: false,
+                    isLowerWeekPreview = isLowerWeekPreview,
+                    isLowerWeekValue = isLowerWeekValue,
                     collegeGroupData = collegeGroupData
                 ) {
-                    if (isLowerWeekPreview != null) {
-                        isLowerWeekPreview = !isLowerWeekPreview!!
-                    }
+                    isLowerWeekPreview = !isLowerWeekPreview
+                    Log.d(TAG, isLowerWeekPreview.toString())
                 }
 
                 HorizontalWeekPager { currentPage ->
@@ -325,8 +327,8 @@ fun LessonListItem(
 
 @Composable
 fun ScheduleDataSection(
-    isLowerWeekPreview: Boolean,
-    isLowerWeekValue: Boolean,
+    isLowerWeekPreview: Boolean?,
+    isLowerWeekValue: Boolean?,
     collegeGroupData: CollegeGroup,
     onWeekToggle: () -> Unit
 ) {
@@ -354,20 +356,24 @@ fun ScheduleDataSection(
                 color = Gray70
             )
 
-            Text(
-                text = if (isLowerWeekValue) "Нижняя неделя" else "Верхняя неделя",
-                fontFamily = Inter,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = if (isLowerWeekValue == isLowerWeekPreview) MaterialTheme.colorScheme.secondary else Gray70
-            )
+            if (isLowerWeekValue != null) {
+                Text(
+                    text = if (isLowerWeekValue) "Нижняя неделя" else "Верхняя неделя",
+                    fontFamily = Inter,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (isLowerWeekValue == isLowerWeekPreview) MaterialTheme.colorScheme.secondary else Gray70
+                )
+            }
         }
 
-        LowerUpperWeekToggle(
-            modifier = Modifier.padding(end = 12.dp),
-            isLowerWeek = isLowerWeekPreview
-        ) {
-            onWeekToggle()
+        if (isLowerWeekPreview != null) {
+            LowerUpperWeekToggle(
+                modifier = Modifier.padding(end = 12.dp),
+                isLowerWeek = isLowerWeekPreview
+            ) {
+                onWeekToggle()
+            }
         }
     }
 }

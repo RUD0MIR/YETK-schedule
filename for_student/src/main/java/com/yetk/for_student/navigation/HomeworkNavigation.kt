@@ -6,7 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.yetk.for_student.screen.HomeworkRoute
 
-const val homeworkNavigationRoute = "homewrok"
+const val homeworkNavigationRoute = "homework"
 
 fun NavController.navigateToHomework(navOptions: NavOptions? = null) {
     this.navigate(homeworkNavigationRoute, navOptions)

@@ -6,16 +6,16 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.yetk.for_student.screen.BellScheduleRoute
 
-const val bellScheduleNavigationRoute = "bellSchedule"
+const val bellsNavigationRoute = "bells"
 
 fun NavController.navigateToBellSchedule(navOptions: NavOptions? = null) {
-    this.navigate(bellScheduleNavigationRoute, navOptions)
+    this.navigate(bellsNavigationRoute, navOptions)
 }
 
 fun NavGraphBuilder.bellScheduleScreen(
 ) {
     composable(
-        route = bellScheduleNavigationRoute,
+        route = bellsNavigationRoute,
     ) {
         BellScheduleRoute()
     }

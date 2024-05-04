@@ -15,7 +15,7 @@ enum class TopLevelDestination(
         icon = YetkIcon.Homework,
         text = "Домашнее задание",
     ),
-    BELL_SCHEDULE(
+    BELLS(
         icon = YetkIcon.BellSchedule,
         text = "Расписание звонков",
     ),

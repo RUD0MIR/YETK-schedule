@@ -1,4 +1,4 @@
-package com.yetk.for_student
+package com.yetk.for_student.di
 
 import android.app.Application
 import androidx.room.Room

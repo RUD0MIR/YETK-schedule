@@ -2,7 +2,6 @@ package com.yetk.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Green = Color(0xFFB5D800)
 val Gray50 = Color(0xFF44444C)
 val Gray60 = Color(0xFF666666)
 val Gray70 = Color(0xFF8D8D8D)

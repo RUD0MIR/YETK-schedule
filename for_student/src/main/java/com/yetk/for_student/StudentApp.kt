@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -20,10 +21,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.yetk.designsystem.component.YetkNavigationBar
@@ -34,7 +35,6 @@ import com.yetk.for_student.navigation.TopLevelDestination
 
 @OptIn(
     ExperimentalLayoutApi::class,
-    ExperimentalComposeUiApi::class,
 )
 @Composable
 fun StudentApp(
@@ -107,6 +107,7 @@ private fun StudentBottomBar(
                 onClick = { onNavigateToDestination(destination) },
                 icon = {
                     Icon(
+                        modifier = Modifier.size(28.dp),
                         imageVector = destination.icon,
                         contentDescription = null,
                     )

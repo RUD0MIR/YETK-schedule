@@ -20,7 +20,9 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
@@ -43,8 +45,8 @@ fun YetkTextField(
         value = text,
         isError = isError,
         onValueChange = { onTextChange(it) },
+        singleLine = true,
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.secondary,
             focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
             unfocusedContainerColor = White,
             unfocusedIndicatorColor = Gray70
@@ -74,7 +76,6 @@ fun YetkPasswordField(
         isError = isError,
         onValueChange = { onTextChange(it) },
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.secondary,
             focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
             unfocusedContainerColor = White,
             unfocusedIndicatorColor = Gray70
@@ -82,6 +83,10 @@ fun YetkPasswordField(
         supportingText = {
             Text(text = supportingText, color = Gray50)
         },
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done,
+        ),
+        singleLine = true,
         placeholder = {
             Text(text = placeholderText, color = Gray70, fontWeight = FontWeight.Medium)
         },
@@ -90,13 +95,13 @@ fun YetkPasswordField(
                 YetkIcon.VisibilityOff
             else YetkIcon.Visibility
 
-            // Please provide localized description for accessibility services
             val description = if (passwordVisible) "Hide password" else "Show password"
 
             IconButton(onClick = onIconClick){
                 Icon(imageVector = icon, description)
             }
-        }
+        },
+        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
     )
 }
 
@@ -131,10 +136,9 @@ fun YetkAutocompleteTextField(
                 )
             },
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Next,
             ),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.secondary,
                 focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
                 unfocusedContainerColor = White,
                 unfocusedIndicatorColor = Gray70
