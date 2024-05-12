@@ -13,12 +13,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import com.yetk.designsystem.theme.Gray50
 import com.yetk.designsystem.theme.Gray80
 import com.yetk.designsystem.theme.Gray90
-import com.yetk.designsystem.theme.Green
 import com.yetk.designsystem.theme.Inter
 
 

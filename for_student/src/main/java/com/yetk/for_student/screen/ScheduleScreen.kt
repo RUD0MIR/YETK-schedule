@@ -348,14 +348,6 @@ fun ScheduleDataSection(
                 color = Gray70
             )
 
-            Text(
-                text = collegeGroupData.name,
-                fontFamily = Inter,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Gray70
-            )
-
             if (isLowerWeekValue != null) {
                 Text(
                     text = if (isLowerWeekValue) "Нижняя неделя" else "Верхняя неделя",
@@ -366,6 +358,14 @@ fun ScheduleDataSection(
                 )
             }
         }
+
+        Text(
+            text = collegeGroupData.name,
+            fontFamily = Inter,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = Gray70
+        )
 
         if (isLowerWeekPreview != null) {
             LowerUpperWeekToggle(

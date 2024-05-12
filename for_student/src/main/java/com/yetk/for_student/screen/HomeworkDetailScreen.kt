@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.yetk.designsystem.component.YetkAutocompleteTextField
 import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.component.YetkFilledButton
@@ -39,27 +38,30 @@ import com.yetk.for_student.data.local.viewmodel.HomeworkViewModel
 import com.yetk.for_student.filterDropdownMenu
 import com.yetk.model.Homework
 
+//TODO work on layout
+
 private const val TAG = "HomeworkDetailScreen"
 
 @Composable
 internal fun HomeworkDetailRoute(
+    homeworkId: Int,
     onNavigateUp: () -> Unit,
-    viewModel: HomeworkViewModel = hiltViewModel(),
+    viewModel: HomeworkViewModel
 ) {
     HomeworkDetailScreen(
-        homeworkIndex = 1,
+        homeworkId = homeworkId,
         state = viewModel.state.collectAsState().value,
-        onEvent = viewModel::onEvent ,
+        onEvent = viewModel::onEvent,
         onNavigateUp = onNavigateUp,
         onHomeworkCheck = { HomeworkEvent.HomeworkChecked(it) },
-        onHomeworkDelete = { HomeworkEvent.DeleteHomework(it)}
+        onHomeworkDelete = { HomeworkEvent.DeleteHomework(it) }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeworkDetailScreen(
-    homeworkIndex: Int,
+    homeworkId: Int,
     state: HomeworkState,
     onEvent: (HomeworkEvent) -> Unit,
     onNavigateUp: () -> Unit,
@@ -67,9 +69,9 @@ fun HomeworkDetailScreen(
     onHomeworkDelete: (homework: Homework) -> Unit
 ) {
     var homework: Homework? = null
-    LaunchedEffect(key1 = state.homeworkId) {
-        if (homeworkIndex != -1) {
-            homework = state.homeworks[homeworkIndex]
+    LaunchedEffect(key1 = state.homeworks) {
+        if (homeworkId != -1) {
+            homework = state.homeworks.find { it.id == homeworkId }
             onEvent(HomeworkEvent.UpdateId(homework?.id ?: -1))
         } else {
             onEvent(HomeworkEvent.ClearState)
@@ -77,7 +79,7 @@ fun HomeworkDetailScreen(
     }
 
     val positiveBtnText = remember {
-        if (homeworkIndex != -1) "Сохранить" else "Добавить"
+        if (homeworkId != -1) "Сохранить" else "Добавить"
     }
 
     val checkBoxValue by remember {
@@ -102,13 +104,14 @@ fun HomeworkDetailScreen(
             YetkTopBar(
                 text = "",
                 navigationIcon = YetkIcon.ArrowBack,
-                navigationIconContentDescription = "Go back"
+                navigationIconContentDescription = "Go back",
+                onNavigationClick = onNavigateUp
             ) {
-                if (homeworkIndex != -1) {
+                if (homeworkId != -1) {
                     Checkbox(
                         checked = checkBoxValue,
                         onCheckedChange = {
-                            onHomeworkCheck(state.homeworks[homeworkIndex])
+                            onHomeworkCheck(state.homeworks[homeworkId])
                             onNavigateUp()
 
                         },
@@ -118,7 +121,7 @@ fun HomeworkDetailScreen(
                     )
 
                     IconButton(onClick = {
-                        onHomeworkDelete(state.homeworks[homeworkIndex])
+                        onHomeworkDelete(state.homeworks[homeworkId])
                         onNavigateUp()
                     }) {
                         Icon(
@@ -184,7 +187,7 @@ fun HomeworkDetailScreen(
                         .padding(end = 16.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    if(state.subjectName.text.isNotBlank() || state.content.isNotBlank()) {
+                    if (state.subjectName.text.isNotBlank() || state.content.isNotBlank()) {
                         YetkFilledButton(
                             text = positiveBtnText
                         ) {

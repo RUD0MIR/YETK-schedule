@@ -4,7 +4,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.yetk.model.Homework
 
 data class HomeworkState(
-    val homeworks: List<com.yetk.model.Homework> = emptyList(),
+    val homeworks: List<Homework> = emptyList(),
     val content: String = "",
     val homeworkId: Int = -1,
     val isHomeworkVisible: Boolean = true,

@@ -1,5 +1,6 @@
 package com.yetk.for_student.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,16 +42,20 @@ import com.yetk.model.Homework
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
 
+private const val TAG = "HomeworkScreen"
+
 @Composable
 internal fun HomeworkRoute(
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    onNavigateToDetailScreen: (id: Int?) -> Unit,
+    onNavigateToEditScreen:(id: Int) -> Unit,
+    onNavigateToAddScreen: (id: Int) -> Unit,
     viewModel: HomeworkViewModel = hiltViewModel(),
 ) {
     HomeworkScreen(
         state = viewModel.state.collectAsState().value,
         onEvent = viewModel::onEvent,
-        onNavigateToDetailScreen = onNavigateToDetailScreen,
+        onNavigateToEditScreen = { onNavigateToEditScreen(it) },
+        onNavigateToAddScreen = { onNavigateToAddScreen(it) },
         onShowSnackbar = onShowSnackbar
     )
 }
@@ -60,12 +65,13 @@ internal fun HomeworkRoute(
 fun HomeworkScreen(
     state: HomeworkState,
     onEvent: (HomeworkEvent) -> Unit,
-    onNavigateToDetailScreen: (id: Int?) -> Unit,
+    onNavigateToEditScreen:(id: Int) -> Unit,
+    onNavigateToAddScreen: (id: Int) -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
 ) {
     Scaffold(
         floatingActionButton = {
-            YetkAddButton() { onNavigateToDetailScreen(-1) }
+            YetkAddButton() { onNavigateToAddScreen(-1) }
         },
     ) { topBarPadding ->
         LazyColumn(
@@ -74,6 +80,7 @@ fun HomeworkScreen(
                 .padding(topBarPadding),
         ) {
             items(state.homeworks.size) {
+                Log.d(TAG, "homeworks: ${state.homeworks}")
                 val homework = state.homeworks[it]
                 if(homework.isVisible) {
                     Column() {
@@ -83,7 +90,7 @@ fun HomeworkScreen(
                                 onEvent(HomeworkEvent.HomeworkChecked(homework))
                             },
                             onItemClick = {
-                                onNavigateToDetailScreen(it)
+                                onNavigateToEditScreen(homework.id)
                                 onEvent(HomeworkEvent.UpdateSubjectName( TextFieldValue(homework.subjectName ?: "")))
                                 onEvent(HomeworkEvent.UpdateContent(homework.content ?: ""))
                             },

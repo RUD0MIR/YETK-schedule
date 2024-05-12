@@ -1,5 +1,6 @@
 package com.yetk.for_student.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yetk.designsystem.theme.Gray50
 import com.yetk.designsystem.theme.Gray90
+import com.yetk.designsystem.theme.White
 import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
 import com.yetk.for_student.parseNhNmin
 import com.yetk.model.BellSchedule
@@ -73,7 +75,8 @@ fun BellScheduleHeader(text: String, lessonDurationMin: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 16.dp),
+            .padding(vertical = 8.dp, horizontal = 16.dp)
+            .background(White),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -93,7 +96,7 @@ fun BellScheduleListItem(
     number: Int,
     time: String
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth().background(White)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

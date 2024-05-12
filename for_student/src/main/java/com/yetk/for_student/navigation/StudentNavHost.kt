@@ -22,10 +22,14 @@ fun StudentNavHost(
         scheduleScreen()
         homeworkScreen(
             onShowSnackbar = onShowSnackbar,
-            onNavigateToDetailScreen = { },
+            onNavigateToAddScreen = { navController.navigateToHomeworkDetail(it) },
+            onNavigateToEditScreen = { navController.navigateToHomeworkDetail(it) }
         )
         bellScheduleScreen()
         subjectsScreen()
-        homeworkDetailScreen(navController::popBackStack)
+        homeworkDetailScreen(
+            onNavigateUp = navController::popBackStack,
+            navController = navController
+        )
     }
 }

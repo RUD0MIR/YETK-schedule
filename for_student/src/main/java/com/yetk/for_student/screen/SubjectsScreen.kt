@@ -1,5 +1,6 @@
 package com.yetk.for_student.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.component.YetkExpandToggle
 import com.yetk.designsystem.theme.Gray50
 import com.yetk.designsystem.theme.Gray60
+import com.yetk.designsystem.theme.White
 import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
 import com.yetk.model.CollegeGroup
 import com.yetk.model.Response
@@ -76,7 +78,8 @@ fun SubjectListItem(
 
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(White),
         verticalArrangement = Arrangement.Bottom
     ) {
         Row(
