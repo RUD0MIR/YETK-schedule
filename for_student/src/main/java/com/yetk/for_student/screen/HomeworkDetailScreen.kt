@@ -20,11 +20,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yetk.designsystem.component.YetkAutocompleteTextField
+import com.yetk.designsystem.component.AutoComplete
 import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.component.YetkFilledButton
 import com.yetk.designsystem.component.YetkMultilineTextField
@@ -35,10 +34,9 @@ import com.yetk.designsystem.theme.Gray50
 import com.yetk.for_student.data.local.viewmodel.HomeworkEvent
 import com.yetk.for_student.data.local.viewmodel.HomeworkState
 import com.yetk.for_student.data.local.viewmodel.HomeworkViewModel
-import com.yetk.for_student.filterDropdownMenu
 import com.yetk.model.Homework
 
-//TODO work on layout
+//TODO autocomplete dont save items
 
 private const val TAG = "HomeworkDetailScreen"
 
@@ -83,15 +81,6 @@ fun HomeworkDetailScreen(
     }
 
     val checkBoxValue by remember {
-        mutableStateOf(false)
-    }
-
-    val bodyMedium = MaterialTheme.typography.bodyMedium
-
-    var subjectsOptions by remember {
-        mutableStateOf(listOf<String>())
-    }
-    var subjectMenuExpanded by remember {
         mutableStateOf(false)
     }
 
@@ -144,21 +133,7 @@ fun HomeworkDetailScreen(
                     .align(Alignment.TopCenter)
                     .fillMaxSize()
             ) {
-                YetkAutocompleteTextField(
-                    value = state.subjectName,
-                    label = "Предмет",
-                    dropDownExpanded = subjectMenuExpanded,
-                    dropDownMenuItems = testDropDownItems,
-                    onValueChange = {
-                        subjectMenuExpanded = !subjectsOptions.contains(it.text)
-                        onEvent(HomeworkEvent.UpdateSubjectName(subjectName = it))
-                        subjectsOptions =
-                            testDropDownItems.filterDropdownMenu(
-                                it
-                            )
-                    },
-                    onDismissRequest = { subjectMenuExpanded = false }
-                )
+                AutoComplete(testDropDownItems, state.subjectName.text, "Предмет")
 
                 YetkMultilineTextField(
                     modifier = Modifier
@@ -184,7 +159,7 @@ fun HomeworkDetailScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(end = 16.dp),
+                        .padding(end = 16.dp, top = 16.dp, bottom = 16.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
                     if (state.subjectName.text.isNotBlank() || state.content.isNotBlank()) {
@@ -196,7 +171,7 @@ fun HomeworkDetailScreen(
                         }
                     }
                     YetkOutlinedButton(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp),
                         text = "Отмена",
                     ) {
                         onNavigateUp()

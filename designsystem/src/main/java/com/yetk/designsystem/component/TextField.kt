@@ -105,6 +105,7 @@ fun YetkPasswordField(
     )
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun YetkAutocompleteTextField(
@@ -186,6 +187,7 @@ fun YetkMultilineTextField(modifier: Modifier = Modifier, value: String, placeho
             )
         },
         colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
             cursorColor = MaterialTheme.colorScheme.secondary,
             focusedLabelColor = MaterialTheme.colorScheme.secondary,
         ),

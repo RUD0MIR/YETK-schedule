@@ -1,6 +1,5 @@
 package com.yetk.designsystem.component
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -15,9 +14,9 @@ import com.yetk.designsystem.theme.Gray50
 import com.yetk.designsystem.theme.White
 
 @Composable
-fun YetkFilledButton(text: String, onClick: () -> Unit) {
+fun YetkFilledButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         onClick = {
             onClick()
         },
