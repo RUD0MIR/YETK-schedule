@@ -44,13 +44,10 @@ import androidx.compose.ui.unit.toSize
 @Composable
 fun AutoComplete(
     items: List<String>,
-    initialValue: String = "",
-    label: String = ""
+    value: String,
+    label: String = "",
+    onValueChange: (String) -> Unit,
 ) {
-    var value by remember {
-        mutableStateOf(initialValue)
-    }
-
     val height by remember {
         mutableStateOf(55.dp)
     }
@@ -92,7 +89,7 @@ fun AutoComplete(
                     value = value,
                     label = { Text(label) },
                     onValueChange = {
-                        value = it
+                        onValueChange(it)
                         expanded = true
                     },
                     colors = TextFieldDefaults.colors(
@@ -137,8 +134,8 @@ fun AutoComplete(
                                 }
                                     .sorted()
                             ) {
-                                CategoryItems(title = it) { title ->
-                                    value = title
+                                CategoryItems(title = it) { itemName ->
+                                    onValueChange(itemName)
                                     expanded = false
                                 }
                             }
@@ -146,8 +143,8 @@ fun AutoComplete(
                             items(
                                 items.sorted()
                             ) {
-                                CategoryItems(title = it) { title ->
-                                    value = title
+                                CategoryItems(title = it) { itemName ->
+                                    onValueChange(itemName)
                                     expanded = false
                                 }
                             }

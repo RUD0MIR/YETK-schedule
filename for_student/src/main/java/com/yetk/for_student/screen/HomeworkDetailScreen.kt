@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -36,7 +37,7 @@ import com.yetk.for_student.data.local.viewmodel.HomeworkState
 import com.yetk.for_student.data.local.viewmodel.HomeworkViewModel
 import com.yetk.model.Homework
 
-//TODO autocomplete dont save items
+//TODO top bar buttons doesnt work
 
 private const val TAG = "HomeworkDetailScreen"
 
@@ -76,6 +77,10 @@ fun HomeworkDetailScreen(
         }
     }
 
+    var subjectTfValue by remember {
+        mutableStateOf(state.subjectName)
+    }
+
     val positiveBtnText = remember {
         if (homeworkId != -1) "Сохранить" else "Добавить"
     }
@@ -85,7 +90,7 @@ fun HomeworkDetailScreen(
     }
 
     val testDropDownItems = remember {
-        mutableListOf("Math", "Biology", "Physics", "PE", "Science", "English", "Russian")
+        mutableListOf("Математика", "Физкультура", "Информационные технологии", "Английский")
     }
 
     Scaffold(
@@ -133,7 +138,14 @@ fun HomeworkDetailScreen(
                     .align(Alignment.TopCenter)
                     .fillMaxSize()
             ) {
-                AutoComplete(testDropDownItems, state.subjectName.text, "Предмет")
+                AutoComplete(
+                    testDropDownItems,
+                    subjectTfValue,
+                    "Предмет"
+                ) {
+                    subjectTfValue = it
+                    onEvent(HomeworkEvent.UpdateSubjectName(it))
+                }
 
                 YetkMultilineTextField(
                     modifier = Modifier
@@ -162,7 +174,7 @@ fun HomeworkDetailScreen(
                         .padding(end = 16.dp, top = 16.dp, bottom = 16.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    if (state.subjectName.text.isNotBlank() || state.content.isNotBlank()) {
+                    if (state.subjectName.isNotBlank() || state.content.isNotBlank()) {
                         YetkFilledButton(
                             text = positiveBtnText
                         ) {

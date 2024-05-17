@@ -1,6 +1,5 @@
 package com.yetk.for_student.data.local.viewmodel
 
-import androidx.compose.ui.text.input.TextFieldValue
 import com.yetk.model.Homework
 
 data class HomeworkState(
@@ -8,7 +7,7 @@ data class HomeworkState(
     val content: String = "",
     val homeworkId: Int = -1,
     val isHomeworkVisible: Boolean = true,
-    val subjectName: TextFieldValue = TextFieldValue(),
+    val subjectName: String = "",
     val isChecked: Boolean = false,
     val isDeleted: Boolean = false
 )
@@ -16,7 +15,7 @@ data class HomeworkState(
 fun HomeworkState.cleanDetailScreenData(): HomeworkState {
     return HomeworkState(
         content = "",
-        subjectName = TextFieldValue(),
+        subjectName = "",
         homeworkId = -1,
         isHomeworkVisible = true,
         isChecked = false,

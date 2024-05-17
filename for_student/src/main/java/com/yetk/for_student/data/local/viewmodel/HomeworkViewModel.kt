@@ -2,8 +2,8 @@ package com.yetk.for_student.data.local.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yetk.model.Homework
 import com.yetk.for_student.data.local.repository.HomeworkRepository
+import com.yetk.model.Homework
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -39,14 +39,14 @@ class HomeworkViewModel @Inject constructor(
                 val subjectName = state.value.subjectName
                 val homeworkId = state.value.homeworkId
 
-                if (subjectName.text.isBlank() && content.isBlank()) {
+                if (subjectName.isBlank() && content.isBlank()) {
                     return
                 }
 
                 val homework = Homework(
                     id = if (homeworkId != -1) homeworkId else 0,
                     content = content,
-                    subjectName = subjectName.text
+                    subjectName = subjectName
                 )
 
                 viewModelScope.launch {

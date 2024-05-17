@@ -22,12 +22,13 @@ class AuthViewModel @Inject constructor(
             //TODO save in datastore
         }
     }
-    fun passwordCheck(login: String): Boolean {
-        return login == "11"
-    }
 
     fun loginCheck(password: String): Boolean {
-        return password == "11"
+        return password == "20kis-1"
+    }
+
+    fun passwordCheck(login: String): Boolean {
+        return login == "1234"
     }
 }
 

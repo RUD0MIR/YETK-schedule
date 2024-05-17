@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,6 +42,8 @@ import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
 
 private const val TAG = "HomeworkScreen"
+
+// TODO need to  add snackbar
 
 @Composable
 internal fun HomeworkRoute(
@@ -71,13 +72,15 @@ fun HomeworkScreen(
 ) {
     Scaffold(
         floatingActionButton = {
-            YetkAddButton() { onNavigateToAddScreen(-1) }
+            YetkAddButton() {
+                onNavigateToAddScreen(-1)
+                onEvent(HomeworkEvent.ClearState)
+            }
         },
     ) { topBarPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(topBarPadding),
         ) {
             items(state.homeworks.size) {
                 Log.d(TAG, "homeworks: ${state.homeworks}")
@@ -91,8 +94,8 @@ fun HomeworkScreen(
                             },
                             onItemClick = {
                                 onNavigateToEditScreen(homework.id)
-                                onEvent(HomeworkEvent.UpdateSubjectName( TextFieldValue(homework.subjectName ?: "")))
-                                onEvent(HomeworkEvent.UpdateContent(homework.content ?: ""))
+                                onEvent(HomeworkEvent.UpdateSubjectName(homework.subjectName ?: "!!!!!!!"))
+                                onEvent(HomeworkEvent.UpdateContent(homework.content ?: "!!!!!!!!!!!!!!"))
                             },
                             onBackgroundEndClick = { id ->
                                 onEvent(HomeworkEvent.DeleteHomework(homework))
@@ -102,6 +105,7 @@ fun HomeworkScreen(
                     }
                 }
             }
+            topBarPadding
         }
     }
 }
