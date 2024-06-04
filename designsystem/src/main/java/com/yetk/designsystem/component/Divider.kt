@@ -6,7 +6,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yetk.designsystem.theme.Gray90
 
 @Composable
 fun YetkDivider() {
@@ -15,6 +14,5 @@ fun YetkDivider() {
             .fillMaxWidth()
             .padding(start = 16.dp),
         thickness = 1.dp,
-        color = Gray90
     )
 }

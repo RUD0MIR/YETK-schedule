@@ -32,13 +32,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import com.yetk.designsystem.theme.YetkScheduleTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,7 +97,7 @@ fun AutoComplete(
                         focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
                         cursorColor = MaterialTheme.colorScheme.secondary,
                         focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                        ),
+                    ),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
@@ -107,8 +108,7 @@ fun AutoComplete(
                             Icon(
                                 modifier = Modifier.size(24.dp),
                                 imageVector = Icons.Rounded.KeyboardArrowDown,
-                                contentDescription = "arrow",
-                                tint = Color.Black
+                                contentDescription = "arrow"
                             )
                         }
                     }
@@ -161,7 +161,6 @@ fun CategoryItems(
     title: String,
     onSelect: (String) -> Unit
 ) {
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -172,5 +171,12 @@ fun CategoryItems(
     ) {
         Text(text = title, fontSize = 16.sp)
     }
+}
 
+@Preview
+@Composable
+private fun AutoCompletePreview() {
+    YetkScheduleTheme {
+        AutoComplete(listOf("item", "item", "item", "item"), "", "lavel") {}
+    }
 }

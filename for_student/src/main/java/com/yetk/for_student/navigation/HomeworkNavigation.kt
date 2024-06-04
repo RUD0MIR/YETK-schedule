@@ -14,8 +14,8 @@ fun NavController.navigateToHomework(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.homeworkScreen(
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    onNavigateToEditScreen: (id: Int) -> Unit,
-    onNavigateToAddScreen: (id: Int) -> Unit,
+    onNavigateToEditScreen: () -> Unit,
+    onNavigateToAddScreen: () -> Unit,
 ) {
     composable(
         route = homeworkNavigationRoute,
@@ -23,7 +23,7 @@ fun NavGraphBuilder.homeworkScreen(
         HomeworkRoute(
             onShowSnackbar = onShowSnackbar,
             onNavigateToEditScreen = onNavigateToEditScreen,
-            onNavigateToAddScreen = { onNavigateToAddScreen(-1) }
+            onNavigateToAddScreen = { onNavigateToAddScreen() }
         )
     }
 }

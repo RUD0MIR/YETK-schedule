@@ -1,6 +1,6 @@
 package com.yetk.for_student.screen
 
-import androidx.compose.foundation.background
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,15 +12,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.yetk.designsystem.theme.Gray50
-import com.yetk.designsystem.theme.Gray90
-import com.yetk.designsystem.theme.White
+import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
 import com.yetk.for_student.parseNhNmin
 import com.yetk.model.BellSchedule
@@ -75,8 +75,7 @@ fun BellScheduleHeader(text: String, lessonDurationMin: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 16.dp)
-            .background(White),
+            .padding(vertical = 8.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -86,7 +85,6 @@ fun BellScheduleHeader(text: String, lessonDurationMin: String) {
         Text(
             text = lessonDurationMin,
             style = MaterialTheme.typography.labelLarge,
-            color = Gray50
         )
     }
 }
@@ -96,7 +94,9 @@ fun BellScheduleListItem(
     number: Int,
     time: String
 ) {
-    Column(modifier = Modifier.fillMaxWidth().background(White)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -110,7 +110,6 @@ fun BellScheduleListItem(
                     modifier = Modifier.padding(end = 16.dp),
                     text = number.toString(),
                     style = MaterialTheme.typography.labelLarge,
-                    color = Gray50
                 )
                 Text(
                     text = time,
@@ -121,7 +120,35 @@ fun BellScheduleListItem(
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp), thickness = 1.dp, color = Gray90
+                .padding(start = 16.dp), thickness = 1.dp
         )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun BellScheduleScreenPreview() {
+    YetkScheduleTheme {
+        Surface(tonalElevation = 5.dp) {
+            BellScheduleScreen(
+                bellSchedule =  Response.Success<BellSchedule>(
+                    BellSchedule(
+                        null,
+                        90,
+                        lessons_time = listOf(
+                            "08:00 - 09:30",
+                            "09:40 - 11:10",
+                            "11:20 - 12:50",
+                            "13:20 - 14:50",
+                            "15:00 - 16:30",
+                            "16:40 - 18:10"
+                        )
+                    )
+
+
+                )
+            )
+        }
     }
 }

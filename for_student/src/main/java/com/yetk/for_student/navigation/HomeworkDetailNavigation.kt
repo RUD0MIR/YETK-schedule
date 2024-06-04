@@ -12,8 +12,8 @@ import com.yetk.for_student.screen.HomeworkDetailRoute
 
 const val homeworkIdArg = "homeworkId"
 
-fun NavController.navigateToHomeworkDetail(homeworkId: Int) {
-    this.navigate("homeworkDetail/$homeworkId") {
+fun NavController.navigateToHomeworkDetail() {
+    this.navigate("homeworkDetail") {
         launchSingleTop = true
     }
 }
@@ -34,7 +34,6 @@ fun NavGraphBuilder.homeworkDetailScreen(
         val viewModel = hiltViewModel<HomeworkViewModel>(parentEntry)
 
         HomeworkDetailRoute(
-            homeworkId = it.arguments?.getInt(homeworkIdArg) ?: -1,
             onNavigateUp = onNavigateUp,
             viewModel = viewModel
         )

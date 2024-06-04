@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.yetk.designsystem.theme.Gray50
+import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +30,7 @@ fun YetkTopBar(
             title = {
                 Text(
                     text = text,
+                    fontSize = 32.sp,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.headlineLarge
                 )
@@ -39,8 +40,7 @@ fun YetkTopBar(
                     IconButton(onClick = onNavigationClick) {
                         Icon(
                             imageVector = navigationIcon,
-                            contentDescription = navigationIconContentDescription,
-                            tint = Gray50
+                            contentDescription = navigationIconContentDescription
                         )
                     }
                 }

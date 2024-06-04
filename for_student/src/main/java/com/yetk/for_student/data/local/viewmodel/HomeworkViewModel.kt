@@ -86,7 +86,7 @@ class HomeworkViewModel @Inject constructor(
                 }
             }
             is HomeworkEvent.ShowHomework -> {
-                val homework = com.yetk.model.Homework(
+                val homework = Homework(
                     id = event.homework.id,
                     content = event.homework.content,
                     subjectName = event.homework.subjectName,
@@ -97,7 +97,7 @@ class HomeworkViewModel @Inject constructor(
                 }
             }
             is HomeworkEvent.HideHomework -> {
-                val homework = com.yetk.model.Homework(
+                val homework = Homework(
                     id = event.homework.id,
                     content = event.homework.content,
                     subjectName = event.homework.subjectName,
@@ -109,6 +109,14 @@ class HomeworkViewModel @Inject constructor(
             }
             HomeworkEvent.ClearState -> {
                 _state.update { it.cleanDetailScreenData() }
+            }
+
+            is HomeworkEvent.UpdateHomeworkDetail -> {
+                _state.update {
+                    it.copy(
+                        homeworkDetail = event.homework
+                    )
+                }
             }
         }
     }

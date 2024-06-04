@@ -1,5 +1,6 @@
 package com.yetk.for_student.screen
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,8 +15,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yetk.designsystem.component.AutoComplete
 import com.yetk.designsystem.component.YetkDivider
@@ -31,7 +33,7 @@ import com.yetk.designsystem.component.YetkMultilineTextField
 import com.yetk.designsystem.component.YetkOutlinedButton
 import com.yetk.designsystem.component.YetkTopBar
 import com.yetk.designsystem.icon.YetkIcon
-import com.yetk.designsystem.theme.Gray50
+import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.data.local.viewmodel.HomeworkEvent
 import com.yetk.for_student.data.local.viewmodel.HomeworkState
 import com.yetk.for_student.data.local.viewmodel.HomeworkViewModel
@@ -43,12 +45,10 @@ private const val TAG = "HomeworkDetailScreen"
 
 @Composable
 internal fun HomeworkDetailRoute(
-    homeworkId: Int,
     onNavigateUp: () -> Unit,
     viewModel: HomeworkViewModel
 ) {
     HomeworkDetailScreen(
-        homeworkId = homeworkId,
         state = viewModel.state.collectAsState().value,
         onEvent = viewModel::onEvent,
         onNavigateUp = onNavigateUp,
@@ -60,29 +60,18 @@ internal fun HomeworkDetailRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeworkDetailScreen(
-    homeworkId: Int,
     state: HomeworkState,
     onEvent: (HomeworkEvent) -> Unit,
     onNavigateUp: () -> Unit,
     onHomeworkCheck: (homework: Homework) -> Unit,
     onHomeworkDelete: (homework: Homework) -> Unit
 ) {
-    var homework: Homework? = null
-    LaunchedEffect(key1 = state.homeworks) {
-        if (homeworkId != -1) {
-            homework = state.homeworks.find { it.id == homeworkId }
-            onEvent(HomeworkEvent.UpdateId(homework?.id ?: -1))
-        } else {
-            onEvent(HomeworkEvent.ClearState)
-        }
-    }
-
     var subjectTfValue by remember {
         mutableStateOf(state.subjectName)
     }
 
     val positiveBtnText = remember {
-        if (homeworkId != -1) "Сохранить" else "Добавить"
+        if (state.homeworkDetail != null) "Сохранить" else "Добавить"
     }
 
     val checkBoxValue by remember {
@@ -101,11 +90,11 @@ fun HomeworkDetailScreen(
                 navigationIconContentDescription = "Go back",
                 onNavigationClick = onNavigateUp
             ) {
-                if (homeworkId != -1) {
+                if (state.homeworkDetail != null) {
                     Checkbox(
                         checked = checkBoxValue,
                         onCheckedChange = {
-                            onHomeworkCheck(state.homeworks[homeworkId])
+                            onHomeworkCheck(state.homeworkDetail)
                             onNavigateUp()
 
                         },
@@ -115,13 +104,12 @@ fun HomeworkDetailScreen(
                     )
 
                     IconButton(onClick = {
-                        onHomeworkDelete(state.homeworks[homeworkId])
+                        onHomeworkDelete(state.homeworkDetail)
                         onNavigateUp()
                     }) {
                         Icon(
                             imageVector = YetkIcon.Delete,
                             contentDescription = "Delete lesson",
-                            tint = Gray50
                         )
                     }
                 }
@@ -190,6 +178,22 @@ fun HomeworkDetailScreen(
                     }
                 }
             }
+        }
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun HomeworkDetailPreview() {
+    YetkScheduleTheme(dynamicColor = false) {
+        Surface(tonalElevation = 5.dp) {
+            HomeworkDetailScreen(
+                state = HomeworkState(homeworkDetail = Homework(1, "Some content", "Some name")),
+                onEvent = {},
+                onNavigateUp = {},
+                onHomeworkCheck = {}
+            ) { }
         }
     }
 }

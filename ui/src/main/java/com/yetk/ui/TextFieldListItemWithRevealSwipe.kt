@@ -15,11 +15,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.unit.dp
 import com.yetk.designsystem.icon.YetkIcon
-import com.yetk.designsystem.theme.Gray90
-import com.yetk.designsystem.theme.Red
-import com.yetk.designsystem.theme.White
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
 
@@ -39,13 +37,11 @@ fun TextFieldListItemWithRevealSwipe(
         directions = setOf(
             RevealDirection.EndToStart
         ),
-        backgroundCardEndColor = Red,
         hiddenContentEnd = {
             Icon(
                 modifier = Modifier.padding(horizontal = 25.dp),
                 imageVector = YetkIcon.Delete,
                 contentDescription = "delete",
-                tint = White
             )
         },
         onBackgroundEndClick = {
@@ -75,7 +71,7 @@ fun TextFieldListItemWithRevealSwipe(
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp), thickness = 1.dp, color = Gray90
+                        .padding(start = 16.dp), thickness = 1.dp
                 )
             }
         }

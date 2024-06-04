@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yetk.designsystem.theme.Gray80
 import com.yetk.designsystem.theme.Inter
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,7 +29,6 @@ fun ErrorScreen(modifier: Modifier = Modifier, message: String = "Хмм... чт
             Icon(
                 imageVector = Icons.Filled.Warning,
                 contentDescription = "something went wrong",
-                tint = Gray80
             )
             Text(
                 modifier = Modifier.width(250.dp),
@@ -38,8 +36,7 @@ fun ErrorScreen(modifier: Modifier = Modifier, message: String = "Хмм... чт
                 text = message,
                 fontFamily = Inter,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp,
-                color = Gray80
+                fontSize = 16.sp
             )
         }
     }

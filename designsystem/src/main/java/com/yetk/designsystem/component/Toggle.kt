@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.yetk.designsystem.icon.YetkIcon
-import com.yetk.designsystem.theme.Gray50
 
 @Composable
 fun LowerUpperWeekToggle(modifier: Modifier, isLowerWeek: Boolean, onValueChange: () -> Unit) {
@@ -24,14 +23,12 @@ fun LowerUpperWeekToggle(modifier: Modifier, isLowerWeek: Boolean, onValueChange
                 modifier = Modifier.size(32.dp),
                 painter = painterResource(id = YetkIcon.ToLowerWeek),
                 contentDescription = "To lower week",
-                tint = Gray50
             )
         } else {
             Icon(
                 modifier = Modifier.size(32.dp),
                 painter = painterResource(id = YetkIcon.ToUpperWeek),
                 contentDescription = "To upper week",
-                tint = Gray50
             )
         }
     }
@@ -45,8 +42,7 @@ fun YetkExpandToggle(modifier: Modifier = Modifier, expanded: Boolean, onClick: 
     ) {
         Icon(
             imageVector = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-            contentDescription = if (expanded) "Close" else "Expand",
-            tint = Gray50
+            contentDescription = if (expanded) "Close" else "Expand"
         )
     }
 }

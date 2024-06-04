@@ -27,7 +27,6 @@ val Typography = Typography(
         fontSize = 36.sp,
         lineHeight = 40.sp,
         letterSpacing = 0.sp,
-        color = Gray50
     ),
     bodyLarge = TextStyle(
         fontFamily = Inter,
@@ -35,54 +34,47 @@ val Typography = Typography(
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp,
-        color = Gray50
     ),
     bodyMedium = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 20.sp,
-        letterSpacing = 0.5.sp,
-        color = Gray60
+        letterSpacing = 0.5.sp
     ),
     bodySmall = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
         lineHeight = 16.sp,
-        letterSpacing = 0.4.sp,
-        color = Gray70
+        letterSpacing = 0.4.sp
     ),
     labelLarge = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.ExtraBold,
         fontSize = 14.sp,
         lineHeight = 20.sp,
-        letterSpacing = 0.1.sp,
-        color = Gray70
+        letterSpacing = 0.1.sp
     ),
     labelMedium = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.ExtraBold,
         fontSize = 13.sp,
         lineHeight = 16.sp,
-        letterSpacing = 0.5.sp,
-        color = Gray50
+        letterSpacing = 0.5.sp
     ),
     labelSmall = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.ExtraBold,
         fontSize = 11.sp,
         lineHeight = 16.sp,
-        letterSpacing = 0.5.sp,
-        color = Gray70
+        letterSpacing = 0.5.sp
     ),
     titleLarge = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Normal,
         fontSize = 24.sp,
         lineHeight = 28.sp,
-        letterSpacing = 0.sp,
-        color = Gray70
+        letterSpacing = 0.sp
     )
 )

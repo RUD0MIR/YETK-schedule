@@ -1,5 +1,6 @@
 package com.yetk.for_student.screen
 
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -33,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,12 +45,8 @@ import com.google.accompanist.pager.rememberPagerState
 import com.yetk.designsystem.component.LowerUpperWeekToggle
 import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.icon.YetkIcon
-import com.yetk.designsystem.theme.Gray50
-import com.yetk.designsystem.theme.Gray70
-import com.yetk.designsystem.theme.Gray80
 import com.yetk.designsystem.theme.Inter
-import com.yetk.designsystem.theme.White
-import com.yetk.designsystem.theme.WhiteDisabled
+import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
 import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
 import com.yetk.for_student.matches
@@ -143,7 +142,6 @@ fun ScheduleScreen(
                                 fontFamily = Inter,
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 20.sp,
-                                color = Gray80
                             )
                         }
                     } else {
@@ -200,7 +198,7 @@ fun HorizontalWeekPager(
                 ) {
                     Text(
                         text = tab,
-                        color = if (isSelected) MaterialTheme.colorScheme.secondary else Gray70,
+                        color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
@@ -224,9 +222,7 @@ fun LessonListItem(
         modifier = Modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (lesson.isCanceled) WhiteDisabled else White
-        ),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.inverseOnSurface),
     ) {
         Row(
             modifier = Modifier
@@ -244,14 +240,12 @@ fun LessonListItem(
                 Text(
                     modifier = Modifier.height(16.dp),
                     text = lesson.startTime(bellSchedule),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
+                    style = MaterialTheme.typography.labelMedium
                 )
                 Text(
                     modifier = Modifier.height(13.dp),
                     text = lesson.endTime(bellSchedule),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = if (lesson.isCanceled) Gray70.copy(alpha = 0.38f) else Gray70
+                    style = MaterialTheme.typography.labelSmall
                 )
             }
             Column(modifier = Modifier.padding(start = 16.dp)) {
@@ -259,8 +253,7 @@ fun LessonListItem(
                     text = lesson.subject,
                     style = MaterialTheme.typography.bodyLarge,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 2,
-                    color = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
+                    maxLines = 2
                 )
                 Row(
                     modifier = Modifier
@@ -274,14 +267,12 @@ fun LessonListItem(
                             Icon(
                                 modifier = Modifier.size(12.dp),
                                 imageVector = YetkIcon.LocationOn,
-                                contentDescription = "Room",
-                                tint = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
+                                contentDescription = "Room"
                             )
                             Text(
                                 modifier = Modifier.padding(start = 4.dp),
                                 text = lesson.rooms[0],//TODO make ui for multiple rooms
                                 style = MaterialTheme.typography.bodySmall,
-                                color = if (lesson.isCanceled) Gray70.copy(alpha = 0.38f) else Gray70
                             )
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -289,13 +280,11 @@ fun LessonListItem(
                                 modifier = Modifier.size(12.dp),
                                 imageVector = YetkIcon.Person,
                                 contentDescription = "Teacher",
-                                tint = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
                             )
                             Text(
                                 modifier = Modifier.padding(start = 4.dp),
                                 text = lesson.teachers[0], //TODO make ui for multiple teachers
                                 style = MaterialTheme.typography.bodySmall,
-                                color = if (lesson.isCanceled) Gray70.copy(alpha = 0.38f) else Gray70
                             )
                         }
                     }
@@ -306,7 +295,6 @@ fun LessonListItem(
                                 Icon(
                                     imageVector = YetkIcon.ClockUpperWeek,
                                     contentDescription = "Upper week",
-                                    tint = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
                                 )
                             }
 
@@ -314,7 +302,6 @@ fun LessonListItem(
                                 Icon(
                                     imageVector = YetkIcon.ClockLowerWeek,
                                     contentDescription = "Lower week",
-                                    tint = if (lesson.isCanceled) Gray50.copy(alpha = 0.38f) else Gray50
                                 )
                             }
                         }
@@ -344,8 +331,7 @@ fun ScheduleDataSection(
                 text = collegeGroupData.relevantFromTo,
                 fontFamily = Inter,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Gray70
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             if (isLowerWeekValue != null) {
@@ -354,7 +340,11 @@ fun ScheduleDataSection(
                     fontFamily = Inter,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = if (isLowerWeekValue == isLowerWeekPreview) MaterialTheme.colorScheme.secondary else Gray70
+                    color =
+                    if(isLowerWeekValue == isLowerWeekPreview)
+                        MaterialTheme.colorScheme.primary
+                    else
+                        MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -364,7 +354,7 @@ fun ScheduleDataSection(
             fontFamily = Inter,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
-            color = Gray70
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         if (isLowerWeekPreview != null) {
@@ -374,6 +364,47 @@ fun ScheduleDataSection(
             ) {
                 onWeekToggle()
             }
+        }
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun ScheduleScreenPreview() {
+    YetkScheduleTheme(dynamicColor = false) {
+        Surface(tonalElevation = 5.dp) {
+            ScheduleScreen(
+                collegeGroup = Response.Success(
+                    CollegeGroup(
+                        relevantFromTo = "22.01.24 - 27.01.24",
+                        lessons = listOf(
+                            Lesson(
+                                dayOfWeek = 0,
+                                isCanceled = false,
+                                number = 1,
+                                rooms =
+                                listOf("304", "108"),
+                                subject = "Английский язык",
+                                teachers = listOf("Колобова Р.В.", "Фомина Р.И."),
+                                weekState = 0
+                            ),
+                            Lesson(
+                                dayOfWeek = 0,
+                                isCanceled = false,
+                                number = 1,
+                                rooms =
+                                listOf("304", "108"),
+                                subject = "Математика",
+                                teachers = listOf("Колобова Р.В.", "Фомина Р.И."),
+                                weekState = 0
+                            )
+                        )
+                    )
+                ),
+                isLowerWeek = Response.Success(true),
+                bellSchedule = Response.Success(BellSchedule())
+            )
         }
     }
 }

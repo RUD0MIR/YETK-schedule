@@ -17,6 +17,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -27,10 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.yetk.designsystem.icon.YetkIcon
-import com.yetk.designsystem.theme.Gray50
-import com.yetk.designsystem.theme.Gray70
 import com.yetk.designsystem.theme.Inter
-import com.yetk.designsystem.theme.White
 
 @Composable
 fun YetkTextField(
@@ -48,14 +46,12 @@ fun YetkTextField(
         singleLine = true,
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-            unfocusedContainerColor = White,
-            unfocusedIndicatorColor = Gray70
         ),
         supportingText = {
-            Text(text = supportingText, color = Gray50)
+            Text(text = supportingText)
         },
         placeholder = {
-            Text(text = placeholderText, color = Gray70, fontWeight = FontWeight.Medium)
+            Text(text = placeholderText, fontWeight = FontWeight.Medium)
         },
     )
 }
@@ -77,18 +73,16 @@ fun YetkPasswordField(
         onValueChange = { onTextChange(it) },
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-            unfocusedContainerColor = White,
-            unfocusedIndicatorColor = Gray70
         ),
         supportingText = {
-            Text(text = supportingText, color = Gray50)
+            Text(text = supportingText)
         },
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
         ),
         singleLine = true,
         placeholder = {
-            Text(text = placeholderText, color = Gray70, fontWeight = FontWeight.Medium)
+            Text(text = placeholderText, fontWeight = FontWeight.Medium)
         },
         trailingIcon = {
             val icon = if (passwordVisible)
@@ -141,8 +135,7 @@ fun YetkAutocompleteTextField(
             ),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-                unfocusedContainerColor = White,
-                unfocusedIndicatorColor = Gray70
+                unfocusedContainerColor = White
             ),
         )
 
@@ -182,8 +175,7 @@ fun YetkMultilineTextField(modifier: Modifier = Modifier, value: String, placeho
         onValueChange = { onValueChange(it) },
         placeholder = {
             Text(
-                text = placeholderText,
-                color = Gray70
+                text = placeholderText
             )
         },
         colors = TextFieldDefaults.colors(

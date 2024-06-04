@@ -25,8 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.yetk.designsystem.theme.Gray60
-import com.yetk.designsystem.theme.Gray90
 
 enum class SwipeDirection {
     Left,
@@ -73,7 +71,6 @@ fun SwipeableSnackbarHost(hostState: SnackbarHostState) {
                     modifier = Modifier
                         .padding(10.dp)
                         .offset(x = offset),
-                    containerColor = Gray90,
                     contentColor = Color.Black,
                     action = {
                         IconButton(onClick = { snackbarData.performAction() }) {
@@ -81,7 +78,7 @@ fun SwipeableSnackbarHost(hostState: SnackbarHostState) {
                         }
                     }
                 ) {
-                    Text(text = snackbarData.visuals.message, color = Gray60)
+                    Text(text = snackbarData.visuals.message)
                 }
         },
         modifier = Modifier
