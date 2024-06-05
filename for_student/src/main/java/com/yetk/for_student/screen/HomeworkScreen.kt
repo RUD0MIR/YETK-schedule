@@ -49,7 +49,6 @@ private const val TAG = "HomeworkScreen"
 
 @Composable
 internal fun HomeworkRoute(
-    onShowSnackbar: suspend (String, String?) -> Boolean,
     onNavigateToEditScreen:() -> Unit,
     onNavigateToAddScreen: () -> Unit,
     viewModel: HomeworkViewModel = hiltViewModel(),

@@ -40,5 +40,4 @@ object YetkIcon {
     val ToUpperWeek = R.drawable.ic_to_upper_week
     val ToLowerWeek = R.drawable.to_lower_week
     val Logo = R.drawable.yetk_logo
-
 }

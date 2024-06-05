@@ -1,5 +1,6 @@
 package com.yetk.designsystem.component
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -67,7 +68,6 @@ fun AutoComplete(
     // Category Field
     Column(
         modifier = Modifier
-            .padding(30.dp)
             .fillMaxWidth()
             .clickable(
                 interactionSource = interactionSource,
@@ -94,9 +94,9 @@ fun AutoComplete(
                         expanded = true
                     },
                     colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-                        cursorColor = MaterialTheme.colorScheme.secondary,
-                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                        cursorColor = MaterialTheme.colorScheme.primary,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
                     ),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
@@ -173,10 +173,11 @@ fun CategoryItems(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun AutoCompletePreview() {
-    YetkScheduleTheme {
+    YetkScheduleTheme(dynamicColor = false) {
         AutoComplete(listOf("item", "item", "item", "item"), "", "lavel") {}
     }
 }

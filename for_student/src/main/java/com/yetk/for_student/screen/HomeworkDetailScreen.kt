@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
@@ -125,7 +127,10 @@ fun HomeworkDetailScreen(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .fillMaxSize()
+                    .padding(horizontal = 16.dp)
             ) {
+                Spacer(modifier = Modifier.height(32.dp))
+
                 AutoComplete(
                     testDropDownItems,
                     subjectTfValue,
@@ -135,10 +140,11 @@ fun HomeworkDetailScreen(
                     onEvent(HomeworkEvent.UpdateSubjectName(it))
                 }
 
+                Spacer(modifier = Modifier.height(32.dp))
+
                 YetkMultilineTextField(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp)
                         .padding(bottom = 116.dp),
                     value = state.content,
                     placeholderText = "Домашнее задание",

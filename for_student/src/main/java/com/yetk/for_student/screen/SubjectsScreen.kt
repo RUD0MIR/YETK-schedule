@@ -1,6 +1,7 @@
 package com.yetk.for_student.screen
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -74,8 +75,6 @@ fun SubjectListItem(
         mutableStateOf(false)
     }
 
-    //TODO animate expand state
-
     Column(modifier = Modifier
         .fillMaxSize()
         ) {
@@ -97,7 +96,7 @@ fun SubjectListItem(
                         text = subject.name,
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    if (expanded) {
+                    AnimatedVisibility(visible = expanded) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             subject.teachers.forEach {
                                 Text(

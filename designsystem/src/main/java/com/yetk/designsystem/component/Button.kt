@@ -24,7 +24,8 @@ fun YetkFilledButton(text: String, modifier: Modifier = Modifier, onClick: () ->
             onClick()
         },
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.secondary
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         )
     ) {
         Text(text = text)
@@ -67,7 +68,7 @@ fun YetkAddButton(onClick: () -> Unit) {
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ButtonsPreview() {
-    YetkScheduleTheme {
+    YetkScheduleTheme(dynamicColor = false) {
         Surface {
             Column {
                 YetkFilledButton("text"){}

@@ -1,7 +1,11 @@
 package com.yetk.designsystem.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenu
@@ -11,13 +15,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -29,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.Inter
+import com.yetk.designsystem.theme.YetkScheduleTheme
 
 @Composable
 fun YetkTextField(
@@ -45,7 +54,7 @@ fun YetkTextField(
         onValueChange = { onTextChange(it) },
         singleLine = true,
         colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
         ),
         supportingText = {
             Text(text = supportingText)
@@ -72,7 +81,7 @@ fun YetkPasswordField(
         isError = isError,
         onValueChange = { onTextChange(it) },
         colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
         ),
         supportingText = {
             Text(text = supportingText)
@@ -134,8 +143,7 @@ fun YetkAutocompleteTextField(
                 imeAction = ImeAction.Next,
             ),
             colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-                unfocusedContainerColor = White
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary
             ),
         )
 
@@ -179,15 +187,45 @@ fun YetkMultilineTextField(modifier: Modifier = Modifier, value: String, placeho
             )
         },
         colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-            cursorColor = MaterialTheme.colorScheme.secondary,
-            focusedLabelColor = MaterialTheme.colorScheme.secondary,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
         ),
     )
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun TextFieldsPreview() {
-    YetkTextField("test") {}
+private fun TextFieldPreview() {
+    YetkScheduleTheme(dynamicColor = false) {
+        Surface {
+            Column {
+                YetkTextField("supporting text", "placeholder text") { }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                YetkTextField(
+                    "text",
+                    "supporting text",
+                    "placeholder text",
+                    isError = true
+                ) { }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                var passwordVisible by remember {
+                    mutableStateOf(false)
+                }
+                YetkPasswordField(
+                    text = "text",
+                    supportingText = "supportingText",
+                    passwordVisible = passwordVisible,
+                    onTextChange = {},
+                    onIconClick = {passwordVisible = !passwordVisible}
+                )
+
+            }
+        }
+    }
 }

@@ -1,19 +1,24 @@
 package com.yetk.designsystem.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.yetk.designsystem.theme.YetkScheduleTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,9 +35,9 @@ fun YetkTopBar(
             title = {
                 Text(
                     text = text,
-                    fontSize = 32.sp,
+                    maxLines = 1,
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineLarge
+                    style = MaterialTheme.typography.headlineMedium
                 )
             },
             navigationIcon = {
@@ -50,5 +55,23 @@ fun YetkTopBar(
             }
         )
         YetkDivider()
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun DividerPreview() {
+    YetkScheduleTheme(dynamicColor = false) {
+        Surface {
+            Column {
+                YetkTopBar(
+                    "Расписание звонков",
+                    Icons.TwoTone.ArrowBack,
+                    onNavigationClick = {},
+                    actions = {}
+                )
+            }
+        }
     }
 }
