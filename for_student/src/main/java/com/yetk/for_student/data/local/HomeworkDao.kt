@@ -2,17 +2,16 @@ package com.yetk.for_student.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import androidx.room.Upsert
-import com.yetk.model.Homework
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HomeworkDao {
 
-    @Upsert
-    suspend fun upsertHomework(homework: com.yetk.model.Homework)
+    @Insert
+    suspend fun insertHomework(homework: com.yetk.model.Homework)
 
     @Update
     suspend fun updateHomework(homework: com.yetk.model.Homework)

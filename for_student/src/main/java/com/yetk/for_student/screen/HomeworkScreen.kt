@@ -49,15 +49,15 @@ private const val TAG = "HomeworkScreen"
 
 @Composable
 internal fun HomeworkRoute(
-    onNavigateToEditScreen:() -> Unit,
+    onNavigateToEditScreen:(homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
     onNavigateToAddScreen: () -> Unit,
     viewModel: HomeworkViewModel = hiltViewModel(),
 ) {
     HomeworkScreen(
         state = viewModel.state.collectAsState().value,
         onEvent = viewModel::onEvent,
-        onNavigateToEditScreen = { onNavigateToEditScreen() },
-        onNavigateToAddScreen = { onNavigateToAddScreen() },
+        onNavigateToEditScreen = onNavigateToEditScreen,
+        onNavigateToAddScreen = onNavigateToAddScreen,
     )
 }
 
@@ -66,7 +66,7 @@ internal fun HomeworkRoute(
 fun HomeworkScreen(
     state: HomeworkState,
     onEvent: (HomeworkEvent) -> Unit,
-    onNavigateToEditScreen:() -> Unit,
+    onNavigateToEditScreen:(homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
     onNavigateToAddScreen: () -> Unit,
 ) {
     Scaffold(
@@ -82,7 +82,20 @@ fun HomeworkScreen(
                 .fillMaxSize()
         ) {
             items(state.homeworks.size) {
-                Log.d(TAG, "homeworks: ${state.homeworks}")
+                Log.d(TAG, "homeworks: ${
+                    if(state.homeworks.size != 0) {
+                        state.homeworks[0].id
+                    } else {
+                        "#"
+                    }
+                }, ${
+                    if(state.homeworks.size >= 2) {
+                        state.homeworks[1].id
+                    } else {
+                        "#"
+                    }
+                }"
+                )
                 val homework = state.homeworks[it]
                 if(homework.isVisible) {
                     Column() {
@@ -92,8 +105,8 @@ fun HomeworkScreen(
                                 onEvent(HomeworkEvent.HomeworkChecked(homework))
                             },
                             onItemClick = {
-                                onNavigateToEditScreen()
-                                onEvent(HomeworkEvent.UpdateHomeworkDetail(homework))
+                                onNavigateToEditScreen(homework.id, homework.content?: "?" , homework.subjectName?: "?" )
+
                             },
                             onBackgroundEndClick = { id ->
                                 onEvent(HomeworkEvent.DeleteHomework(homework))
@@ -193,20 +206,20 @@ fun HomeworkListItem(
 private fun HomeworkScreenPreview() {
     YetkScheduleTheme(dynamicColor = false) {
         Surface(tonalElevation = 5.dp) {
-            HomeworkScreen(
-                state = HomeworkState(
-                    homeworks = listOf(
-                        Homework(0, "content", "name"),
-                        Homework(0, "content", "name"),
-                        Homework(0, "really big content fjdaslkjfla;sdkj jfladskjflkasdjf with line break", "name"),
-                        Homework(0, "content", "name"),
-                        Homework(0, "content", "name"),
-                    )
-                ),
-                onEvent = {},
-                onNavigateToEditScreen = {},
-                onNavigateToAddScreen = { },
-            )
+//            HomeworkScreen(
+//                state = HomeworkState(
+//                    homeworks = listOf(
+//                        Homework(0, "content", "name"),
+//                        Homework(0, "content", "name"),
+//                        Homework(0, "really big content fjdaslkjfla;sdkj jfladskjflkasdjf with line break", "name"),
+//                        Homework(0, "content", "name"),
+//                        Homework(0, "content", "name"),
+//                    )
+//                ),
+//                onEvent = {},
+//                onNavigateToEditScreen = {},
+//                onNavigateToAddScreen = { },
+//            )
         }
     }
 }

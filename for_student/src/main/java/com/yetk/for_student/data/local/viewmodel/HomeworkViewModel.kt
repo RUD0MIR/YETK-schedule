@@ -34,23 +34,9 @@ class HomeworkViewModel @Inject constructor(
                 }
                 _state.update { it.cleanDetailScreenData() }
             }
-            HomeworkEvent.SaveHomework -> {
-                val content = state.value.content
-                val subjectName = state.value.subjectName
-                val homeworkId = state.value.homeworkId
-
-                if (subjectName.isBlank() && content.isBlank()) {
-                    return
-                }
-
-                val homework = Homework(
-                    id = if (homeworkId != -1) homeworkId else 0,
-                    content = content,
-                    subjectName = subjectName
-                )
-
+            is HomeworkEvent.InsertHomework -> {
                 viewModelScope.launch {
-                    repository.upsertHomework(homework)
+                    repository.upsertHomework(event.homework)
                 }
             }
             is HomeworkEvent.UpdateContent -> {
@@ -111,11 +97,9 @@ class HomeworkViewModel @Inject constructor(
                 _state.update { it.cleanDetailScreenData() }
             }
 
-            is HomeworkEvent.UpdateHomeworkDetail -> {
-                _state.update {
-                    it.copy(
-                        homeworkDetail = event.homework
-                    )
+            is HomeworkEvent.UpdateHomework -> {
+                viewModelScope.launch {
+                    repository.updateHomework(event.homework)
                 }
             }
         }

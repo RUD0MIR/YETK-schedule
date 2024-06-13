@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.yetk.designsystem.component.AutoComplete
 import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.component.YetkFilledButton
@@ -41,16 +42,22 @@ import com.yetk.for_student.data.local.viewmodel.HomeworkState
 import com.yetk.for_student.data.local.viewmodel.HomeworkViewModel
 import com.yetk.model.Homework
 
-//TODO top bar buttons doesnt work
+//TODO top bar buttons doesn't work
 
 private const val TAG = "HomeworkDetailScreen"
 
 @Composable
 internal fun HomeworkDetailRoute(
+    homeworkId: Int = -1,
+    homeworkContent: String,
+    homeworkSubject: String,
     onNavigateUp: () -> Unit,
-    viewModel: HomeworkViewModel
+    viewModel: HomeworkViewModel = hiltViewModel()
 ) {
     HomeworkDetailScreen(
+        homeworkId = homeworkId,
+        homeworkContent = homeworkContent,
+        homeworkSubject = homeworkSubject,
         state = viewModel.state.collectAsState().value,
         onEvent = viewModel::onEvent,
         onNavigateUp = onNavigateUp,
@@ -62,18 +69,25 @@ internal fun HomeworkDetailRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeworkDetailScreen(
+    homeworkContent: String,
+    homeworkSubject: String,
     state: HomeworkState,
+    homeworkId: Int,
     onEvent: (HomeworkEvent) -> Unit,
     onNavigateUp: () -> Unit,
     onHomeworkCheck: (homework: Homework) -> Unit,
     onHomeworkDelete: (homework: Homework) -> Unit
 ) {
     var subjectTfValue by remember {
-        mutableStateOf(state.subjectName)
+        mutableStateOf(homeworkSubject)
     }
 
-    val positiveBtnText = remember {
-        if (state.homeworkDetail != null) "Сохранить" else "Добавить"
+    var contentTfValue by remember {
+        mutableStateOf(homeworkContent)
+    }
+
+    val isScreenForEditItem by remember {
+        mutableStateOf(homeworkId != -1)
     }
 
     val checkBoxValue by remember {
@@ -96,7 +110,7 @@ fun HomeworkDetailScreen(
                     Checkbox(
                         checked = checkBoxValue,
                         onCheckedChange = {
-                            onHomeworkCheck(state.homeworkDetail)
+                            onHomeworkCheck(Homework(homeworkId, null, null))
                             onNavigateUp()
 
                         },
@@ -106,7 +120,7 @@ fun HomeworkDetailScreen(
                     )
 
                     IconButton(onClick = {
-                        onHomeworkDelete(state.homeworkDetail)
+                        onHomeworkDelete(Homework(homeworkId, null, null))
                         onNavigateUp()
                     }) {
                         Icon(
@@ -137,7 +151,6 @@ fun HomeworkDetailScreen(
                     "Предмет"
                 ) {
                     subjectTfValue = it
-                    onEvent(HomeworkEvent.UpdateSubjectName(it))
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -146,10 +159,10 @@ fun HomeworkDetailScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(bottom = 116.dp),
-                    value = state.content,
+                    value = contentTfValue,
                     placeholderText = "Домашнее задание",
                     onValueChange = {
-                        onEvent(HomeworkEvent.UpdateContent(content = it))
+                        contentTfValue = it
                     }
                 )
             }
@@ -168,11 +181,15 @@ fun HomeworkDetailScreen(
                         .padding(end = 16.dp, top = 16.dp, bottom = 16.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    if (state.subjectName.isNotBlank() || state.content.isNotBlank()) {
+                    if (subjectTfValue.isNotBlank() || contentTfValue.isNotBlank()) {
                         YetkFilledButton(
-                            text = positiveBtnText
+                            text = if (isScreenForEditItem) "Сохранить" else "Добавить"
                         ) {
-                            onEvent(HomeworkEvent.SaveHomework)
+                            if (isScreenForEditItem) {
+                                onEvent(HomeworkEvent.UpdateHomework(Homework(homeworkId, contentTfValue, subjectTfValue)))
+                            } else {
+                                onEvent(HomeworkEvent.InsertHomework(Homework(0, contentTfValue, subjectTfValue)))
+                            }
                             onNavigateUp()
                         }
                     }
@@ -195,6 +212,9 @@ private fun HomeworkDetailPreview() {
     YetkScheduleTheme(dynamicColor = false) {
         Surface(tonalElevation = 5.dp) {
             HomeworkDetailScreen(
+                homeworkId = -1,
+                homeworkSubject = "subject",
+                homeworkContent = "content",
                 state = HomeworkState(homeworkDetail = Homework(1, "Some content", "Some name")),
                 onEvent = {},
                 onNavigateUp = {},

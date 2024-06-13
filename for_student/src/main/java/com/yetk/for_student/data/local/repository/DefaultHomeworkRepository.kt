@@ -10,7 +10,7 @@ class DefaultHomeworkRepository @Inject constructor(
 ) : HomeworkRepository {
 
     override suspend fun upsertHomework(homework: Homework) {
-        dao.upsertHomework(homework)
+        dao.insertHomework(homework)
     }
 
     override suspend fun deleteHomework(homework: Homework) {
