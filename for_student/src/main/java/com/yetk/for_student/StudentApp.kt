@@ -33,6 +33,8 @@ import com.yetk.designsystem.component.YetkTopBar
 import com.yetk.for_student.navigation.StudentNavHost
 import com.yetk.for_student.navigation.TopLevelDestination
 
+//TODO add support for different screen sizes
+//TODO add tests
 //TODO add some ui to show error on internet connection error
 @Composable
 fun StudentApp(

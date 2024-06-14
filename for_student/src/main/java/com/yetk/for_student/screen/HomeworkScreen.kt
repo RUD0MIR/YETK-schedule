@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "HomeworkScreen"
 
-// TODO need to  add snackbar
+// TODO replace with new cool composable for edit screens
 
 @Composable
 internal fun HomeworkRoute(
