@@ -1,4 +1,4 @@
-package com.yetk.for_student.data.local.viewmodel
+package com.yetk.for_student.data.local
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,12 +20,9 @@ class HomeworkViewModel @Inject constructor(
     private val repository: HomeworkRepository
 ) : ViewModel() {
     val homeworks = repository.getAll()
-//    private val _homeworks = MutableStateFlow<List<ExploreModel>>(emptyList())
 
     fun checkHomework(homeworkId: Int) {
         viewModelScope.launch {
-            //checkbox animation delay
-            delay(1000)
             repository.deleteHomework(Homework(homeworkId, null, null))
         }
     }

@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,12 +36,14 @@ import com.yetk.designsystem.component.YetkOutlinedButton
 import com.yetk.designsystem.component.YetkTopBar
 import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.YetkScheduleTheme
-import com.yetk.for_student.data.local.viewmodel.HomeworkEvent
-import com.yetk.for_student.data.local.viewmodel.HomeworkState
-import com.yetk.for_student.data.local.viewmodel.HomeworkViewModel
+import com.yetk.for_student.data.local.HomeworkViewModel
+import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
+import com.yetk.model.CollegeGroup
 import com.yetk.model.Homework
+import com.yetk.model.Response
 
-//TODO top bar buttons doesn't work
+//TODO call snackbar on tob bar actions
+//TODO after clicking on subjectName in AutocompleteTextField set it's cursor to an end
 
 private const val TAG = "HomeworkDetailScreen"
 
@@ -51,13 +52,16 @@ internal fun HomeworkDetailRoute(
     homeworkId: Int = -1,
     homeworkContent: String,
     homeworkSubject: String,
+    subjectsNames: List<String>,
     onNavigateUp: () -> Unit,
-    viewModel: HomeworkViewModel = hiltViewModel()
+    viewModel: HomeworkViewModel = hiltViewModel(),
+    studentViewModel: StudentViewModel = hiltViewModel()
 ) {
     HomeworkDetailScreen(
         homeworkId = homeworkId,
         homeworkContent = homeworkContent,
         homeworkSubject = homeworkSubject,
+        subjectsNames = subjectsNames,
         onNavigateUp = onNavigateUp,
         onHomeworkCheck = { viewModel.checkHomework(homeworkId) },
         onHomeworkDelete = { viewModel.deleteHomework(homeworkId) },
@@ -72,30 +76,27 @@ fun HomeworkDetailScreen(
     homeworkContent: String,
     homeworkSubject: String,
     homeworkId: Int,
+    subjectsNames: List<String>,
     onNavigateUp: () -> Unit,
     onHomeworkCheck: () -> Unit,
     onHomeworkDelete: () -> Unit,
     onHomeworkInsert: (homework: Homework) -> Unit,
     onHomeworkUpdate: (homework: Homework) -> Unit,
 ) {
-    var subjectTfValue by remember {
-        mutableStateOf(homeworkSubject)
-    }
-
-    var contentTfValue by remember {
-        mutableStateOf(homeworkContent)
-    }
-
     val isScreenForEditItem by remember {
         mutableStateOf(homeworkId != -1)
     }
 
-    val checkBoxValue by remember {
-        mutableStateOf(false)
+    var subjectTfValue by remember {
+        mutableStateOf(if(isScreenForEditItem) homeworkSubject else "")
     }
 
-    val testDropDownItems = remember {
-        mutableListOf("Математика", "Физкультура", "Информационные технологии", "Английский")
+    var contentTfValue by remember {
+        mutableStateOf(if(isScreenForEditItem) homeworkContent else "")
+    }
+
+    val checkBoxValue by remember {
+        mutableStateOf(false)
     }
 
     Scaffold(
@@ -146,7 +147,7 @@ fun HomeworkDetailScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 AutoComplete(
-                    testDropDownItems,
+                    subjectsNames,
                     subjectTfValue,
                     "Предмет"
                 ) {
@@ -215,6 +216,7 @@ private fun HomeworkDetailPreview() {
                 homeworkId = -1,
                 homeworkSubject = "subject",
                 homeworkContent = "content",
+                subjectsNames = emptyList<String>(),
                 onNavigateUp = {},
                 onHomeworkCheck = {},
                 onHomeworkInsert = {},

@@ -22,7 +22,8 @@ fun NavGraphBuilder.homeworkScreen(
     ) {
         HomeworkRoute(
             onNavigateToEditScreen = onNavigateToEditScreen,
-            onNavigateToAddScreen = { onNavigateToAddScreen() }
+            onNavigateToAddScreen = { onNavigateToAddScreen() },
+            onShowSnackbar = onShowSnackbar
         )
     }
 }

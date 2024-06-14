@@ -33,9 +33,7 @@ import com.yetk.designsystem.component.YetkTopBar
 import com.yetk.for_student.navigation.StudentNavHost
 import com.yetk.for_student.navigation.TopLevelDestination
 
-@OptIn(
-    ExperimentalLayoutApi::class,
-)
+//TODO add some ui to show error on internet connection error
 @Composable
 fun StudentApp(
     appState: StudentAppState = rememberStudentAppState()

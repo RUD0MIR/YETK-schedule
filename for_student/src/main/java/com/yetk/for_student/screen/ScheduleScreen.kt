@@ -66,7 +66,7 @@ private const val TAG = "ScheduleScreen"
 
 @Composable
 internal fun ScheduleRoute(
-    viewModel: StudentViewModel = hiltViewModel(),
+    viewModel: StudentViewModel,
 ) {
     ScheduleScreen(
         collegeGroup = viewModel.collegeGroup.value,

@@ -1,5 +1,7 @@
 package com.yetk.for_student.data.remote.viewmodel
 
+import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +12,8 @@ import com.yetk.model.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "StudentViewModel"
 
 @HiltViewModel
 class StudentViewModel @Inject constructor(
@@ -27,6 +31,18 @@ class StudentViewModel @Inject constructor(
         fetchCollegeGroupData("6wBXWrOgataTaazTBhBn")
         fetchIsLowerWeek()
         fetchBellScheduleData()
+    }
+
+    fun getSubjectsNames(): List<String> {
+        val subjectsNames = mutableListOf<String>()
+        if (collegeGroup.value is Response.Success) {
+            val collegeGroupData = collegeGroup as MutableState<Response.Success<CollegeGroup>>
+            collegeGroupData.value.data.subjects.map {
+                subjectsNames.add(it.name)
+            }
+        }
+        Log.d(TAG, "subjectsNames.size:${subjectsNames.size} ")
+        return subjectsNames
     }
 
     private fun fetchCollegeGroupData(groupId: String) = viewModelScope.launch {

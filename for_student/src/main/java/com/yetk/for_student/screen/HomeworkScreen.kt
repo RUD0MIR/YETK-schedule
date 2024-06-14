@@ -1,7 +1,9 @@
 package com.yetk.for_student.screen
 
 import android.content.res.Configuration
-import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,11 +23,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,19 +35,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yetk.designsystem.component.YetkAddButton
 import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.YetkScheduleTheme
-import com.yetk.for_student.data.local.viewmodel.HomeworkEvent
-import com.yetk.for_student.data.local.viewmodel.HomeworkState
-import com.yetk.for_student.data.local.viewmodel.HomeworkViewModel
+import com.yetk.for_student.data.local.HomeworkViewModel
 import com.yetk.model.Homework
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private const val TAG = "HomeworkScreen"
 
@@ -56,6 +57,7 @@ internal fun HomeworkRoute(
     onNavigateToEditScreen:(homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
     onNavigateToAddScreen: () -> Unit,
     viewModel: HomeworkViewModel = hiltViewModel(),
+    onShowSnackbar: suspend (String, String?) -> Boolean
 ) {
     val lifecycle = LocalLifecycleOwner.current
     HomeworkScreen(
@@ -64,6 +66,7 @@ internal fun HomeworkRoute(
         onHomeworkDelete = { viewModel.deleteHomework(it) },
         onHomeworkCheck = { viewModel.checkHomework(it) },
         onNavigateToAddScreen = onNavigateToAddScreen,
+        onShowSnackbar = onShowSnackbar
     )
 }
 
@@ -74,7 +77,8 @@ fun HomeworkScreen(
     onNavigateToEditScreen:(homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
     onHomeworkCheck: (homeworkId: Int) -> Unit,
     onHomeworkDelete: (homeworkId: Int) -> Unit,
-    onNavigateToAddScreen: () -> Unit
+    onNavigateToAddScreen: () -> Unit,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
 ) {
     Scaffold(
         floatingActionButton = {
@@ -83,18 +87,40 @@ fun HomeworkScreen(
             }
         },
     ) { topBarPadding ->
+        val scope = rememberCoroutineScope()
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
         ) {
             items(homeworks.size) {
                 val homework = homeworks[it]
-                if(homework.isVisible) {
+                var isVisible by rememberSaveable {
+                    mutableStateOf(true)
+                }
+                AnimatedVisibility(
+                    isVisible,
+                    enter = slideInHorizontally {
+                        with(it) { -it }
+                    },
+                    exit = slideOutHorizontally {
+                        with(it) { -it }
+                    }
+                    ) {
                     Column {
                         HomeworkListItem(
                             homework,
                             onCheck = {id ->
-                                onHomeworkCheck(id)
+                                scope.launch {
+                                    //checkbox animation delay
+                                    delay(500)
+                                    isVisible = false
+
+                                    if (!onShowSnackbar("Домашнее задание выполнено!", "Отмена")) {
+                                        onHomeworkCheck(id)
+                                    } else {
+                                        isVisible = true
+                                    }
+                                }
                             },
                             onItemClick = {
                                 onNavigateToEditScreen(
@@ -104,7 +130,14 @@ fun HomeworkScreen(
                                 )
                             },
                             onBackgroundEndClick = { id ->
-                                onHomeworkDelete(id)
+                                isVisible = false
+                                scope.launch {
+                                    if (!onShowSnackbar("Домашнее задание удалено", "Отмена")) {
+                                        onHomeworkDelete(id)
+                                    } else {
+                                        isVisible = true
+                                    }
+                                }
                             },
                         )
                         YetkDivider()
@@ -127,6 +160,7 @@ fun HomeworkListItem(
     var isChecked by remember {
         mutableStateOf(false)
     }
+
 
     RevealSwipe(
         modifier = Modifier
@@ -207,6 +241,7 @@ private fun HomeworkScreenPreview() {
                 {},
                 {},
                 {},
+                {_, _ -> false}
             )
         }
     }
