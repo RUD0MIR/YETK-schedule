@@ -10,7 +10,7 @@ fun StudentNavHost(
     appState: StudentAppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
-    startDestination: String = homeworkNavigationRoute, //TODO authorizationNavigationRoute
+    startDestination: String = authorizationNavigationRoute, //TODO authorizationNavigationRoute
 ) {
     val navController = appState.navController
     NavHost(
@@ -26,7 +26,6 @@ fun StudentNavHost(
             onNavigateToEditScreen = { id, content, subjectName ->
                 navController.navigateToHomeworkDetail(id, content, subjectName)
             }
-
         )
         bellScheduleScreen()
         subjectsScreen()

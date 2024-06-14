@@ -58,11 +58,11 @@ internal fun HomeworkDetailRoute(
         homeworkId = homeworkId,
         homeworkContent = homeworkContent,
         homeworkSubject = homeworkSubject,
-        state = viewModel.state.collectAsState().value,
-        onEvent = viewModel::onEvent,
         onNavigateUp = onNavigateUp,
-        onHomeworkCheck = { HomeworkEvent.HomeworkChecked(it) },
-        onHomeworkDelete = { HomeworkEvent.DeleteHomework(it) }
+        onHomeworkCheck = { viewModel.checkHomework(homeworkId) },
+        onHomeworkDelete = { viewModel.deleteHomework(homeworkId) },
+        onHomeworkInsert = { viewModel.insertHomework(it) },
+        onHomeworkUpdate = { viewModel.updateHomework(it) },
     )
 }
 
@@ -71,12 +71,12 @@ internal fun HomeworkDetailRoute(
 fun HomeworkDetailScreen(
     homeworkContent: String,
     homeworkSubject: String,
-    state: HomeworkState,
     homeworkId: Int,
-    onEvent: (HomeworkEvent) -> Unit,
     onNavigateUp: () -> Unit,
-    onHomeworkCheck: (homework: Homework) -> Unit,
-    onHomeworkDelete: (homework: Homework) -> Unit
+    onHomeworkCheck: () -> Unit,
+    onHomeworkDelete: () -> Unit,
+    onHomeworkInsert: (homework: Homework) -> Unit,
+    onHomeworkUpdate: (homework: Homework) -> Unit,
 ) {
     var subjectTfValue by remember {
         mutableStateOf(homeworkSubject)
@@ -106,11 +106,11 @@ fun HomeworkDetailScreen(
                 navigationIconContentDescription = "Go back",
                 onNavigationClick = onNavigateUp
             ) {
-                if (state.homeworkDetail != null) {
+                if (isScreenForEditItem) {
                     Checkbox(
                         checked = checkBoxValue,
                         onCheckedChange = {
-                            onHomeworkCheck(Homework(homeworkId, null, null))
+                            onHomeworkCheck()
                             onNavigateUp()
 
                         },
@@ -120,7 +120,7 @@ fun HomeworkDetailScreen(
                     )
 
                     IconButton(onClick = {
-                        onHomeworkDelete(Homework(homeworkId, null, null))
+                        onHomeworkDelete()
                         onNavigateUp()
                     }) {
                         Icon(
@@ -186,9 +186,9 @@ fun HomeworkDetailScreen(
                             text = if (isScreenForEditItem) "Сохранить" else "Добавить"
                         ) {
                             if (isScreenForEditItem) {
-                                onEvent(HomeworkEvent.UpdateHomework(Homework(homeworkId, contentTfValue, subjectTfValue)))
+                                onHomeworkUpdate(Homework(homeworkId, contentTfValue, subjectTfValue))
                             } else {
-                                onEvent(HomeworkEvent.InsertHomework(Homework(0, contentTfValue, subjectTfValue)))
+                                onHomeworkInsert(Homework(0, contentTfValue, subjectTfValue))
                             }
                             onNavigateUp()
                         }
@@ -215,11 +215,11 @@ private fun HomeworkDetailPreview() {
                 homeworkId = -1,
                 homeworkSubject = "subject",
                 homeworkContent = "content",
-                state = HomeworkState(homeworkDetail = Homework(1, "Some content", "Some name")),
-                onEvent = {},
                 onNavigateUp = {},
-                onHomeworkCheck = {}
-            ) { }
+                onHomeworkCheck = {},
+                onHomeworkInsert = {},
+               onHomeworkDelete = {}
+            ) {}
         }
     }
 }

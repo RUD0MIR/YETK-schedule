@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.yetk.for_student.data.local.repository.HomeworkRepository
 import com.yetk.model.Homework
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -17,91 +19,32 @@ import javax.inject.Inject
 class HomeworkViewModel @Inject constructor(
     private val repository: HomeworkRepository
 ) : ViewModel() {
-    private val _homeworks = repository.getAll()
+    val homeworks = repository.getAll()
+//    private val _homeworks = MutableStateFlow<List<ExploreModel>>(emptyList())
 
-    private val _state = MutableStateFlow(HomeworkState())
-    val state = combine(_state, _homeworks) { state, homeworks ->
-        state.copy(
-            homeworks = homeworks
-        )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeworkState())
+    fun checkHomework(homeworkId: Int) {
+        viewModelScope.launch {
+            //checkbox animation delay
+            delay(1000)
+            repository.deleteHomework(Homework(homeworkId, null, null))
+        }
+    }
 
-    fun onEvent(event: HomeworkEvent) {
-        when (event) {
-            is HomeworkEvent.DeleteHomework -> {
-                viewModelScope.launch {
-                    repository.deleteHomework(event.homework)
-                }
-                _state.update { it.cleanDetailScreenData() }
-            }
-            is HomeworkEvent.InsertHomework -> {
-                viewModelScope.launch {
-                    repository.upsertHomework(event.homework)
-                }
-            }
-            is HomeworkEvent.UpdateContent -> {
-                _state.update {
-                    it.copy(
-                        content = event.content,
-                    )
-                }
-            }
-            is HomeworkEvent.UpdateSubjectName -> {
-                _state.update {
-                    it.copy(
-                        subjectName = event.subjectName
-                    )
-                }
-            }
-            is HomeworkEvent.UpdateId -> {
-                _state.update {
-                    it.copy(
-                        homeworkId = event.id
-                    )
-                }
-            }
-            is HomeworkEvent.HomeworkChecked -> {
-                viewModelScope.launch {
-                    repository.deleteHomework(event.homework)
-                }
+    fun deleteHomework(homeworkId: Int) {
+        viewModelScope.launch {
+            repository.deleteHomework(Homework(homeworkId, null, null))
+        }
+    }
 
-            }
-            is HomeworkEvent.GetHomework -> {
-                viewModelScope.launch {
-                    repository.getHomeworkById(event.id)
-                }
-            }
-            is HomeworkEvent.ShowHomework -> {
-                val homework = Homework(
-                    id = event.homework.id,
-                    content = event.homework.content,
-                    subjectName = event.homework.subjectName,
-                    isVisible = true
-                )
-                viewModelScope.launch {
-                    repository.updateHomework(homework)
-                }
-            }
-            is HomeworkEvent.HideHomework -> {
-                val homework = Homework(
-                    id = event.homework.id,
-                    content = event.homework.content,
-                    subjectName = event.homework.subjectName,
-                    isVisible = false
-                )
-                viewModelScope.launch {
-                    repository.updateHomework(homework)
-                }
-            }
-            HomeworkEvent.ClearState -> {
-                _state.update { it.cleanDetailScreenData() }
-            }
+    fun insertHomework(homework: Homework) {
+        viewModelScope.launch {
+            repository.insertHomework(homework)
+        }
+    }
 
-            is HomeworkEvent.UpdateHomework -> {
-                viewModelScope.launch {
-                    repository.updateHomework(event.homework)
-                }
-            }
+    fun updateHomework(homework: Homework) {
+        viewModelScope.launch {
+            repository.updateHomework(homework)
         }
     }
 }

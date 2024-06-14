@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yetk.designsystem.component.YetkAddButton
 import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.icon.YetkIcon
@@ -53,10 +57,12 @@ internal fun HomeworkRoute(
     onNavigateToAddScreen: () -> Unit,
     viewModel: HomeworkViewModel = hiltViewModel(),
 ) {
+    val lifecycle = LocalLifecycleOwner.current
     HomeworkScreen(
-        state = viewModel.state.collectAsState().value,
-        onEvent = viewModel::onEvent,
+        homeworks = viewModel.homeworks.collectAsStateWithLifecycle(emptyList<Homework>(), lifecycle).value,
         onNavigateToEditScreen = onNavigateToEditScreen,
+        onHomeworkDelete = { viewModel.deleteHomework(it) },
+        onHomeworkCheck = { viewModel.checkHomework(it) },
         onNavigateToAddScreen = onNavigateToAddScreen,
     )
 }
@@ -64,16 +70,16 @@ internal fun HomeworkRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeworkScreen(
-    state: HomeworkState,
-    onEvent: (HomeworkEvent) -> Unit,
+    homeworks: List<Homework>,
     onNavigateToEditScreen:(homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
-    onNavigateToAddScreen: () -> Unit,
+    onHomeworkCheck: (homeworkId: Int) -> Unit,
+    onHomeworkDelete: (homeworkId: Int) -> Unit,
+    onNavigateToAddScreen: () -> Unit
 ) {
     Scaffold(
         floatingActionButton = {
             YetkAddButton() {
                 onNavigateToAddScreen()
-                onEvent(HomeworkEvent.ClearState)
             }
         },
     ) { topBarPadding ->
@@ -81,35 +87,24 @@ fun HomeworkScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            items(state.homeworks.size) {
-                Log.d(TAG, "homeworks: ${
-                    if(state.homeworks.size != 0) {
-                        state.homeworks[0].id
-                    } else {
-                        "#"
-                    }
-                }, ${
-                    if(state.homeworks.size >= 2) {
-                        state.homeworks[1].id
-                    } else {
-                        "#"
-                    }
-                }"
-                )
-                val homework = state.homeworks[it]
+            items(homeworks.size) {
+                val homework = homeworks[it]
                 if(homework.isVisible) {
-                    Column() {
+                    Column {
                         HomeworkListItem(
                             homework,
-                            onCheck = {
-                                onEvent(HomeworkEvent.HomeworkChecked(homework))
+                            onCheck = {id ->
+                                onHomeworkCheck(id)
                             },
                             onItemClick = {
-                                onNavigateToEditScreen(homework.id, homework.content?: "?" , homework.subjectName?: "?" )
-
+                                onNavigateToEditScreen(
+                                    homework.id,
+                                    homework.content?: "?" ,
+                                    homework.subjectName?: "?"
+                                )
                             },
                             onBackgroundEndClick = { id ->
-                                onEvent(HomeworkEvent.DeleteHomework(homework))
+                                onHomeworkDelete(id)
                             },
                         )
                         YetkDivider()
@@ -127,7 +122,7 @@ fun HomeworkListItem(
     homework: Homework,
     onBackgroundEndClick: (id: Int) -> Unit,
     onItemClick: () -> Unit,
-    onCheck: () -> Unit
+    onCheck: (id: Int) -> Unit
 ) {
     var isChecked by remember {
         mutableStateOf(false)
@@ -188,7 +183,7 @@ fun HomeworkListItem(
                     onCheckedChange = {
                         isChecked = !isChecked
                         if (isChecked) {
-                            onCheck()
+                            onCheck(homework.id)
                         }
                     },
                     colors = CheckboxDefaults.colors(
@@ -206,20 +201,13 @@ fun HomeworkListItem(
 private fun HomeworkScreenPreview() {
     YetkScheduleTheme(dynamicColor = false) {
         Surface(tonalElevation = 5.dp) {
-//            HomeworkScreen(
-//                state = HomeworkState(
-//                    homeworks = listOf(
-//                        Homework(0, "content", "name"),
-//                        Homework(0, "content", "name"),
-//                        Homework(0, "really big content fjdaslkjfla;sdkj jfladskjflkasdjf with line break", "name"),
-//                        Homework(0, "content", "name"),
-//                        Homework(0, "content", "name"),
-//                    )
-//                ),
-//                onEvent = {},
-//                onNavigateToEditScreen = {},
-//                onNavigateToAddScreen = { },
-//            )
+            HomeworkScreen(
+                emptyList<Homework>(),
+                {_, _, _ ->},
+                {},
+                {},
+                {},
+            )
         }
     }
 }
