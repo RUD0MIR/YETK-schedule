@@ -12,7 +12,7 @@ fun StudentNavHost(
     appState: StudentAppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
-    startDestination: String = homeworkNavigationRoute, //TODO authorizationNavigationRoute
+    startDestination: String = scheduleNavigationRoute, //TODO authorizationNavigationRoute
     studentViewModel: StudentViewModel = hiltViewModel()
 ) {
     val navController = appState.navController

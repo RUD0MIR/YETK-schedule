@@ -15,6 +15,7 @@ import androidx.compose.material.icons.twotone.LocationOn
 import androidx.compose.material.icons.twotone.MenuBook
 import androidx.compose.material.icons.twotone.Notifications
 import androidx.compose.material.icons.twotone.Person
+import androidx.compose.material.icons.twotone.Schedule
 import androidx.compose.material.icons.twotone.Visibility
 import androidx.compose.material.icons.twotone.VisibilityOff
 import com.yetk.designsystem.R
@@ -23,7 +24,7 @@ object YetkIcon {
     val VisibilityOff = Icons.TwoTone.VisibilityOff
     val Visibility = Icons.TwoTone.Visibility
     val ClockUpperWeek = Icons.Outlined.Schedule
-    val ClockLowerWeek = Icons.Filled.Schedule
+    val ClockLowerWeek = Icons.TwoTone.Schedule
     val Schedule = Icons.TwoTone.DateRange
     val Homework = Icons.TwoTone.Home
     val BellSchedule = Icons.TwoTone.Notifications

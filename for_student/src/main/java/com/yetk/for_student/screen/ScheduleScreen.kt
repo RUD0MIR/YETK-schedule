@@ -2,6 +2,9 @@ package com.yetk.for_student.screen
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +34,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,8 +52,9 @@ import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.Inter
 import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
+import com.yetk.for_student.WeekState
 import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
-import com.yetk.for_student.matches
+import com.yetk.for_student.matchesWeekState
 import com.yetk.model.BellSchedule
 import com.yetk.model.CollegeGroup
 import com.yetk.model.Lesson
@@ -117,44 +122,32 @@ fun ScheduleScreen(
                     collegeGroupData = collegeGroupData
                 ) {
                     isLowerWeekPreview = !isLowerWeekPreview
-                    Log.d(TAG, isLowerWeekPreview.toString())
                 }
 
                 HorizontalWeekPager { currentPage ->
-                    var currentLessons = emptyList<Lesson>()
-
-                    if (isLowerWeekPreview != null) {
-                        currentLessons = collegeGroupData.lessons.filter {
-                            it.dayOfWeek == currentPage && it.weekState.matches(isLowerWeekPreview!!)
-                        }
+                    var currentLessons = remember {
+                        collegeGroupData.lessons.filter { it.dayOfWeek == currentPage }
                     }
 
                     if (currentLessons.isEmpty()) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                modifier = Modifier.width(250.dp),
-                                textAlign = TextAlign.Center,
-                                text = "На сегодня занятий не запланированно",
-                                fontFamily = Inter,
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 20.sp,
-                            )
-                        }
+                        EmptyListPlaceholder(modifier = Modifier.fillMaxSize())
                     } else {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                         ) {
                             items(count = currentLessons.size) { i ->
-                                Column() {
-                                    LessonListItem(
-                                        currentLessons[i],
-                                        bellScheduleData
-                                    )
-                                    YetkDivider()
+                                AnimatedVisibility(
+                                    visible = currentLessons[i].weekState.matchesWeekState(isLowerWeekPreview),
+                                    enter = fadeIn(),
+                                    exit = fadeOut()
+                                ) {
+                                    Column {
+                                        LessonListItem(
+                                            currentLessons[i],
+                                            bellScheduleData
+                                        )
+                                        YetkDivider()
+                                    }
                                 }
                             }
                         }
@@ -162,6 +155,23 @@ fun ScheduleScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun EmptyListPlaceholder(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            modifier = Modifier.width(250.dp),
+            textAlign = TextAlign.Center,
+            text = "На сегодня занятий не запланированно",
+            fontFamily = Inter,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 20.sp,
+        )
     }
 }
 
@@ -182,19 +192,20 @@ fun HorizontalWeekPager(
                 .height(40.dp),
             selectedTabIndex = pagerState.currentPage,
             containerColor = MaterialTheme.colorScheme.background,
-            indicator = {},
             divider = {}
         ) {
             weekTabsTitles.forEachIndexed { i: Int, tab: String ->
                 val isSelected = pagerState.currentPage == i
                 Tab(
+                    modifier = Modifier.padding(12.dp),
                     selected = isSelected,
                     onClick = {
                         scope.launch {
                             pagerState.animateScrollToPage(i)
                         }
                     },
-                    interactionSource = NoRippleInteractionSource()
+                    interactionSource = NoRippleInteractionSource(),
+                    selectedContentColor = MaterialTheme.colorScheme.primary
                 ) {
                     Text(
                         text = tab,
@@ -226,9 +237,7 @@ fun LessonListItem(
     ) {
         Row(
             modifier = Modifier
-                .clickable {
-
-                }
+                .clickable {}
                 .fillMaxWidth()
                 .padding(vertical = 8.dp, horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -238,12 +247,10 @@ fun LessonListItem(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    modifier = Modifier.height(16.dp),
                     text = lesson.startTime(bellSchedule),
                     style = MaterialTheme.typography.labelMedium
                 )
                 Text(
-                    modifier = Modifier.height(13.dp),
                     text = lesson.endTime(bellSchedule),
                     style = MaterialTheme.typography.labelSmall
                 )
@@ -288,22 +295,20 @@ fun LessonListItem(
                             )
                         }
                     }
-                    Row {
-                        when (lesson.weekState.toInt()) {
-                            0 -> {}
-                            1 -> {
-                                Icon(
-                                    imageVector = YetkIcon.ClockUpperWeek,
-                                    contentDescription = "Upper week",
-                                )
-                            }
+                    when (lesson.weekState) {
+                        WeekState.EveryWeek.id -> {}
+                        WeekState.UpperWeek.id -> {
+                            Icon(
+                                imageVector = YetkIcon.ClockUpperWeek,
+                                contentDescription = WeekState.UpperWeek.text,
+                            )
+                        }
 
-                            -1 -> {
-                                Icon(
-                                    imageVector = YetkIcon.ClockLowerWeek,
-                                    contentDescription = "Lower week",
-                                )
-                            }
+                        WeekState.LowerWeek.id -> {
+                            Icon(
+                                imageVector = YetkIcon.ClockLowerWeek,
+                                contentDescription = WeekState.LowerWeek.text,
+                            )
                         }
                     }
                 }
@@ -341,7 +346,7 @@ fun ScheduleDataSection(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     color =
-                    if(isLowerWeekValue == isLowerWeekPreview)
+                    if (isLowerWeekValue == isLowerWeekPreview)
                         MaterialTheme.colorScheme.primary
                     else
                         MaterialTheme.colorScheme.onSurfaceVariant
