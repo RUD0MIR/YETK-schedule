@@ -2,25 +2,26 @@ package com.yetk.for_student.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.yetk.designsystem.icon.YetkIcon
+import com.yetk.for_student.R
 
 enum class TopLevelDestination(
     val icon: ImageVector,
-    val text: String,
+    val textId: Int,
 ) {
     SCHEDULE(
         icon = YetkIcon.Schedule,
-        text = "Расписание",
+        textId = R.string.schedule,
     ),
     HOMEWORK(
         icon = YetkIcon.Homework,
-        text = "Домашнее задание",
+        textId = R.string.homework
     ),
     BELLS(
         icon = YetkIcon.BellSchedule,
-        text = "Расписание звонков",
+        textId = R.string.bell_schedule
     ),
     SUBJECTS(
         icon = YetkIcon.Subjects,
-        text = "Предметы",
+        textId = R.string.subjects
     ),
 }

@@ -71,6 +71,7 @@ fun YetkPasswordField(
     supportingText: String = "",
     placeholderText: String = "",
     passwordVisible: Boolean,
+    showIconContentDescription: String? = null,
     isError: Boolean = false,
     onTextChange: (String) -> Unit,
     onIconClick: () -> Unit
@@ -98,10 +99,8 @@ fun YetkPasswordField(
                 YetkIcon.VisibilityOff
             else YetkIcon.Visibility
 
-            val description = if (passwordVisible) "Hide password" else "Show password"
-
             IconButton(onClick = onIconClick){
-                Icon(imageVector = icon, description)
+                Icon(imageVector = icon, showIconContentDescription)
             }
         },
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()

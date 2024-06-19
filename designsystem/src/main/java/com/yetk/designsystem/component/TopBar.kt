@@ -29,7 +29,7 @@ fun YetkTopBar(
     onNavigationClick: () -> Unit = {},
     actions: @Composable () -> Unit
 ) {
-    Column() {
+    Column {
         TopAppBar(
             modifier = Modifier.padding(end = 16.dp),
             title = {

@@ -31,6 +31,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,7 @@ import com.yetk.designsystem.component.YetkAddButton
 import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.YetkScheduleTheme
+import com.yetk.for_student.R
 import com.yetk.for_student.data.local.HomeworkViewModel
 import com.yetk.model.Homework
 import de.charlex.compose.RevealDirection
@@ -54,14 +56,17 @@ private const val TAG = "HomeworkScreen"
 
 @Composable
 internal fun HomeworkRoute(
-    onNavigateToEditScreen:(homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
+    onNavigateToEditScreen: (homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
     onNavigateToAddScreen: () -> Unit,
     viewModel: HomeworkViewModel = hiltViewModel(),
     onShowSnackbar: suspend (String, String?) -> Boolean
 ) {
     val lifecycle = LocalLifecycleOwner.current
     HomeworkScreen(
-        homeworks = viewModel.homeworks.collectAsStateWithLifecycle(emptyList<Homework>(), lifecycle).value,
+        homeworks = viewModel.homeworks.collectAsStateWithLifecycle(
+            emptyList<Homework>(),
+            lifecycle
+        ).value,
         onNavigateToEditScreen = onNavigateToEditScreen,
         onHomeworkDelete = { viewModel.deleteHomework(it) },
         onHomeworkCheck = { viewModel.checkHomework(it) },
@@ -74,7 +79,7 @@ internal fun HomeworkRoute(
 @Composable
 fun HomeworkScreen(
     homeworks: List<Homework>,
-    onNavigateToEditScreen:(homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
+    onNavigateToEditScreen: (homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
     onHomeworkCheck: (homeworkId: Int) -> Unit,
     onHomeworkDelete: (homeworkId: Int) -> Unit,
     onNavigateToAddScreen: () -> Unit,
@@ -105,17 +110,22 @@ fun HomeworkScreen(
                     exit = slideOutHorizontally {
                         with(it) { -it }
                     }
-                    ) {
+                ) {
                     Column {
+                        val context = LocalContext.current
                         HomeworkListItem(
                             homework,
-                            onCheck = {id ->
+                            onCheck = { id ->
                                 scope.launch {
                                     //checkbox animation delay
                                     delay(500)
                                     isVisible = false
 
-                                    if (!onShowSnackbar("Домашнее задание выполнено!", "Отмена")) {
+                                    if (!onShowSnackbar(
+                                            context.getString(R.string.homework_completed),
+                                            context.getString(R.string.cancel_action)
+                                        )
+                                    ) {
                                         onHomeworkCheck(id)
                                     } else {
                                         isVisible = true
@@ -125,14 +135,19 @@ fun HomeworkScreen(
                             onItemClick = {
                                 onNavigateToEditScreen(
                                     homework.id,
-                                    homework.content?: "?" ,
-                                    homework.subjectName?: "?"
+                                    homework.content ?: context.getString(R.string.null_content),
+                                    homework.subjectName ?: context.getString(R.string.null_content)
                                 )
                             },
                             onBackgroundEndClick = { id ->
                                 isVisible = false
                                 scope.launch {
-                                    if (!onShowSnackbar("Домашнее задание удалено", "Отмена")) {
+                                    if (
+                                        !onShowSnackbar(
+                                            context.getString(R.string.homework_deleted),
+                                            context.getString(R.string.cancel_action)
+                                        )
+                                    ) {
                                         onHomeworkDelete(id)
                                     } else {
                                         isVisible = true
@@ -237,11 +252,11 @@ private fun HomeworkScreenPreview() {
         Surface(tonalElevation = 5.dp) {
             HomeworkScreen(
                 emptyList<Homework>(),
-                {_, _, _ ->},
+                { _, _, _ -> },
                 {},
                 {},
                 {},
-                {_, _ -> false}
+                { _, _ -> false }
             )
         }
     }

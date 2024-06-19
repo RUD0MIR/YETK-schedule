@@ -22,7 +22,12 @@ import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.YetkScheduleTheme
 
 @Composable
-fun LowerUpperWeekToggle(modifier: Modifier, isLowerWeek: Boolean, onValueChange: () -> Unit) {
+fun LowerUpperWeekToggle(
+    modifier: Modifier,
+    contentDescription: String? = null,
+    isLowerWeek: Boolean,
+    onValueChange: () -> Unit
+) {
     IconButton(
         modifier = modifier,
         onClick = { onValueChange() }
@@ -31,27 +36,32 @@ fun LowerUpperWeekToggle(modifier: Modifier, isLowerWeek: Boolean, onValueChange
             Icon(
                 modifier = Modifier.size(32.dp),
                 painter = painterResource(id = YetkIcon.ToLowerWeek),
-                contentDescription = "To lower week",
+                contentDescription = contentDescription,
             )
         } else {
             Icon(
                 modifier = Modifier.size(32.dp),
                 painter = painterResource(id = YetkIcon.ToUpperWeek),
-                contentDescription = "To upper week",
+                contentDescription = contentDescription,
             )
         }
     }
 }
 
 @Composable
-fun YetkExpandToggle(modifier: Modifier = Modifier, expanded: Boolean, onClick: () -> Unit) {
+fun YetkExpandToggle(
+    modifier: Modifier = Modifier,
+    expanded: Boolean,
+    contentDescription: String? = null,
+    onClick: () -> Unit
+) {
     IconButton(
         modifier = modifier,
         onClick = { onClick() }
     ) {
         Icon(
             imageVector = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-            contentDescription = if (expanded) "Close" else "Expand"
+            contentDescription = contentDescription
         )
     }
 }

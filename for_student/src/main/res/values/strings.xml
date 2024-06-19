@@ -8,4 +8,35 @@
         <item>ПТ</item>
         <item>СБ</item>
     </array>
+    <string name="schedule">Расписание</string>
+    <string name="homework">Домашнее задание</string>
+    <string name="bell_schedule">Расписание звонков</string>
+    <string name="subjects">Предметы</string>
+    <string name="incorrect_login">Неверный логин</string>
+    <string name="login">Логин</string>
+    <string name="login_placeholder">Ваш логин</string>
+    <string name="incorrect_password">Неверный пароль</string>
+    <string name="password_label">Пароль</string>
+    <string name="password_placeholder">Ваш пароль</string>
+    <string name="remember_me_checkbox_text">Запомнить меня</string>
+    <string name="sign_in">Войти</string>
+    <string name="lessons_duration">"Длительность пар: "</string>
+    <string name="navigate_back">Вернуться назад</string>
+    <string name="delete_homework_action">Удалить домашнее задание</string>
+    <string name="subject">Предмет</string>
+    <string name="save_action">Сохранить</string>
+    <string name="add_action">Добавить</string>
+    <string name="cancel_action">Отмена</string>
+    <string name="homework_completed">Домашнее задание выполнено!</string>
+    <string name="null_content">\?</string>
+    <string name="homework_deleted">Домашнее задание удалено</string>
+    <string name="error_screen_message">Хмм... что-то пошло не так</string>
+    <string name="no_lessons_today_message">На сегодня занятий не запланированно</string>
+    <string name="room_icon">аудитория</string>
+    <string name="teacher_icon">Преподаватель</string>
+    <string name="upper_week">Верхняя неделя</string>
+    <string name="every_week">Каждую неделю</string>
+    <string name="lower_week">Нижняя неделя</string>
+    <string name="hour_format">"%1$s ч "</string>
+    <string name="minutes_format">"%1$s мин "</string>
 </resources>

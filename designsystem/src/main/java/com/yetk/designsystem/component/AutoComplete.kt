@@ -34,12 +34,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import com.yetk.designsystem.R
 import com.yetk.designsystem.theme.YetkScheduleTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,6 +50,7 @@ fun AutoComplete(
     items: List<String>,
     value: String,
     label: String = "",
+    arrowIconContentDescription: String? = null,
     onValueChange: (String) -> Unit,
 ) {
     val height by remember {
@@ -108,7 +111,7 @@ fun AutoComplete(
                             Icon(
                                 modifier = Modifier.size(24.dp),
                                 imageVector = Icons.Rounded.KeyboardArrowDown,
-                                contentDescription = "arrow"
+                                contentDescription = arrowIconContentDescription
                             )
                         }
                     }

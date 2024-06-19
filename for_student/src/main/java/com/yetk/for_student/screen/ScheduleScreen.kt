@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -106,7 +107,7 @@ fun ScheduleScreen(
         }
 
         isFailure(collegeGroup, isLowerWeek, bellSchedule) -> {
-            ErrorScreen(message = "Хмм... что-то пошло не так")
+            ErrorScreen(message = stringResource(R.string.error_screen_message))
         }
 
         isSuccess(collegeGroup, isLowerWeek, bellSchedule) -> {
@@ -167,7 +168,7 @@ fun EmptyListPlaceholder(modifier: Modifier = Modifier) {
         Text(
             modifier = Modifier.width(250.dp),
             textAlign = TextAlign.Center,
-            text = "На сегодня занятий не запланированно",
+            text = stringResource(R.string.no_lessons_today_message),
             fontFamily = Inter,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 20.sp,
@@ -274,7 +275,7 @@ fun LessonListItem(
                             Icon(
                                 modifier = Modifier.size(12.dp),
                                 imageVector = YetkIcon.LocationOn,
-                                contentDescription = "Room"
+                                contentDescription = stringResource(R.string.room_icon)
                             )
                             Text(
                                 modifier = Modifier.padding(start = 4.dp),
@@ -286,7 +287,7 @@ fun LessonListItem(
                             Icon(
                                 modifier = Modifier.size(12.dp),
                                 imageVector = YetkIcon.Person,
-                                contentDescription = "Teacher",
+                                contentDescription = stringResource(R.string.teacher_icon),
                             )
                             Text(
                                 modifier = Modifier.padding(start = 4.dp),
@@ -300,14 +301,14 @@ fun LessonListItem(
                         WeekState.UpperWeek.id -> {
                             Icon(
                                 imageVector = YetkIcon.ClockUpperWeek,
-                                contentDescription = WeekState.UpperWeek.text,
+                                contentDescription = stringResource(WeekState.UpperWeek.textId),
                             )
                         }
 
                         WeekState.LowerWeek.id -> {
                             Icon(
                                 imageVector = YetkIcon.ClockLowerWeek,
-                                contentDescription = WeekState.LowerWeek.text,
+                                contentDescription = stringResource(WeekState.LowerWeek.textId) ,
                             )
                         }
                     }
@@ -341,7 +342,9 @@ fun ScheduleDataSection(
 
             if (isLowerWeekValue != null) {
                 Text(
-                    text = if (isLowerWeekValue) "Нижняя неделя" else "Верхняя неделя",
+                    text = if (isLowerWeekValue)
+                        stringResource(WeekState.LowerWeek.textId) else
+                           stringResource(WeekState.UpperWeek.textId),
                     fontFamily = Inter,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,

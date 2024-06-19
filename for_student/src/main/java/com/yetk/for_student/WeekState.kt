@@ -1,9 +1,9 @@
 package com.yetk.for_student
 
-sealed class WeekState(val text: String, val id: Int) {
-    object UpperWeek: WeekState("Верхняя неделя", 1)
-    object EveryWeek: WeekState("Каждую неделю", 0)
-    object LowerWeek: WeekState("Нижняя неделя", -1)
+sealed class WeekState(val textId: Int, val id: Int) {
+    data object UpperWeek: WeekState(R.string.upper_week, 1)
+    data object EveryWeek: WeekState(R.string.every_week, 0)
+    data object LowerWeek: WeekState(R.string.lower_week, -1)
 
     operator fun not(): WeekState {
         return if(this == UpperWeek) LowerWeek else UpperWeek

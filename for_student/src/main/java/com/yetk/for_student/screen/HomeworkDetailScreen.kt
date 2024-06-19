@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,6 +37,7 @@ import com.yetk.designsystem.component.YetkOutlinedButton
 import com.yetk.designsystem.component.YetkTopBar
 import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.YetkScheduleTheme
+import com.yetk.for_student.R
 import com.yetk.for_student.data.local.HomeworkViewModel
 import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
 import com.yetk.model.CollegeGroup
@@ -104,7 +106,7 @@ fun HomeworkDetailScreen(
             YetkTopBar(
                 text = "",
                 navigationIcon = YetkIcon.ArrowBack,
-                navigationIconContentDescription = "Go back",
+                navigationIconContentDescription = stringResource(R.string.navigate_back),
                 onNavigationClick = onNavigateUp
             ) {
                 if (isScreenForEditItem) {
@@ -126,7 +128,7 @@ fun HomeworkDetailScreen(
                     }) {
                         Icon(
                             imageVector = YetkIcon.Delete,
-                            contentDescription = "Delete lesson",
+                            contentDescription = stringResource(R.string.delete_homework_action),
                         )
                     }
                 }
@@ -149,7 +151,7 @@ fun HomeworkDetailScreen(
                 AutoComplete(
                     subjectsNames,
                     subjectTfValue,
-                    "Предмет"
+                    stringResource(R.string.subject)
                 ) {
                     subjectTfValue = it
                 }
@@ -161,7 +163,7 @@ fun HomeworkDetailScreen(
                         .fillMaxSize()
                         .padding(bottom = 116.dp),
                     value = contentTfValue,
-                    placeholderText = "Домашнее задание",
+                    placeholderText = stringResource(id = R.string.homework),
                     onValueChange = {
                         contentTfValue = it
                     }
@@ -184,7 +186,9 @@ fun HomeworkDetailScreen(
                 ) {
                     if (subjectTfValue.isNotBlank() || contentTfValue.isNotBlank()) {
                         YetkFilledButton(
-                            text = if (isScreenForEditItem) "Сохранить" else "Добавить"
+                            text = if (isScreenForEditItem) stringResource(R.string.save_action) else stringResource(
+                                R.string.add_action
+                            )
                         ) {
                             if (isScreenForEditItem) {
                                 onHomeworkUpdate(Homework(homeworkId, contentTfValue, subjectTfValue))
@@ -196,7 +200,7 @@ fun HomeworkDetailScreen(
                     }
                     YetkOutlinedButton(
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                        text = "Отмена",
+                        text = stringResource(R.string.cancel_action),
                     ) {
                         onNavigateUp()
                     }

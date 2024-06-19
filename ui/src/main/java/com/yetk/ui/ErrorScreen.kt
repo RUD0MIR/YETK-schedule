@@ -20,7 +20,7 @@ import com.yetk.designsystem.theme.Inter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ErrorScreen(modifier: Modifier = Modifier, message: String = "Хмм... что-то пошло не так") {
+fun ErrorScreen(modifier: Modifier = Modifier, message: String) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             modifier = modifier,
@@ -28,7 +28,7 @@ fun ErrorScreen(modifier: Modifier = Modifier, message: String = "Хмм... чт
         ) {
             Icon(
                 imageVector = Icons.Filled.Warning,
-                contentDescription = "something went wrong",
+                contentDescription = null,
             )
             Text(
                 modifier = Modifier.width(250.dp),

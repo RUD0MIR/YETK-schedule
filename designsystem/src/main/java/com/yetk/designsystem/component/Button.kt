@@ -49,7 +49,7 @@ fun YetkOutlinedButton(text: String, modifier: Modifier = Modifier, onClick: () 
 }
 
 @Composable
-fun YetkAddButton(onClick: () -> Unit) {
+fun YetkAddButton(contentDescription: String? = null, onClick: () -> Unit) {
     FloatingActionButton(
         onClick = {
             onClick()
@@ -59,7 +59,7 @@ fun YetkAddButton(onClick: () -> Unit) {
     ) {
         Icon(
             imageVector = YetkIcon.Add,
-            contentDescription = "Add"
+            contentDescription = contentDescription
         )
     }
 }

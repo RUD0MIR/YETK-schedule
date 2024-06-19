@@ -18,6 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,7 @@ import com.yetk.designsystem.component.YetkLogoImage
 import com.yetk.designsystem.component.YetkPasswordField
 import com.yetk.designsystem.component.YetkTextField
 import com.yetk.designsystem.theme.YetkScheduleTheme
+import com.yetk.for_student.R
 import com.yetk.for_student.data.remote.viewmodel.AuthViewModel
 
 @Composable
@@ -96,8 +98,9 @@ fun AuthorizationScreen(
 
             YetkTextField(
                 text = login,
-                supportingText = if (isLoginError) "Неверный логин" else "Логин",
-                "Ваш логин",
+                supportingText = if (isLoginError) stringResource(R.string.incorrect_login)
+                else stringResource( R.string.login),
+                stringResource(R.string.login_placeholder),
                 isError = isLoginError
             ) { login = it }
 
@@ -106,21 +109,23 @@ fun AuthorizationScreen(
             YetkPasswordField(
                 text = password,
                 isError = isPasswordError,
-                supportingText = if (isPasswordError) "Неверный пароль" else "Пароль",
-                placeholderText = "Ваш пароль",
+                supportingText = if (isPasswordError) stringResource(R.string.incorrect_password) else stringResource(
+                    R.string.password_label
+                ),
+                placeholderText = stringResource(R.string.password_placeholder),
                 passwordVisible = passwordVisible,
                 onTextChange = { password = it }
             ) {
                 passwordVisible = !passwordVisible
             }
 
-            YetkCheckBox(value = rememberMeChecked, text = "Запомнить меня") {
+            YetkCheckBox(value = rememberMeChecked, text = stringResource(R.string.remember_me_checkbox_text)) {
                 onCheckChange()
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            YetkFilledButton(text = "Войти") {
+            YetkFilledButton(text = stringResource(R.string.sign_in)) {
                 val loginCorrect = loginCheck(login)
                 val passwordCorrect = passwordCheck(password)
                 if (loginCorrect && passwordCorrect) {

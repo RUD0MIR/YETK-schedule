@@ -11,12 +11,6 @@ import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.StudentApp
 import dagger.hilt.android.AndroidEntryPoint
 
-//TODO fix colors on authScreen and bottomBar
-
-//TODO remove sealed class pattern from HomeworkViewModel
-//TODO add StateHandle to HomeworkViewmodel and get navArgs for detail screen
-
-//TODO pop auth screen from back stack
 private const val TAG = "MainActivity"
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

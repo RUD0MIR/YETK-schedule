@@ -17,10 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yetk.designsystem.theme.YetkScheduleTheme
+import com.yetk.for_student.R
 import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
 import com.yetk.for_student.parseNhNmin
 import com.yetk.model.BellSchedule
@@ -54,7 +56,7 @@ fun BellScheduleScreen(
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyColumn {
                     item {
-                        BellScheduleHeader("Длительность пар: ", lessonDurationMin)
+                        BellScheduleHeader(stringResource(R.string.lessons_duration), lessonDurationMin)
                     }
 
                     items(lessonsTime.size) {
