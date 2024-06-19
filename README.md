@@ -4,7 +4,7 @@
 
 ![light_theme](https://github.com/RUD0MIR/YETK-schedule/blob/main/light%20theme.jpg)
 
-![dark_theme](https://github.com/RUD0MIR/YETK-schedule/blob/main/light%20theme.jpg)
+![dark_theme](https://github.com/RUD0MIR/YETK-schedule/blob/main/dark%20theme.jpg)
 
 
 ## Main features:
