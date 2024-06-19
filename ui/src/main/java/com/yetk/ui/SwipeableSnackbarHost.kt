@@ -1,30 +1,41 @@
 package com.yetk.ui
 
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.yetk.designsystem.theme.YetkScheduleTheme
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 enum class SwipeDirection {
     Left,
@@ -36,7 +47,9 @@ enum class SwipeDirection {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SwipeableSnackbarHost(hostState: SnackbarHostState) {
-    if (hostState.currentSnackbarData == null) { return }
+    if (hostState.currentSnackbarData == null) {
+        return
+    }
     var size by remember { mutableStateOf(Size.Zero) }
     val swipeableState = rememberSwipeableState(SwipeDirection.Initial)
     val width = remember(size) {
@@ -54,6 +67,7 @@ fun SwipeableSnackbarHost(hostState: SnackbarHostState) {
                     SwipeDirection.Left -> {
                         hostState.currentSnackbarData?.dismiss()
                     }
+
                     else -> {
                         return@onDispose
                     }
@@ -67,19 +81,12 @@ fun SwipeableSnackbarHost(hostState: SnackbarHostState) {
     SnackbarHost(
         hostState,
         snackbar = { snackbarData ->
-                Snackbar(
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .offset(x = offset),
-                    contentColor = Color.Black,
-                    action = {
-                        IconButton(onClick = { snackbarData.performAction() }) {
-                            Text(text = snackbarData.visuals.actionLabel.toString(), color = MaterialTheme.colorScheme.secondary)
-                        }
-                    }
-                ) {
-                    Text(text = snackbarData.visuals.message)
-                }
+            YetkSnackbar(
+                modifier = Modifier
+                    .offset(x = offset)
+                    .padding(bottom = 16.dp),
+                snackbarData
+            )
         },
         modifier = Modifier
             .onSizeChanged { size = Size(it.width.toFloat(), it.height.toFloat()) }
@@ -94,4 +101,21 @@ fun SwipeableSnackbarHost(hostState: SnackbarHostState) {
                 orientation = Orientation.Horizontal
             )
     )
+}
+
+@Composable
+fun YetkSnackbar(modifier: Modifier = Modifier, snackbarData: SnackbarData) {
+    Snackbar(
+        modifier = modifier,
+        dismissAction = {
+            TextButton(onClick = { snackbarData.performAction() }) {
+                Text(
+                    text = snackbarData.visuals.actionLabel.toString(),
+                    color = MaterialTheme.colorScheme.inverseOnSurface
+                )
+            }
+        }
+    ) {
+        Text(text = snackbarData.visuals.message)
+    }
 }

@@ -22,12 +22,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.component.YetkExpandToggle
 import com.yetk.designsystem.theme.YetkScheduleTheme
+import com.yetk.for_student.R
 import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
 import com.yetk.model.CollegeGroup
 import com.yetk.model.Response
@@ -53,7 +55,7 @@ fun SubjectsScreen(
 ) {
     when (collegeGroupData) {
         is Response.Loading -> LoadingScreen()
-        is Response.Failure -> ErrorScreen()
+        is Response.Failure -> ErrorScreen(message = stringResource(id = R.string.error_screen_message))
         is Response.Success -> {
             LazyColumn(
                 modifier = Modifier

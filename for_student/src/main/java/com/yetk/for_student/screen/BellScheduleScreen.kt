@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,11 +47,12 @@ internal fun BellScheduleRoute(
 fun BellScheduleScreen(
     bellSchedule: Response<BellSchedule>
 ) {
+    val context = LocalContext.current
     when (bellSchedule) {
         is Response.Loading -> LoadingScreen()
-        is Response.Failure -> ErrorScreen()
+        is Response.Failure -> ErrorScreen(message = stringResource(id = R.string.error_screen_message))
         is Response.Success -> {
-            val lessonDurationMin = bellSchedule.data.lesson_duration_min.parseNhNmin()
+            val lessonDurationMin = bellSchedule.data.lesson_duration_min.parseNhNmin(context)
             val lessonsTime = bellSchedule.data.lessons_time
 
             Box(modifier = Modifier.fillMaxSize()) {
@@ -147,8 +149,6 @@ private fun BellScheduleScreenPreview() {
                             "16:40 - 18:10"
                         )
                     )
-
-
                 )
             )
         }

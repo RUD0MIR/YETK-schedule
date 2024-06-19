@@ -33,6 +33,7 @@ import com.yetk.designsystem.component.YetkNavigationBarItem
 import com.yetk.designsystem.component.YetkTopBar
 import com.yetk.for_student.navigation.StudentNavHost
 import com.yetk.for_student.navigation.TopLevelDestination
+import com.yetk.ui.SwipeableSnackbarHost
 
 //TODO add support for different screen sizes
 //TODO add tests
@@ -48,7 +49,7 @@ fun StudentApp(
     Scaffold(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = { SwipeableSnackbarHost(snackbarHostState) },
         bottomBar = {
             if (showBottomBar) {
                 StudentBottomBar(
