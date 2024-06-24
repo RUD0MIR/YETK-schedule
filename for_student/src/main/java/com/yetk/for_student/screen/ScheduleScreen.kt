@@ -88,9 +88,6 @@ fun ScheduleScreen(
     bellSchedule: Response<BellSchedule>,
 
     ) {
-    var isLowerWeekPreview by remember {
-        mutableStateOf(false)
-    }
     var collegeGroupData by remember {
         mutableStateOf(CollegeGroup())
     }
@@ -114,6 +111,11 @@ fun ScheduleScreen(
             collegeGroupData = (collegeGroup as Response.Success).data
             isLowerWeekValue = (isLowerWeek as Response.Success).data
             bellScheduleData = (bellSchedule as Response.Success).data
+
+            var isLowerWeekPreview by remember {
+                mutableStateOf(isLowerWeekValue!!)
+            }
+
 
             //TODO make isLowerWeekPreview depends on isLowerWeekValue
             Column(Modifier.fillMaxSize()) {
@@ -368,6 +370,9 @@ fun ScheduleDataSection(
         if (isLowerWeekPreview != null) {
             LowerUpperWeekToggle(
                 modifier = Modifier.padding(end = 12.dp),
+                contentDescription = if (isLowerWeekPreview) stringResource(R.string.to_upper_week_aciton) else stringResource(
+                    R.string.to_lower_week_action
+                ),
                 isLowerWeek = isLowerWeekPreview
             ) {
                 onWeekToggle()

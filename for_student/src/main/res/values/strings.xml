@@ -39,4 +39,6 @@
     <string name="lower_week">Нижняя неделя</string>
     <string name="hour_format">"%1$s ч "</string>
     <string name="minutes_format">"%1$s мин "</string>
+    <string name="to_upper_week_aciton">отобразить занятия на верхней неделе</string>
+    <string name="to_lower_week_action">отобразить занятия на нижней неделе</string>
 </resources>
