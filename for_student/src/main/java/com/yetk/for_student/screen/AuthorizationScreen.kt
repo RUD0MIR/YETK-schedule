@@ -40,9 +40,14 @@ internal fun AuthorizationRoute(
     AuthorizationScreen(
         viewModel.rememberMeChecked,
         onCheckChange = viewModel::onCheckChange,
-        loginCheck = viewModel::loginCheck,
-        passwordCheck = viewModel::passwordCheck,
-        onNavigate = onNavigate
+        onNavigate = onNavigate,
+        login = viewModel.login,
+        onLoginChange = viewModel::changeLogin,
+        password = viewModel.password,
+        onPasswordChange = viewModel::changePassword,
+        authenticated = viewModel::authenticated,
+        isLoginError = viewModel.isLoginError,
+        isPasswordError = viewModel.isPasswordError
     )
 }
 
@@ -50,27 +55,16 @@ internal fun AuthorizationRoute(
 fun AuthorizationScreen(
     rememberMeChecked: Boolean,
     onCheckChange: () -> Unit,
-    loginCheck: (String) -> Boolean,
-    passwordCheck: (String) -> Boolean,
+    login: String,
+    isLoginError: Boolean,
+    onLoginChange: (String) -> Unit,
+    password: String,
+    isPasswordError: Boolean,
+    onPasswordChange: (String) -> Unit,
+    authenticated: () -> Boolean,
     onNavigate: () -> Unit,
 ) {
     YetkScheduleTheme {
-        var login by rememberSaveable {
-            mutableStateOf("")
-        }
-
-        var password by rememberSaveable {
-            mutableStateOf("")
-        }
-
-        var isLoginError by rememberSaveable {
-            mutableStateOf(false)
-        }
-
-        var isPasswordError by rememberSaveable {
-            mutableStateOf(false)
-        }
-
         var passwordVisible by rememberSaveable {
             mutableStateOf(false)
         }
@@ -102,7 +96,7 @@ fun AuthorizationScreen(
                 else stringResource( R.string.login),
                 stringResource(R.string.login_placeholder),
                 isError = isLoginError
-            ) { login = it }
+            ) { onLoginChange(it) }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -114,7 +108,7 @@ fun AuthorizationScreen(
                 ),
                 placeholderText = stringResource(R.string.password_placeholder),
                 passwordVisible = passwordVisible,
-                onTextChange = { password = it }
+                onTextChange = { onPasswordChange(it) }
             ) {
                 passwordVisible = !passwordVisible
             }
@@ -126,13 +120,9 @@ fun AuthorizationScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             YetkFilledButton(text = stringResource(R.string.sign_in)) {
-                val loginCorrect = loginCheck(login)
-                val passwordCorrect = passwordCheck(password)
-                if (loginCorrect && passwordCorrect) {
+                if (authenticated()) {
                     onNavigate()
                 }
-                isLoginError = !loginCorrect
-                isPasswordError = !passwordCorrect
             }
         }
     }
@@ -145,10 +135,15 @@ private fun AuthorizationScreenPreview() {
     YetkScheduleTheme(dynamicColor = false) {
         Surface(tonalElevation = 5.dp) {
             AuthorizationScreen(
-                rememberMeChecked = true,
+                rememberMeChecked = false,
                 onCheckChange = {},
-                loginCheck = {false},
-                passwordCheck = {false}
+                login = "",
+                isLoginError = false,
+                onLoginChange = {},
+                password = "",
+                isPasswordError = false,
+                onPasswordChange = {},
+                authenticated = {false}
             ) {}
         }
     }

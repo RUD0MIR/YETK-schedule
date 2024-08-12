@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
 import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
@@ -121,11 +122,7 @@ fun BellScheduleListItem(
                 )
             }
         }
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp), thickness = 1.dp
-        )
+        YetkDivider()
     }
 }
 

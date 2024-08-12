@@ -12,14 +12,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.yetk.for_student.navigation.TopLevelDestination
-import com.yetk.for_student.navigation.bellsNavigationRoute
-import com.yetk.for_student.navigation.homeworkNavigationRoute
-import com.yetk.for_student.navigation.navigateToBellSchedule
-import com.yetk.for_student.navigation.navigateToHomework
-import com.yetk.for_student.navigation.navigateToSchedule
-import com.yetk.for_student.navigation.navigateToSubjects
-import com.yetk.for_student.navigation.scheduleNavigationRoute
-import com.yetk.for_student.navigation.subjectsNavigationRoute
+import com.yetk.for_student.navigation.destination.bellsNavigationRoute
+import com.yetk.for_student.navigation.destination.homeworkNavigationRoute
+import com.yetk.for_student.navigation.destination.navigateToBellSchedule
+import com.yetk.for_student.navigation.destination.navigateToHomework
+import com.yetk.for_student.navigation.destination.navigateToSchedule
+import com.yetk.for_student.navigation.destination.navigateToSubjects
+import com.yetk.for_student.navigation.destination.scheduleNavigationRoute
+import com.yetk.for_student.navigation.destination.subjectsNavigationRoute
 import kotlinx.coroutines.CoroutineScope
 
 @Composable

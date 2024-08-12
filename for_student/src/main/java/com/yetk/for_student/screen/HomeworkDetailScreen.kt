@@ -12,13 +12,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yetk.designsystem.component.AutoComplete
 import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.component.YetkFilledButton
@@ -38,11 +38,12 @@ import com.yetk.designsystem.component.YetkTopBar
 import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
-import com.yetk.for_student.data.local.HomeworkViewModel
-import com.yetk.for_student.data.remote.viewmodel.StudentViewModel
-import com.yetk.model.CollegeGroup
+import com.yetk.for_student.common.Const.AUTO_INCREMENT_ID
+import com.yetk.for_student.common.DetailScreenType
 import com.yetk.model.Homework
-import com.yetk.model.Response
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 //TODO call snackbar on tob bar actions
 //TODO after clicking on subjectName in AutocompleteTextField set it's cursor to an end
@@ -51,50 +52,54 @@ private const val TAG = "HomeworkDetailScreen"
 
 @Composable
 internal fun HomeworkDetailRoute(
-    homeworkId: Int = -1,
-    homeworkContent: String,
+    detailScreenType: DetailScreenType,
     homeworkSubject: String,
-    subjectsNames: List<String>,
-    onNavigateUp: () -> Unit,
-    viewModel: HomeworkViewModel = hiltViewModel(),
-    studentViewModel: StudentViewModel = hiltViewModel()
-) {
-    HomeworkDetailScreen(
-        homeworkId = homeworkId,
-        homeworkContent = homeworkContent,
-        homeworkSubject = homeworkSubject,
-        subjectsNames = subjectsNames,
-        onNavigateUp = onNavigateUp,
-        onHomeworkCheck = { viewModel.checkHomework(homeworkId) },
-        onHomeworkDelete = { viewModel.deleteHomework(homeworkId) },
-        onHomeworkInsert = { viewModel.insertHomework(it) },
-        onHomeworkUpdate = { viewModel.updateHomework(it) },
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HomeworkDetailScreen(
     homeworkContent: String,
-    homeworkSubject: String,
-    homeworkId: Int,
     subjectsNames: List<String>,
+    checkCorrectInput: (String, String) -> Boolean,
     onNavigateUp: () -> Unit,
-    onHomeworkCheck: () -> Unit,
-    onHomeworkDelete: () -> Unit,
+    onHomeworkCheck: (Int) -> Unit,
+    onHomeworkDelete: (Int) -> Unit,
     onHomeworkInsert: (homework: Homework) -> Unit,
     onHomeworkUpdate: (homework: Homework) -> Unit,
 ) {
-    val isScreenForEditItem by remember {
-        mutableStateOf(homeworkId != -1)
+    HomeworkDetailScreen(
+        detailScreenType = detailScreenType,
+        subjectsNames = subjectsNames,
+        onNavigateUp = onNavigateUp,
+        onHomeworkCheck = onHomeworkCheck,
+        onHomeworkDelete = onHomeworkDelete,
+        onHomeworkInsert = onHomeworkInsert,
+        onHomeworkUpdate = onHomeworkUpdate,
+        homeworkSubject = homeworkSubject,
+        homeworkContent = homeworkContent,
+        checkCorrectInput = checkCorrectInput,
+    )
+}
+
+@Composable
+fun HomeworkDetailScreen(
+    homeworkSubject: String,
+    homeworkContent: String,
+    detailScreenType: DetailScreenType,
+    subjectsNames: List<String>,
+    checkCorrectInput: (String, String) -> Boolean,
+    onNavigateUp: () -> Unit,
+    onHomeworkCheck: (Int) -> Unit,
+    onHomeworkDelete: (Int) -> Unit,
+    onHomeworkInsert: (homework: Homework) -> Unit,
+    onHomeworkUpdate: (homework: Homework) -> Unit,
+) {
+    val isEditScreen = remember {
+        detailScreenType is DetailScreenType.EditScreen
     }
 
     var subjectTfValue by remember {
-        mutableStateOf(if(isScreenForEditItem) homeworkSubject else "")
+        mutableStateOf(homeworkSubject)
     }
 
     var contentTfValue by remember {
-        mutableStateOf(if(isScreenForEditItem) homeworkContent else "")
+        mutableStateOf(homeworkContent)
     }
 
     val checkBoxValue by remember {
@@ -109,11 +114,11 @@ fun HomeworkDetailScreen(
                 navigationIconContentDescription = stringResource(R.string.navigate_back),
                 onNavigationClick = onNavigateUp
             ) {
-                if (isScreenForEditItem) {
+                if (isEditScreen) {
                     Checkbox(
                         checked = checkBoxValue,
                         onCheckedChange = {
-                            onHomeworkCheck()
+                            onHomeworkCheck(detailScreenType.id)
                             onNavigateUp()
 
                         },
@@ -123,7 +128,7 @@ fun HomeworkDetailScreen(
                     )
 
                     IconButton(onClick = {
-                        onHomeworkDelete()
+                        onHomeworkDelete(detailScreenType.id)
                         onNavigateUp()
                     }) {
                         Icon(
@@ -170,41 +175,62 @@ fun HomeworkDetailScreen(
                 )
             }
 
-            // Button section
-            Column(
+            ButtonSection(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-            ) {
-                YetkDivider()
+                    .align(Alignment.BottomCenter),
+                homeworkId = detailScreenType.id,
+                isEditScreen = isEditScreen,
+                subjectTfValue = subjectTfValue,
+                contentTfValue = contentTfValue,
+                checkCorrectInput = checkCorrectInput,
+                onHomeworkInsert = onHomeworkInsert,
+                onHomeworkUpdate = onHomeworkUpdate,
+                onNavigateUp = onNavigateUp,
+                )
+        }
+    }
+}
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 16.dp, top = 16.dp, bottom = 16.dp),
-                    horizontalArrangement = Arrangement.End
+@Composable
+fun ButtonSection(
+    modifier: Modifier,
+    homeworkId: Int,
+    isEditScreen: Boolean,
+    subjectTfValue: String,
+    contentTfValue: String,
+    checkCorrectInput: (String, String) -> Boolean,
+    onHomeworkInsert: (homework: Homework) -> Unit,
+    onHomeworkUpdate: (homework: Homework) -> Unit,
+    onNavigateUp: () -> Unit
+) {
+    val positiveBtnTextId = if (isEditScreen) R.string.save_action else R.string.add_action
+
+    Column(
+        modifier = modifier
+    ) {
+        YetkDivider()
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 16.dp, top = 16.dp, bottom = 16.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            if (checkCorrectInput(subjectTfValue, contentTfValue)) {
+                YetkFilledButton(
+                    text = stringResource(positiveBtnTextId)
                 ) {
-                    if (subjectTfValue.isNotBlank() || contentTfValue.isNotBlank()) {
-                        YetkFilledButton(
-                            text = if (isScreenForEditItem) stringResource(R.string.save_action) else stringResource(
-                                R.string.add_action
-                            )
-                        ) {
-                            if (isScreenForEditItem) {
-                                onHomeworkUpdate(Homework(homeworkId, contentTfValue, subjectTfValue))
-                            } else {
-                                onHomeworkInsert(Homework(0, contentTfValue, subjectTfValue))
-                            }
-                            onNavigateUp()
-                        }
-                    }
-                    YetkOutlinedButton(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                        text = stringResource(R.string.cancel_action),
-                    ) {
-                        onNavigateUp()
-                    }
+                    if (isEditScreen) onHomeworkUpdate(Homework(homeworkId, contentTfValue, subjectTfValue))
+                    else onHomeworkInsert(Homework(AUTO_INCREMENT_ID, contentTfValue, subjectTfValue))
+                    onNavigateUp()
                 }
+            }
+            YetkOutlinedButton(
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                text = stringResource(R.string.cancel_action),
+            ) {
+                onNavigateUp()
             }
         }
     }
@@ -217,15 +243,17 @@ private fun HomeworkDetailPreview() {
     YetkScheduleTheme(dynamicColor = false) {
         Surface(tonalElevation = 5.dp) {
             HomeworkDetailScreen(
-                homeworkId = -1,
-                homeworkSubject = "subject",
-                homeworkContent = "content",
+                detailScreenType = DetailScreenType.AddScreen,
                 subjectsNames = emptyList<String>(),
                 onNavigateUp = {},
                 onHomeworkCheck = {},
                 onHomeworkInsert = {},
-               onHomeworkDelete = {}
-            ) {}
+                onHomeworkDelete = {},
+                homeworkSubject = "",
+                homeworkContent = "",
+                checkCorrectInput = {_, _ -> false},
+                onHomeworkUpdate = {},
+            )
         }
     }
 }

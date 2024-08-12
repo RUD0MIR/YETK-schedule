@@ -18,6 +18,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -43,39 +44,38 @@ import com.yetk.designsystem.component.YetkDivider
 import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
+import com.yetk.for_student.common.Const.CHECKBOX_ANIM_DURATION
 import com.yetk.for_student.data.local.HomeworkViewModel
 import com.yetk.model.Homework
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 private const val TAG = "HomeworkScreen"
 
-// TODO replace with new cool composable for edit screens
-
 @Composable
 internal fun HomeworkRoute(
+    homeworks: List<Homework>,
     onNavigateToEditScreen: (homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
     onNavigateToAddScreen: () -> Unit,
-    viewModel: HomeworkViewModel = hiltViewModel(),
+    onHomeworkCheck: (homeworkId: Int) -> Unit,
+    onHomeworkDelete: (homeworkId: Int) -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean
 ) {
     val lifecycle = LocalLifecycleOwner.current
+
     HomeworkScreen(
-        homeworks = viewModel.homeworks.collectAsStateWithLifecycle(
-            emptyList<Homework>(),
-            lifecycle
-        ).value,
+        homeworks = homeworks,
         onNavigateToEditScreen = onNavigateToEditScreen,
-        onHomeworkDelete = { viewModel.deleteHomework(it) },
-        onHomeworkCheck = { viewModel.checkHomework(it) },
+        onHomeworkDelete = onHomeworkDelete,
+        onHomeworkCheck = onHomeworkCheck,
         onNavigateToAddScreen = onNavigateToAddScreen,
         onShowSnackbar = onShowSnackbar
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeworkScreen(
     homeworks: List<Homework>,
@@ -93,6 +93,7 @@ fun HomeworkScreen(
         },
     ) { topBarPadding ->
         val scope = rememberCoroutineScope()
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -104,12 +105,8 @@ fun HomeworkScreen(
                 }
                 AnimatedVisibility(
                     isVisible,
-                    enter = slideInHorizontally {
-                        with(it) { -it }
-                    },
-                    exit = slideOutHorizontally {
-                        with(it) { -it }
-                    }
+                    enter = slideInHorizontally { offset -> -offset },
+                    exit = slideOutHorizontally {offset -> -offset }
                 ) {
                     Column {
                         val context = LocalContext.current
@@ -117,8 +114,7 @@ fun HomeworkScreen(
                             homework,
                             onCheck = { id ->
                                 scope.launch {
-                                    //checkbox animation delay
-                                    delay(500)
+                                    delay(CHECKBOX_ANIM_DURATION)
                                     isVisible = false
 
                                     if (!onShowSnackbar(
@@ -176,7 +172,6 @@ fun HomeworkListItem(
         mutableStateOf(false)
     }
 
-
     RevealSwipe(
         modifier = Modifier
             .fillMaxWidth(),
@@ -186,7 +181,7 @@ fun HomeworkListItem(
             RevealDirection.EndToStart
         ),
         hiddenContentEnd = {
-            androidx.compose.material.Icon(
+             Icon(
                 modifier = Modifier.padding(horizontal = 25.dp),
                 imageVector = YetkIcon.Delete,
                 contentDescription = null,

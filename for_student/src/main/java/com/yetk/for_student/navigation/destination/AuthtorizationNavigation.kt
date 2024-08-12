@@ -1,4 +1,4 @@
-package com.yetk.for_student.navigation
+package com.yetk.for_student.navigation.destination
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

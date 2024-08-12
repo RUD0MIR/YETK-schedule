@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.yetk.for_student.data.remote.repository.FirestoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,6 +17,26 @@ class AuthViewModel @Inject constructor(
     var rememberMeChecked by mutableStateOf(false)
         private set
 
+    var login by mutableStateOf("")
+    private set
+
+    var password by mutableStateOf("")
+    private set
+
+    var isLoginError by mutableStateOf(false)
+    private set
+
+    var isPasswordError by mutableStateOf(false)
+    private set
+
+    fun changeLogin(txt: String) {
+        login = txt
+    }
+
+    fun changePassword(txt: String) {
+        password = txt
+    }
+
     fun onCheckChange() {
         rememberMeChecked = !rememberMeChecked
 
@@ -23,12 +45,32 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun loginCheck(password: String): Boolean {
-        return password == "20kis-1"
+    fun authenticated(): Boolean {
+        if (login.isBlank() || password.isBlank()) return false
+
+        if (!fakeLoginCheck(password)) return false
+
+        if (!fakePasswordCheck(password)) return false
+
+        return true
     }
 
-    fun passwordCheck(login: String): Boolean {
-        return login == "1234"
+    private fun fakeLoginCheck(password: String): Boolean {
+        return if (password == "20kis-1") {
+            true
+        } else {
+            isLoginError = true
+            false
+        }
+    }
+
+    private fun fakePasswordCheck(login: String): Boolean {
+        return if (login == "1234") {
+            true
+        } else {
+            isPasswordError = true
+            false
+        }
     }
 }
 
