@@ -66,6 +66,8 @@ internal fun HomeworkRoute(
 ) {
     val lifecycle = LocalLifecycleOwner.current
 
+
+
     HomeworkScreen(
         homeworks = homeworks,
         onNavigateToEditScreen = onNavigateToEditScreen,

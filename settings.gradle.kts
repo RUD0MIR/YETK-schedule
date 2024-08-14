@@ -13,6 +13,7 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "YetkSchedule"
 include(":app")
 include(":for_student")
