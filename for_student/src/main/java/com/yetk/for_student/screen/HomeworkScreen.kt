@@ -23,6 +23,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +49,7 @@ import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
 import com.yetk.for_student.common.Const.CHECKBOX_ANIM_DURATION
+import com.yetk.for_student.common.DetailScreenType
 import com.yetk.for_student.data.local.HomeworkViewModel
 import com.yetk.model.Homework
 import de.charlex.compose.RevealDirection
@@ -55,28 +60,72 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "HomeworkScreen"
 
+private data class HomeworkNavArgs(
+    val screenType: DetailScreenType,
+    val subject: String = "",
+    val content: String = ""
+)
+
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 internal fun HomeworkRoute(
     homeworks: List<Homework>,
-    onNavigateToEditScreen: (homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
-    onNavigateToAddScreen: () -> Unit,
+    subjectNames: List<String>,
+    onInputCheck: (String, String) -> Boolean,
     onHomeworkCheck: (homeworkId: Int) -> Unit,
     onHomeworkDelete: (homeworkId: Int) -> Unit,
+    onHomeworkInsert: (homework: Homework) -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean
 ) {
-    val lifecycle = LocalLifecycleOwner.current
+    val navigator = rememberListDetailPaneScaffoldNavigator<Any>()
+    NavigableListDetailPaneScaffold(
+        navigator = navigator,
+        listPane = {
+            HomeworkScreen(
+                homeworks = homeworks,
+                onNavigateToEditScreen = { id, content, subject ->
+                    navigator.navigateTo(
+                        pane = ListDetailPaneScaffoldRole.Detail,
+                        content = HomeworkNavArgs(
+                            screenType = DetailScreenType.EditScreen(id),
+                            subject = subject,
+                            content = content
+                        )
+                    )
+                },
+                onHomeworkDelete = onHomeworkDelete,
+                onHomeworkCheck = onHomeworkCheck,
+                onNavigateToAddScreen = {
+                    navigator.navigateTo(
+                        pane = ListDetailPaneScaffoldRole.Detail,
+                        content = HomeworkNavArgs(DetailScreenType.AddScreen)
+                    )
+                },
+                onShowSnackbar = onShowSnackbar
+            )
+        },
+        detailPane = {
+            val navArgs = navigator.currentDestination?.content as? HomeworkNavArgs
 
+            if (navArgs != null) {
+                HomeworkDetailScreen(
+                    homeworkSubject = navArgs.subject,
+                    homeworkContent = navArgs.content,
+                    detailScreenType = navArgs.screenType,
+                    subjectsNames = subjectNames,
+                    checkCorrectInput = onInputCheck,
+                    onNavigateUp = { navigator.navigateBack() },
+                    onHomeworkCheck = onHomeworkCheck,
+                    onHomeworkDelete = onHomeworkDelete,
+                    onHomeworkInsert = onHomeworkInsert
+                ) {
 
-
-    HomeworkScreen(
-        homeworks = homeworks,
-        onNavigateToEditScreen = onNavigateToEditScreen,
-        onHomeworkDelete = onHomeworkDelete,
-        onHomeworkCheck = onHomeworkCheck,
-        onNavigateToAddScreen = onNavigateToAddScreen,
-        onShowSnackbar = onShowSnackbar
+                }
+            }
+        }
     )
 }
+
 
 @Composable
 fun HomeworkScreen(
@@ -108,7 +157,7 @@ fun HomeworkScreen(
                 AnimatedVisibility(
                     isVisible,
                     enter = slideInHorizontally { offset -> -offset },
-                    exit = slideOutHorizontally {offset -> -offset }
+                    exit = slideOutHorizontally { offset -> -offset }
                 ) {
                     Column {
                         val context = LocalContext.current
@@ -183,7 +232,7 @@ fun HomeworkListItem(
             RevealDirection.EndToStart
         ),
         hiddenContentEnd = {
-             Icon(
+            Icon(
                 modifier = Modifier.padding(horizontal = 25.dp),
                 imageVector = YetkIcon.Delete,
                 contentDescription = null,

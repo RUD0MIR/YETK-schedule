@@ -57,6 +57,8 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
     implementation (libs.lifecycle.runtime.compose)
+    implementation(libs.compose.material3.adaptive.navigation.suite)
+    implementation(libs.compose.material3.adaptive.navigation)
 
     androidTestImplementation( platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test.junit4)

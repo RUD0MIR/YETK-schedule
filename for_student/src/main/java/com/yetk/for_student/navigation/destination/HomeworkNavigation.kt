@@ -18,19 +18,19 @@ fun NavController.navigateToHomework(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.homeworkScreen(
     onShowSnackbar: suspend (String, String?) -> Boolean,
     viewModel: HomeworkViewModel,
-    onNavigateToEditScreen:(homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
-    onNavigateToAddScreen: () -> Unit,
+    subjectNames: List<String>,
 ) {
     composable(
         route = homeworkNavigationRoute,
     ) {
         HomeworkRoute(
             homeworks = viewModel.homeworks.collectAsStateWithLifecycle().value,
-            onNavigateToEditScreen = onNavigateToEditScreen,
-            onNavigateToAddScreen = { onNavigateToAddScreen() },
             onShowSnackbar = onShowSnackbar,
             onHomeworkDelete = { viewModel.deleteHomework(it) },
             onHomeworkCheck = { viewModel.checkHomework(it) },
+            subjectNames = subjectNames,
+            onInputCheck = viewModel::checkCorrectInput,
+            onHomeworkInsert = viewModel::insertHomework,
         )
     }
 }

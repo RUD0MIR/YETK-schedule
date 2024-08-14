@@ -37,18 +37,16 @@ fun StudentNavHost(
         scheduleScreen(studentViewModel)
         homeworkScreen(
             onShowSnackbar = onShowSnackbar,
-            onNavigateToAddScreen = { navController.navigateToHomeworkDetail() },
-            onNavigateToEditScreen = { id, content, subjectName ->
-                navController.navigateToHomeworkDetail(id, content, subjectName)
-            },
-            viewModel = homeworkViewModel
+            viewModel = homeworkViewModel,
+            subjectNames = studentViewModel.getSubjectsNames()
         )
         bellScheduleScreen()
         subjectsScreen()
-        homeworkDetailScreen(
-            subjectsNames = studentViewModel.getSubjectsNames(),
-            onNavigateUp = navController::popBackStack,
-            homeworkViewModel
-        )
+
+//        homeworkDetailScreen(
+//            subjectsNames = studentViewModel.getSubjectsNames(),
+//            onNavigateUp = navController::popBackStack,
+//            homeworkViewModel
+//        )
     }
 }
