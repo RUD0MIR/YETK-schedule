@@ -49,7 +49,7 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
     implementation(libs.compose.ui.tooling.preview)
-    implementation(libs.material3)
+    implementation(libs.compose.material3)
     implementation(libs.material)
 
     testImplementation(libs.junit)
