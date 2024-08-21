@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.yetk.for_student.data.local.HomeworkDao
 import com.yetk.for_student.data.local.HomeworkDatabase
-import com.yetk.for_student.data.local.repository.DefaultHomeworkRepository
-import com.yetk.for_student.data.local.repository.HomeworkRepository
+import com.yetk.for_student.data.local.DefaultHomeworkRepository
+import com.yetk.for_student.domain.repository.HomeworkRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

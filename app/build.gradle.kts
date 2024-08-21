@@ -63,7 +63,6 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
 
-    implementation(projects.model)
     implementation(projects.forStudent)
     implementation(projects.designsystem)
     implementation(projects.ui)

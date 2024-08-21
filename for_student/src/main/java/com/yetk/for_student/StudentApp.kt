@@ -1,7 +1,6 @@
 package com.yetk.for_student
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -16,7 +15,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Short
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.runtime.Composable
@@ -31,8 +29,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import com.yetk.designsystem.component.YetkNavigationBar
 import com.yetk.designsystem.component.YetkNavigationBarItem
 import com.yetk.designsystem.component.YetkTopBar
-import com.yetk.for_student.navigation.StudentNavHost
-import com.yetk.for_student.navigation.TopLevelDestination
+import com.yetk.for_student.ui.navigation.StudentNavHost
+import com.yetk.for_student.ui.navigation.TopLevelDestination
 import com.yetk.ui.SwipeableSnackbarHost
 
 //TODO add support for different screen sizes
