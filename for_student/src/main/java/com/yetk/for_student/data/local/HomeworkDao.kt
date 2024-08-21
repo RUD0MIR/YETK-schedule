@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.yetk.for_student.data.model.HomeworkEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -12,22 +13,17 @@ import kotlinx.coroutines.flow.StateFlow
 interface HomeworkDao {
 
     @Insert
-    suspend fun insertHomework(homework: com.yetk.model.Homework)
+    suspend fun insertHomework(homework: HomeworkEntity)
 
     @Update
-    suspend fun updateHomework(homework: com.yetk.model.Homework)
+    suspend fun updateHomework(homework: HomeworkEntity)
 
     @Delete
-    suspend fun deleteHomework(homework: com.yetk.model.Homework)
+    suspend fun deleteHomework(homework: HomeworkEntity)
 
-    @Query("SELECT * FROM homework")
-    fun getAll(): Flow<List<com.yetk.model.Homework>>
+    @Query("SELECT * FROM homeworkentity")
+    fun getAll(): Flow<List<HomeworkEntity>>
 
-    @Update
-    suspend fun updateAll(homeworks: List<com.yetk.model.Homework>)
-
-
-
-    @Query("SELECT * FROM homework WHERE homework.id = :id")
-    fun getHomeworkById(id: Int): Flow<com.yetk.model.Homework>
+    @Query("SELECT * FROM homeworkentity WHERE homeworkentity.id = :id")
+    fun getHomeworkById(id: Int): Flow<HomeworkEntity>
 }

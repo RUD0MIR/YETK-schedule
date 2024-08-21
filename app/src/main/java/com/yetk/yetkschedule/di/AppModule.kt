@@ -3,8 +3,8 @@ package com.yetk.yetkschedule.di
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
-import com.yetk.for_student.data.remote.repository.DefaultFirestoreRepository
-import com.yetk.for_student.data.remote.repository.FirestoreRepository
+import com.yetk.for_student.data.remote.repository.CollegeGroupDataRepoImpl
+import com.yetk.for_student.domain.repository.CollegeGroupDataRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,5 +23,5 @@ object AppModule {
     @Singleton
     fun provideDefaultFirestoreRepository(
         firestore: FirebaseFirestore
-    ) = DefaultFirestoreRepository(firestore) as FirestoreRepository
+    ) = CollegeGroupDataRepoImpl(firestore) as CollegeGroupDataRepository
 }

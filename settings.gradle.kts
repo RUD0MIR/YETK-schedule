@@ -17,6 +17,5 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "YetkSchedule"
 include(":app")
 include(":for_student")
-include(":model")
 include(":ui")
 include(":designsystem")

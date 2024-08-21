@@ -7,7 +7,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yetk.designsystem.theme.YetkScheduleTheme
-import com.yetk.for_student.screen.ScheduleScreen
+import com.yetk.for_student.ui.screen.schedule.ScheduleScreen
 import org.junit.Rule
 import org.junit.Test
 import com.yetk.model.Response

@@ -46,7 +46,6 @@ dependencies {
     implementation (libs.coroutines.core)
     implementation (libs.coroutines.android)
 
-    implementation(projects.model)
     implementation(projects.ui)
     implementation(projects.designsystem)
 

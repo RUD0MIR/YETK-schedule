@@ -11,15 +11,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
-import com.yetk.for_student.navigation.TopLevelDestination
-import com.yetk.for_student.navigation.destination.bellsNavigationRoute
-import com.yetk.for_student.navigation.destination.homeworkNavigationRoute
-import com.yetk.for_student.navigation.destination.navigateToBellSchedule
-import com.yetk.for_student.navigation.destination.navigateToHomework
-import com.yetk.for_student.navigation.destination.navigateToSchedule
-import com.yetk.for_student.navigation.destination.navigateToSubjects
-import com.yetk.for_student.navigation.destination.scheduleNavigationRoute
-import com.yetk.for_student.navigation.destination.subjectsNavigationRoute
+import com.yetk.for_student.ui.navigation.TopLevelDestination
+import com.yetk.for_student.ui.screen.bell_schedule.bellsNavigationRoute
+import com.yetk.for_student.ui.screen.homework.homeworkNavigationRoute
+import com.yetk.for_student.ui.screen.bell_schedule.navigateToBellSchedule
+import com.yetk.for_student.ui.screen.homework.navigateToHomework
+import com.yetk.for_student.ui.screen.schedule.navigateToSchedule
+import com.yetk.for_student.ui.screen.subjects.navigateToSubjects
+import com.yetk.for_student.ui.screen.schedule.scheduleNavigationRoute
+import com.yetk.for_student.ui.screen.subjects.subjectsNavigationRoute
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
