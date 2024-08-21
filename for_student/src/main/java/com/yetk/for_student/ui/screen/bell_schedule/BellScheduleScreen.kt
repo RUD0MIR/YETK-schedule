@@ -35,14 +35,13 @@ private const val TAG = "BellScheduleScreen"
 
 @Composable
 internal fun BellScheduleRoute(
-    viewModel: StudentViewModel = hiltViewModel(),
+    bellSchedule: Response<BellSchedule>
 ) {
     BellScheduleScreen(
-        viewModel.bellSchedule.value
+        bellSchedule
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BellScheduleScreen(
     bellSchedule: Response<BellSchedule>

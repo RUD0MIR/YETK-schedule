@@ -37,7 +37,7 @@ fun StudentNavHost(
             viewModel = homeworkViewModel,
             subjectNames = studentViewModel.getSubjectsNames()
         )
-        bellScheduleScreen()
+        bellScheduleScreen(studentViewModel)
         subjectsScreen()
 
 //        homeworkDetailScreen(

@@ -67,12 +67,14 @@ private const val TAG = "ScheduleScreen"
 
 @Composable
 internal fun ScheduleRoute(
-    viewModel: StudentViewModel,
+    collegeGroup: Response<CollegeGroup>,
+    isLowerWeek: Response<Boolean>,
+    bellSchedule: Response<BellSchedule>,
 ) {
     ScheduleScreen(
-        collegeGroup = viewModel.collegeGroup.collectAsStateWithLifecycle().value,
-        isLowerWeek = viewModel.isLowerWeek.collectAsStateWithLifecycle().value,
-        bellSchedule = viewModel.bellSchedule.collectAsStateWithLifecycle().value
+        collegeGroup = collegeGroup,
+        isLowerWeek = isLowerWeek,
+        bellSchedule = bellSchedule
     )
 }
 

@@ -1,5 +1,6 @@
 package com.yetk.for_student.ui.screen.schedule
 
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -16,6 +17,10 @@ fun NavGraphBuilder.scheduleScreen(studentViewModel: StudentViewModel) {
     composable(
         route = scheduleNavigationRoute,
     ) {
-        ScheduleRoute(studentViewModel)
+        ScheduleRoute(
+            collegeGroup = studentViewModel.collegeGroup.collectAsStateWithLifecycle().value,
+            isLowerWeek = studentViewModel.isLowerWeek.collectAsStateWithLifecycle().value,
+            bellSchedule = studentViewModel.bellSchedule.collectAsStateWithLifecycle().value
+        )
     }
 }
