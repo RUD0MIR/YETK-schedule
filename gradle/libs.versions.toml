@@ -27,6 +27,7 @@ googleServicesVersion = "4.4.0"
 tracingKtxVersion = "1.2.0"
 adaptiveNavigationSuiteVersion = "1.0.0-alpha07"
 material3-adaptiveVersion = "1.0.0-beta04"
+extJunitVersion = "1.2.1"
 
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPagerVersion" }
@@ -36,7 +37,7 @@ appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompatV
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
-androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "extJunitVersion" }
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeComposeVersion" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
@@ -63,6 +64,7 @@ junit = { module = "junit:junit", version.ref = "junitVersion" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePluginVersion" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutinesVersion" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
+coroutines-test = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesVersion"}
 material = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 compose-material3 = { module = "androidx.compose.material3:material3" }

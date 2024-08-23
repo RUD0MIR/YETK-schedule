@@ -1,11 +1,12 @@
 package com.yetk.for_student
 
+import com.yetk.for_student.domain.model.BellSchedule
 import com.yetk.for_student.domain.model.CollegeGroup
 import com.yetk.for_student.domain.model.Lesson
 import com.yetk.for_student.domain.model.Subject
 
 
-class TestData {
+object TestData {
     val collegeGroup1 = CollegeGroup(
         id = "6wBXWrOgataTaazTBhBn",
         login = "20kis-1",
@@ -92,6 +93,18 @@ class TestData {
                 name = "Физкультура",
                 teachers = listOf("Иванов И.И.")
             )
+        )
+    )
+
+    val bellSchedule = BellSchedule(
+        lessonDurationMin = 120,
+        lessonsTime = listOf(
+            "08:00 - 09:30",
+            "09:40 - 11:10",
+            "11:20 - 12:50",
+            "13:20 - 14:50",
+            "15:00 - 16:30",
+            "16:40 - 18:10"
         )
     )
 }

@@ -20,7 +20,7 @@ fun StudentNavHost(
     appState: StudentAppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
-    startDestination: String = scheduleNavigationRoute, //TODO authorizationNavigationRoute
+    startDestination: String = scheduleNavigationRoute, //authorizationNavigationRoute
     studentViewModel: StudentViewModel = hiltViewModel(),
     homeworkViewModel: HomeworkViewModel = hiltViewModel()
 ) {
@@ -39,11 +39,5 @@ fun StudentNavHost(
         )
         bellScheduleScreen(studentViewModel)
         subjectsScreen()
-
-//        homeworkDetailScreen(
-//            subjectsNames = studentViewModel.getSubjectsNames(),
-//            onNavigateUp = navController::popBackStack,
-//            homeworkViewModel
-//        )
     }
 }
