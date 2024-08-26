@@ -11,6 +11,4 @@ interface HomeworkRepository {
     suspend fun deleteHomework(homework: Homework)
 
     fun getAll(): Flow<List<Homework>>
-
-    fun getHomeworkById(id: Int): Flow<Homework>
 }

@@ -30,8 +30,4 @@ class DefaultHomeworkRepository @Inject constructor(
     override suspend fun updateHomework(homework: Homework) {
         dao.updateHomework(homework.toData())
     }
-
-    override fun getHomeworkById(id: Int): Flow<Homework> {
-        return dao.getHomeworkById(id).map { it.toDomain() }
-    }
 }

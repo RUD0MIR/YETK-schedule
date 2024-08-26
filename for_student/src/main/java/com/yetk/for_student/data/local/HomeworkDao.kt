@@ -23,7 +23,4 @@ interface HomeworkDao {
 
     @Query("SELECT * FROM homeworkentity")
     fun getAll(): Flow<List<HomeworkEntity>>
-
-    @Query("SELECT * FROM homeworkentity WHERE homeworkentity.id = :id")
-    fun getHomeworkById(id: Int): Flow<HomeworkEntity>
 }
