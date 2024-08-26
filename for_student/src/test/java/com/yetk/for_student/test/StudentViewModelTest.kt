@@ -2,8 +2,8 @@ package com.yetk.for_student.test
 
 import com.yetk.for_student.FakeCollegeGroupRepoImpl
 import com.yetk.for_student.MainDispatcherRule
-import com.yetk.for_student.common.Response
 import com.yetk.for_student.TestData
+import com.yetk.for_student.common.Response
 import com.yetk.for_student.ui.screen.StudentViewModel
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi

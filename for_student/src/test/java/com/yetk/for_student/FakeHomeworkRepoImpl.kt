@@ -17,8 +17,4 @@ class FakeHomeworkRepoImpl: HomeworkRepository {
     override fun getAll() = flow {
         emit(emptyList<Homework>())
     }
-
-    override fun getHomeworkById(id: Int) = flow {
-        emit(Homework(id = 0, content = "", subjectName = "", isVisible = false))
-    }
 }
