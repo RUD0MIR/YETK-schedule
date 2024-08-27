@@ -34,8 +34,7 @@ import com.yetk.for_student.ui.navigation.TopLevelDestination
 import com.yetk.ui.SwipeableSnackbarHost
 
 //TODO add support for different screen sizes
-//TODO add tests
-//TODO add some ui to show error on internet connection error
+//TODO add ui to show error on internet connection error
 @Composable
 fun StudentApp(
     appState: StudentAppState = rememberStudentAppState()

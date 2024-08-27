@@ -112,7 +112,13 @@ fun SubjectListItem(
                         }
                     }
                 }
-                YetkExpandToggle(Modifier.padding(top = 4.dp), expanded = expanded) {
+                YetkExpandToggle(
+                    Modifier.padding(top = 4.dp),
+                    expanded = expanded,
+                    contentDescription =
+                    if (expanded) stringResource(id = R.string.shrink_action)
+                    else stringResource(id = R.string.expand_action)
+                ) {
                     expanded = !expanded
                 }
             }

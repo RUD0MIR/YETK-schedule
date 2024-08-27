@@ -2,6 +2,7 @@ package com.yetk.for_student
 
 import com.yetk.for_student.domain.model.BellSchedule
 import com.yetk.for_student.domain.model.CollegeGroup
+import com.yetk.for_student.domain.model.Homework
 import com.yetk.for_student.domain.model.Lesson
 import com.yetk.for_student.domain.model.Subject
 
@@ -68,5 +69,11 @@ object TestData {
             "15:00 - 16:30",
             "16:40 - 18:10"
         )
+    )
+
+    val homeworks = listOf(
+        Homework(id = 0, content = "content1", subjectName = "name1", isVisible = true),
+        Homework(id = 1, content = "content2", subjectName = "name2", isVisible = true),
+        Homework(id = 2, content = "content3", subjectName = "name3", isVisible = true),
     )
 }
