@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,7 @@ import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
 import com.yetk.for_student.common.Const.CHECKBOX_ANIM_DURATION
 import com.yetk.for_student.common.DetailScreenType
+import com.yetk.for_student.common.Tags
 import com.yetk.for_student.domain.model.Homework
 import de.charlex.compose.RevealDirection
 import de.charlex.compose.RevealSwipe
@@ -124,6 +126,7 @@ internal fun HomeworkRoute(
 @Composable
 fun HomeworkScreen(
     homeworks: List<Homework>,
+    checkBoxAnimDuration: Long = CHECKBOX_ANIM_DURATION,
     onNavigateToEditScreen: (homeworkId: Int, homeworkContent: String, homeworkSubject: String) -> Unit,
     onHomeworkCheck: (homeworkId: Int) -> Unit,
     onHomeworkDelete: (homeworkId: Int) -> Unit,
@@ -159,7 +162,7 @@ fun HomeworkScreen(
                             homework,
                             onCheck = { id ->
                                 scope.launch {
-                                    delay(CHECKBOX_ANIM_DURATION)
+                                    delay(checkBoxAnimDuration)
                                     isVisible = false
 
                                     if (!onShowSnackbar(
@@ -219,7 +222,8 @@ fun HomeworkListItem(
 
     RevealSwipe(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .testTag(Tags.RevealSwipe(homework.id).tag),
         backgroundCardEndColor = MaterialTheme.colorScheme.primaryContainer,
         backgroundCardContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         directions = setOf(
@@ -227,7 +231,7 @@ fun HomeworkListItem(
         ),
         hiddenContentEnd = {
             Icon(
-                modifier = Modifier.padding(horizontal = 25.dp),
+                modifier = Modifier.padding(horizontal = 25.dp).testTag(Tags.DeleteAction(homework.id).tag),
                 imageVector = YetkIcon.Delete,
                 contentDescription = null,
             )
@@ -275,6 +279,7 @@ fun HomeworkListItem(
                             onCheck(homework.id)
                         }
                     },
+                    modifier = Modifier.testTag(Tags.CheckBox(homework.id).tag),
                     colors = CheckboxDefaults.colors(
                         checkedColor = MaterialTheme.colorScheme.secondary,
                     ),
@@ -291,12 +296,17 @@ private fun HomeworkScreenPreview() {
     YetkScheduleTheme(dynamicColor = false) {
         Surface(tonalElevation = 5.dp) {
             HomeworkScreen(
-                emptyList<Homework>(),
-                { _, _, _ -> },
-                {},
-                {},
-                {},
-                { _, _ -> false }
+                listOf(
+                    Homework(id = 0, content = "content1", subjectName = "name1", isVisible = true),
+                    Homework(id = 1, content = "content2", subjectName = "name2", isVisible = true),
+                    Homework(id = 2, content = "content3", subjectName = "name3", isVisible = true),
+                ),
+                checkBoxAnimDuration = 0,
+                onNavigateToEditScreen = { i: Int, s: String, s1: String -> },
+                onHomeworkCheck = {},
+                onHomeworkDelete = {},
+                onNavigateToAddScreen = {},
+                onShowSnackbar = { _, _ -> false },
             )
         }
     }

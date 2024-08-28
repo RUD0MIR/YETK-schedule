@@ -5,19 +5,19 @@
       <SelectionState runConfigName="Unnamed">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="subjectsDisplayedCorrectly()">
+      <SelectionState runConfigName="homeworkItemsDisplayedCorrectly()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="SubjectsScreenTest">
+      <SelectionState runConfigName="checkBoxWorks()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="bellScheduleDataDisplayed()">
+      <SelectionState runConfigName="HomeworkScreenTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ScheduleScreenTest">
+      <SelectionState runConfigName="checkBoxesWorks()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="homeworkItemsDisplayed()">
+      <SelectionState runConfigName="revealSwipeDeleteActionsWorks()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
