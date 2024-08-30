@@ -11,6 +11,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
 import com.yetk.for_student.TestData
+import com.yetk.for_student.WeekState
 import com.yetk.for_student.common.Response
 import com.yetk.for_student.ui.screen.schedule.ScheduleScreen
 import org.junit.Before
@@ -21,8 +22,18 @@ class ScheduleScreenTest {
     @get:Rule
     val rule = createComposeRule()
 
+    private lateinit var context: Context
+    private lateinit var upperWeekAction: String
+    private lateinit var lowerWeekAction: String
+    private lateinit var weekDays: Array<String>
+
     @Before
     fun setUp() {
+        context = InstrumentationRegistry.getInstrumentation().targetContext
+        upperWeekAction = context.resources.getString(R.string.to_upper_week_aciton)
+        lowerWeekAction = context.resources.getString(R.string.to_lower_week_action)
+        weekDays = context.resources.getStringArray(R.array.week_days)
+
         rule.setContent {
             YetkScheduleTheme {
                 ScheduleScreen(
@@ -47,67 +58,133 @@ class ScheduleScreenTest {
 
     @Test
     fun weekStateInformationDisplayed() {
-        val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
         val lowerWeekTitle = context.resources.getString(R.string.lower_week)
-
         rule.onNodeWithText(lowerWeekTitle).assertIsDisplayed()
     }
 
     @Test
     fun weekStatePreviewToggleSwitchesCorrectly() {
-        val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-        rule.onNodeWithContentDescription(context.resources.getString(R.string.to_upper_week_aciton))
+        rule.onNodeWithContentDescription(upperWeekAction)
             .assertIsDisplayed()
 
-        rule.onNodeWithContentDescription(context.resources.getString(R.string.to_upper_week_aciton))
+        rule.onNodeWithContentDescription(upperWeekAction)
             .performClick()
 
-        rule.onNodeWithContentDescription(context.resources.getString(R.string.to_lower_week_action))
+        rule.onNodeWithContentDescription(lowerWeekAction)
+            .assertIsDisplayed()
+
+        rule.onNodeWithContentDescription(lowerWeekAction)
+            .performClick()
+
+        rule.onNodeWithContentDescription(upperWeekAction)
             .assertIsDisplayed()
     }
 
     //list items tests
     @Test
-    fun lesson1DisplayedCorrectly() {
-        val lesson1 = TestData.collegeGroup.lessons[0]
-        val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    fun lessonsDisplayedCorrectly() {
+        val lessons = TestData.collegeGroup.lessons
 
-        rule.onNodeWithText(lesson1.subject).assertIsDisplayed()
+        rule.onNodeWithContentDescription(upperWeekAction).assertIsDisplayed()
 
-        rule.onNodeWithContentDescription(context.resources.getString(R.string.to_upper_week_aciton))
+        val mondayUpperWeekLessons = lessons.filter {
+            it.dayOfWeek == 0 && it.weekState == WeekState.UpperWeek.id
+        }
+        val mondayEveryWeekLessons = lessons.filter {
+            it.dayOfWeek == 0 && it.weekState == WeekState.EveryWeek.id
+        }
+        val mondayLowerWeekLessons = lessons.filter {
+            it.dayOfWeek == 0 && it.weekState == WeekState.LowerWeek.id
+        }
+
+        mondayLowerWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsDisplayed()
+        }
+
+        mondayEveryWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsDisplayed()
+        }
+
+        mondayUpperWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsNotDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsNotDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsNotDisplayed()
+        }
+
+        rule.onNodeWithContentDescription(upperWeekAction)
             .performClick()
 
-        rule.onNodeWithText(lesson1.subject).assertIsDisplayed()
+        mondayLowerWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsNotDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsNotDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsNotDisplayed()
+        }
 
-    }
+        mondayEveryWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsDisplayed()
+        }
 
-    @Test
-    fun lesson2DisplayedCorrectly() {
-        val lesson2 = TestData.collegeGroup.lessons[1]
-        val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+        mondayUpperWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsDisplayed()
+        }
 
-        rule.onNodeWithText(lesson2.subject).assertIsNotDisplayed()
+        rule.onNodeWithText(weekDays[1]).performClick()
 
-        rule.onNodeWithContentDescription(context.resources.getString(R.string.to_upper_week_aciton))
+        val tuesdayUpperWeekLessons = lessons.filter {
+            it.dayOfWeek == 1 && it.weekState == WeekState.UpperWeek.id
+        }
+        val tuesdayEveryWeekLessons = lessons.filter {
+            it.dayOfWeek == 1 && it.weekState == WeekState.EveryWeek.id
+        }
+        val tuesdayLowerWeekLessons = lessons.filter {
+            it.dayOfWeek == 1 && it.weekState == WeekState.LowerWeek.id
+        }
+
+        tuesdayLowerWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsNotDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsNotDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsNotDisplayed()
+        }
+
+        tuesdayEveryWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsDisplayed()
+        }
+
+        tuesdayUpperWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsDisplayed()
+        }
+
+        rule.onNodeWithContentDescription(context.resources.getString(R.string.to_lower_week_action))
             .performClick()
 
-        rule.onNodeWithText(lesson2.subject).assertIsDisplayed()
-    }
+        tuesdayLowerWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsDisplayed()
+        }
 
-    @Test
-    fun lesson3DisplayedCorrectly() {
-        val lesson3 = TestData.collegeGroup.lessons[2]
-        val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+        tuesdayEveryWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsDisplayed()
+        }
 
-        rule.onNodeWithText(lesson3.subject).assertIsNotDisplayed()
-
-        rule.onNodeWithText(context.resources.getStringArray(R.array.week_days)[1]).performClick()
-
-        rule.onNodeWithText(lesson3.subject).assertIsDisplayed()
-
-        rule.onNodeWithContentDescription(context.resources.getString(R.string.to_upper_week_aciton))
-            .performClick()
-
-        rule.onNodeWithText(lesson3.subject).assertIsNotDisplayed()
+        tuesdayUpperWeekLessons.forEach {
+            rule.onNodeWithText(it.subject).assertIsNotDisplayed()
+            rule.onNodeWithText(it.rooms[0]).assertIsNotDisplayed()
+            rule.onNodeWithText(it.teachers[0]).assertIsNotDisplayed()
+        }
     }
 }

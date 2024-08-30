@@ -18,7 +18,6 @@ import com.yetk.for_student.TestData
 import com.yetk.for_student.common.Tags
 import com.yetk.for_student.domain.model.Homework
 import com.yetk.for_student.ui.screen.homework.HomeworkScreen
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -70,6 +69,11 @@ class HomeworkScreenTest {
 
     @Test
     fun checkBoxesWorks() {
+        homeworks.forEach {
+            rule.onNodeWithText(it.content).assertIsDisplayed()
+            rule.onNodeWithText(it.subjectName).assertIsDisplayed()
+        }
+
         homeworks.reversed().forEach {
             rule.onNodeWithTag(Tags.CheckBox(it.id).tag).performClick()
         }
@@ -82,6 +86,11 @@ class HomeworkScreenTest {
 
     @Test
     fun revealSwipeDeleteActionsWorks() {
+        homeworks.forEach {
+            rule.onNodeWithText(it.content).assertIsDisplayed()
+            rule.onNodeWithText(it.subjectName).assertIsDisplayed()
+        }
+
         homeworks.reversed().forEach {
             rule.onAllNodesWithTag(Tags.RevealSwipe(it.id).tag).onLast()
                 .assertIsDisplayed()

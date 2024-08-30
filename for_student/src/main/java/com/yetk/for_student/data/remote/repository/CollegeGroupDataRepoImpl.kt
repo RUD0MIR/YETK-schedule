@@ -13,8 +13,6 @@ import javax.inject.Inject
 
 private const val TAG = "DefaultBellScheduleRepo"
 
-//TODO refactor messy implementation
-
 class CollegeGroupDataRepoImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : CollegeGroupDataRepository {

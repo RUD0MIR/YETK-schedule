@@ -7,16 +7,15 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onLast
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onSibling
-import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
 import com.yetk.for_student.TestData
 import com.yetk.for_student.common.Response
+import com.yetk.for_student.common.Tags
 import com.yetk.for_student.ui.screen.subjects.SubjectsScreen
 import org.junit.Before
 import org.junit.Rule
@@ -40,19 +39,19 @@ class SubjectsScreenTest {
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
         val subjects = TestData.collegeGroup.subjects
 
-        subjects.forEach {
-            rule.onNodeWithText(it.name).onSibling()
+        subjects.forEachIndexed { i, _ ->
+            rule.onNodeWithTag(Tags.ExpandToggle(i).tag)
                 .assert(hasContentDescription(context.getString(R.string.expand_action)))
                 .assertHasClickAction()
                 .assertIsDisplayed()
         }
 
-        subjects.forEach {
-            rule.onNodeWithText(it.name).onSibling().performClick()
+        subjects.forEachIndexed { i, _ ->
+            rule.onNodeWithTag(Tags.ExpandToggle(i).tag).performClick()
         }
 
-        subjects.forEach {
-            rule.onNodeWithText(it.name).onSiblings().onLast()
+        subjects.forEachIndexed { i, _ ->
+            rule.onNodeWithTag(Tags.ExpandToggle(i).tag)
                 .assert(hasContentDescription(context.getString(R.string.shrink_action)))
                 .assertHasClickAction()
                 .assertIsDisplayed()
@@ -67,8 +66,8 @@ class SubjectsScreenTest {
             rule.onNodeWithText(it.name).assertIsDisplayed()
         }
 
-        subjects.forEach {
-            rule.onNodeWithText(it.name).onSibling().performClick()
+        subjects.forEachIndexed { i, _ ->
+            rule.onNodeWithTag(Tags.ExpandToggle(i).tag).performClick()
         }
 
         subjects.forEach {
@@ -86,8 +85,8 @@ class SubjectsScreenTest {
             }
         }
 
-        subjects.forEach {
-            rule.onNodeWithText(it.name).onSibling().performClick()
+        subjects.forEachIndexed { i, _ ->
+            rule.onNodeWithTag(Tags.ExpandToggle(i).tag).performClick()
         }
 
         subjects.forEach { subject ->

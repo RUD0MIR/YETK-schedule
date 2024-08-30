@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ import com.yetk.designsystem.component.YetkExpandToggle
 import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
 import com.yetk.for_student.common.Response
+import com.yetk.for_student.common.Tags
 import com.yetk.for_student.domain.model.CollegeGroup
 import com.yetk.for_student.domain.model.Subject
 import com.yetk.for_student.ui.screen.StudentViewModel
@@ -63,7 +65,7 @@ fun SubjectsScreen(
                     .fillMaxSize()
             ) {
                 items(collegeGroupData.data.subjects.size) {
-                    SubjectListItem(collegeGroupData.data.subjects[it])
+                    SubjectListItem(collegeGroupData.data.subjects[it], it)
                 }
             }
         }
@@ -72,7 +74,8 @@ fun SubjectsScreen(
 
 @Composable
 fun SubjectListItem(
-    subject: Subject
+    subject: Subject,
+    index: Int = -1
 ) {
     var expanded by remember {
         mutableStateOf(false)
@@ -113,7 +116,9 @@ fun SubjectListItem(
                     }
                 }
                 YetkExpandToggle(
-                    Modifier.padding(top = 4.dp),
+                    Modifier
+                        .padding(top = 4.dp)
+                        .testTag(Tags.ExpandToggle(index).tag),
                     expanded = expanded,
                     contentDescription =
                     if (expanded) stringResource(id = R.string.shrink_action)
