@@ -76,4 +76,10 @@ object TestData {
         Homework(id = 1, content = "content2", subjectName = "name2", isVisible = true),
         Homework(id = 2, content = "content3", subjectName = "name3", isVisible = true),
     )
+
+    val subjectsNames = listOf(
+        "Английский язык",
+        "Физкультура",
+        "Информационные технологии"
+    )
 }

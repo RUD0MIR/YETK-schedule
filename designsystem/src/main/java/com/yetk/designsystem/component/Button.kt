@@ -17,7 +17,11 @@ import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.YetkScheduleTheme
 
 @Composable
-fun YetkFilledButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun YetkFilledButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
     Button(
         modifier = modifier,
         onClick = {

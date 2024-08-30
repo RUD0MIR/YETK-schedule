@@ -101,6 +101,10 @@ fun HomeworkDetailScreen(
         mutableStateOf(false)
     }
 
+    var autoCompleteExpanded by remember {
+        mutableStateOf(false)
+    }
+
     Scaffold(
         topBar = {
             YetkTopBar(
@@ -149,9 +153,13 @@ fun HomeworkDetailScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 AutoComplete(
-                    subjectsNames,
-                    subjectTfValue,
-                    stringResource(R.string.subject)
+                    items = subjectsNames,
+                    value = subjectTfValue,
+                    label = stringResource(R.string.subject),
+                    arrowIconContentDescription = if (autoCompleteExpanded) stringResource(id = R.string.shrink_action)
+                    else stringResource(R.string.expand_action),
+                    expanded = autoCompleteExpanded,
+                    onExpandedChange = {autoCompleteExpanded = it}
                 ) {
                     subjectTfValue = it
                 }
@@ -244,8 +252,8 @@ private fun HomeworkDetailPreview() {
                 onHomeworkCheck = {},
                 onHomeworkInsert = {},
                 onHomeworkDelete = {},
-                homeworkSubject = "",
-                homeworkContent = "",
+                homeworkSubject = "fdaf",
+                homeworkContent = "fadf",
                 checkCorrectInput = {_, _ -> false},
                 onHomeworkUpdate = {},
             )

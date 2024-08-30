@@ -34,14 +34,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import com.yetk.designsystem.R
 import com.yetk.designsystem.theme.YetkScheduleTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +48,8 @@ fun AutoComplete(
     items: List<String>,
     value: String,
     label: String = "",
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
     arrowIconContentDescription: String? = null,
     onValueChange: (String) -> Unit,
 ) {
@@ -60,10 +60,7 @@ fun AutoComplete(
     var size by remember {
         mutableStateOf(Size.Zero)
     }
-
-    var expanded by remember {
-        mutableStateOf(false)
-    }
+    
     val interactionSource = remember {
         MutableInteractionSource()
     }
@@ -76,7 +73,7 @@ fun AutoComplete(
                 interactionSource = interactionSource,
                 indication = null,
                 onClick = {
-                    expanded = false
+                    onExpandedChange(false)
                 }
             )
     ) {
@@ -94,7 +91,7 @@ fun AutoComplete(
                     label = { Text(label) },
                     onValueChange = {
                         onValueChange(it)
-                        expanded = true
+                        onExpandedChange(true)
                     },
                     colors = TextFieldDefaults.colors(
                         focusedIndicatorColor = MaterialTheme.colorScheme.primary,
@@ -107,7 +104,7 @@ fun AutoComplete(
                     ),
                     singleLine = true,
                     trailingIcon = {
-                        IconButton(onClick = { expanded = !expanded }) {
+                        IconButton(onClick = { onExpandedChange(!expanded) }) {
                             Icon(
                                 modifier = Modifier.size(24.dp),
                                 imageVector = Icons.Rounded.KeyboardArrowDown,
@@ -139,7 +136,7 @@ fun AutoComplete(
                             ) {
                                 CategoryItems(title = it) { itemName ->
                                     onValueChange(itemName)
-                                    expanded = false
+                                    onExpandedChange(false)
                                 }
                             }
                         } else {
@@ -148,7 +145,7 @@ fun AutoComplete(
                             ) {
                                 CategoryItems(title = it) { itemName ->
                                     onValueChange(itemName)
-                                    expanded = false
+                                    onExpandedChange(false)
                                 }
                             }
                         }
@@ -181,6 +178,14 @@ fun CategoryItems(
 @Composable
 private fun AutoCompletePreview() {
     YetkScheduleTheme(dynamicColor = false) {
-        AutoComplete(listOf("item", "item", "item", "item"), "", "lavel") {}
+        AutoComplete(
+            items = listOf("item1", "item2"),
+            value = "value",
+            label = "label",
+            expanded = true,
+            onExpandedChange = {},
+            arrowIconContentDescription = null,
+            onValueChange = {}
+        )
     }
 }
