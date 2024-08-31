@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,6 +39,7 @@ import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
 import com.yetk.for_student.common.Const.AUTO_INCREMENT_ID
 import com.yetk.for_student.common.DetailScreenType
+import com.yetk.for_student.common.Tags
 import com.yetk.for_student.domain.model.Homework
 
 //TODO call snackbar on tob bar actions
@@ -115,6 +117,7 @@ fun HomeworkDetailScreen(
             ) {
                 if (isEditScreen) {
                     Checkbox(
+                        modifier = Modifier.testTag(Tags.CheckBox(detailScreenType.id).tag),
                         checked = checkBoxValue,
                         onCheckedChange = {
                             onHomeworkCheck(detailScreenType.id)
@@ -246,14 +249,14 @@ private fun HomeworkDetailPreview() {
     YetkScheduleTheme(dynamicColor = false) {
         Surface(tonalElevation = 5.dp) {
             HomeworkDetailScreen(
-                detailScreenType = DetailScreenType.AddScreen,
+                detailScreenType = DetailScreenType.EditScreen(1),
                 subjectsNames = emptyList<String>(),
                 onNavigateUp = {},
                 onHomeworkCheck = {},
                 onHomeworkInsert = {},
                 onHomeworkDelete = {},
-                homeworkSubject = "fdaf",
-                homeworkContent = "fadf",
+                homeworkSubject = "",
+                homeworkContent = "",
                 checkCorrectInput = {_, _ -> false},
                 onHomeworkUpdate = {},
             )

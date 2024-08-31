@@ -5,13 +5,19 @@
       <SelectionState runConfigName="Unnamed">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="SubjectsScreenTest">
+      <SelectionState runConfigName="HomeworkAddScreenTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ScheduleScreenTest">
+      <SelectionState runConfigName="positiveButtonTest() (1)">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="HomeworkDatabaseTest">
+      <SelectionState runConfigName="HomeworkEditScreen">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="autoCompleteResizingCorrectly()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="autoCompleteChosenOptionDisplayed()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

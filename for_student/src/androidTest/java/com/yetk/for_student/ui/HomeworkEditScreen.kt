@@ -9,14 +9,18 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextReplacement
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yetk.designsystem.theme.YetkScheduleTheme
 import com.yetk.for_student.R
 import com.yetk.for_student.TestData
 import com.yetk.for_student.common.DetailScreenType
+import com.yetk.for_student.common.Tags
 import com.yetk.for_student.domain.model.Homework
 import com.yetk.for_student.ui.screen.homework.HomeworkDetailScreen
 import org.junit.Assert
@@ -24,8 +28,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class HomeworkAddScreenTest {
-
+class HomeworkEditScreen {
     @get:Rule
     val rule = createComposeRule()
 
@@ -33,6 +36,8 @@ class HomeworkAddScreenTest {
 
     private lateinit var homeworks: SnapshotStateList<Homework>
     private lateinit var navigateUpInvoked: MutableState<Boolean>
+    private val itemId = 0
+    private lateinit var currentHomework: Homework
 
     private val subjectsNames = TestData.subjectsNames
 
@@ -45,25 +50,51 @@ class HomeworkAddScreenTest {
                 SnapshotStateList()
             }
 
+            homeworks.addAll(TestData.homeworks)
+
+            currentHomework = homeworks[itemId]
+
             navigateUpInvoked = remember {
                 mutableStateOf(false)
             }
 
             YetkScheduleTheme {
                 HomeworkDetailScreen(
-                    homeworkSubject = "",
-                    homeworkContent = "",
-                    detailScreenType = DetailScreenType.AddScreen,
+                    homeworkSubject = homeworks[itemId].subjectName,
+                    homeworkContent = homeworks[itemId].content,
+                    detailScreenType = DetailScreenType.EditScreen(itemId),
                     subjectsNames = subjectsNames,
                     checkCorrectInput = { s: String, s1: String -> true },
                     onNavigateUp = { navigateUpInvoked.value = true },
-                    onHomeworkCheck = {},
-                    onHomeworkDelete = {},
-                    onHomeworkInsert = { homeworks.add(it) },
-                    onHomeworkUpdate = {}
+                    onHomeworkCheck = { homeworks.removeAt(it) },
+                    onHomeworkDelete = { homeworks.removeAt(it) },
+                    onHomeworkInsert = {},
+                    onHomeworkUpdate = { homeworks[it.id] = it }
                 )
             }
         }
+    }
+
+    @Test
+    fun checkBoxTest() {
+        val currentHomework = homeworks[itemId]
+
+        rule.onNodeWithTag(Tags.CheckBox(itemId).tag)
+            .assertIsDisplayed()
+            .performClick()
+
+        Assert.assertTrue(currentHomework !in homeworks)
+    }
+
+    @Test
+    fun deleteActionTest() {
+        val currentHomework = homeworks[itemId]
+
+        rule.onNodeWithContentDescription(context.getString(R.string.delete_homework_action))
+            .assertIsDisplayed()
+            .performClick()
+
+        Assert.assertTrue(currentHomework !in homeworks)
     }
 
     @Test
@@ -81,9 +112,8 @@ class HomeworkAddScreenTest {
             rule.onNodeWithText(it).assertIsNotDisplayed()
         }
 
-        rule.onNodeWithContentDescription(context.getString(R.string.expand_action))
-            .assertIsDisplayed()
-            .performClick()
+        rule.onNodeWithText(currentHomework.subjectName)
+            .performTextClearance()
 
         subjectsNames.forEach {
             rule.onNodeWithText(it).assertIsDisplayed()
@@ -101,10 +131,9 @@ class HomeworkAddScreenTest {
     @Test
     fun autoCompleteChosenOptionDisplayed() {
         val chosenSubject = subjectsNames.first()
-        rule.onNodeWithContentDescription(context.getString(R.string.expand_action))
-            .assertIsDisplayed()
-            .performClick()
 
+        rule.onNodeWithText(currentHomework.subjectName)
+            .performTextClearance()
 
         rule.onNodeWithText(chosenSubject)
             .assertIsDisplayed()
@@ -123,6 +152,10 @@ class HomeworkAddScreenTest {
     @Test
     fun autoCompleteTextInputTest() {
         val text = "some text"
+
+        rule.onNodeWithText(currentHomework.subjectName)
+            .performTextClearance()
+
         rule.onNodeWithText(context.getString(R.string.subject))
             .performTextInput(text)
 
@@ -133,6 +166,10 @@ class HomeworkAddScreenTest {
     @Test
     fun homeworkTextFieldTextInputTest() {
         val text = "other text"
+
+        rule.onNodeWithText(currentHomework.content)
+            .performTextClearance()
+
         rule.onNodeWithText(context.getString(R.string.homework))
             .performTextInput(text)
 
@@ -142,26 +179,26 @@ class HomeworkAddScreenTest {
 
     @Test
     fun positiveButtonTest() {
-        val subjectName = "Math"
-        val content = "some content"
+        val subjectName = "new name"
+        val content = "new content"
 
-        rule.onNodeWithText(context.getString(R.string.add_action))
+        rule.onNodeWithText(context.getString(R.string.save_action))
             .assertIsDisplayed()
 
-        rule.onNodeWithText(context.getString(R.string.subject))
-            .performTextInput(subjectName)
+        rule.onNodeWithText(homeworks[itemId].subjectName)
+            .performTextReplacement(subjectName)
 
-        rule.onNodeWithText(context.getString(R.string.homework))
-            .performTextInput(content)
+        rule.onNodeWithText(homeworks[itemId].content)
+            .performTextReplacement(content)
 
-        rule.onNodeWithText(context.getString(R.string.add_action))
+        rule.onNodeWithText(context.getString(R.string.save_action))
             .performClick()
 
-        val insertedHomework = homeworks.last()
+        val updatedHomework = homeworks[itemId]
 
         Assert.assertTrue(
-            "Homework insert is not invoked",
-            insertedHomework.subjectName == subjectName && insertedHomework.content == content
+            "Homework is not updated",
+            updatedHomework.subjectName == subjectName && updatedHomework.content == content
         )
     }
 
