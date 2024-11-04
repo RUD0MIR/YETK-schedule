@@ -5,14 +5,7 @@ buildscript {
         gradlePluginPortal()
         google()
     }
-
-    dependencies {
-        classpath(libs.gradle)
-        classpath(libs.kotlin.gradle.plugin)
-        classpath(libs.hilt.android.gradle.plugin)
-    }
 }
-
 
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -20,4 +13,16 @@ plugins {
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.google.services) apply false
+    alias(libs.plugins.ktlint) apply true
+    alias(libs.plugins.hilt.gradle) apply false
+}
+
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    ktlint {
+        debug = false
+        android = true
+        outputToConsole = true
+        outputColorName = "RED"
+    }
 }

@@ -41,7 +41,7 @@ fun YetkTopBar(
                 )
             },
             navigationIcon = {
-                if(navigationIcon != null)  {
+                if (navigationIcon != null) {
                     IconButton(onClick = onNavigationClick) {
                         Icon(
                             imageVector = navigationIcon,

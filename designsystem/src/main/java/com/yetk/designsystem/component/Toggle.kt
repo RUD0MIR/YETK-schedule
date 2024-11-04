@@ -36,13 +36,13 @@ fun LowerUpperWeekToggle(
             Icon(
                 modifier = Modifier.size(32.dp),
                 painter = painterResource(id = YetkIcon.ToLowerWeek),
-                contentDescription = contentDescription,
+                contentDescription = contentDescription
             )
         } else {
             Icon(
                 modifier = Modifier.size(32.dp),
                 painter = painterResource(id = YetkIcon.ToUpperWeek),
-                contentDescription = contentDescription,
+                contentDescription = contentDescription
             )
         }
     }
@@ -60,7 +60,11 @@ fun YetkExpandToggle(
         onClick = { onClick() }
     ) {
         Icon(
-            imageVector = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+            imageVector = if (expanded) {
+                Icons.Filled.KeyboardArrowUp
+            } else {
+                Icons.Filled.KeyboardArrowDown
+            },
             contentDescription = contentDescription
         )
     }
@@ -79,7 +83,6 @@ private fun DividerPreview() {
                 LowerUpperWeekToggle(modifier = Modifier, isLowerWeek = isLowerWeek) {
                     isLowerWeek = !isLowerWeek
                 }
-
 
                 var expanded by remember {
                     mutableStateOf(true)

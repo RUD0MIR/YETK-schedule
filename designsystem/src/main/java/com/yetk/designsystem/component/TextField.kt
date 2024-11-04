@@ -53,15 +53,16 @@ fun YetkTextField(
         isError = isError,
         onValueChange = { onTextChange(it) },
         singleLine = true,
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+        colors =
+        TextFieldDefaults.colors(
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary
         ),
         supportingText = {
             Text(text = supportingText)
         },
         placeholder = {
             Text(text = placeholderText, fontWeight = FontWeight.Medium)
-        },
+        }
     )
 }
 
@@ -81,32 +82,40 @@ fun YetkPasswordField(
         value = text,
         isError = isError,
         onValueChange = { onTextChange(it) },
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+        colors =
+        TextFieldDefaults.colors(
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary
         ),
         supportingText = {
             Text(text = supportingText)
         },
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Done,
+        keyboardOptions =
+        KeyboardOptions(
+            imeAction = ImeAction.Done
         ),
         singleLine = true,
         placeholder = {
             Text(text = placeholderText, fontWeight = FontWeight.Medium)
         },
         trailingIcon = {
-            val icon = if (passwordVisible)
-                YetkIcon.VisibilityOff
-            else YetkIcon.Visibility
+            val icon =
+                if (passwordVisible) {
+                    YetkIcon.VisibilityOff
+                } else {
+                    YetkIcon.Visibility
+                }
 
-            IconButton(onClick = onIconClick){
+            IconButton(onClick = onIconClick) {
                 Icon(imageVector = icon, showIconContentDescription)
             }
         },
-        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+        visualTransformation = if (passwordVisible) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
+        }
     )
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -117,17 +126,19 @@ fun YetkAutocompleteTextField(
     dropDownExpanded: Boolean,
     dropDownMenuItems: List<String>,
     onValueChange: (TextFieldValue) -> Unit,
-    onDismissRequest: () -> Unit,
+    onDismissRequest: () -> Unit
 ) {
     Box(modifier) {
         TextField(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 16.dp)
                 .onFocusChanged { focusState ->
-                    if (!focusState.isFocused)
+                    if (!focusState.isFocused) {
                         onDismissRequest()
+                    }
                 },
             value = value,
             onValueChange = { onValueChange(it) },
@@ -138,17 +149,20 @@ fun YetkAutocompleteTextField(
                     fontWeight = FontWeight.Normal
                 )
             },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
+            keyboardOptions =
+            KeyboardOptions(
+                imeAction = ImeAction.Next
             ),
-            colors = TextFieldDefaults.colors(
+            colors =
+            TextFieldDefaults.colors(
                 focusedIndicatorColor = MaterialTheme.colorScheme.primary
-            ),
+            )
         )
 
         DropdownMenu(
             expanded = dropDownExpanded,
-            properties = PopupProperties(
+            properties =
+            PopupProperties(
                 focusable = false,
                 dismissOnBackPress = true,
                 dismissOnClickOutside = true
@@ -175,7 +189,12 @@ fun YetkAutocompleteTextField(
 }
 
 @Composable
-fun YetkMultilineTextField(modifier: Modifier = Modifier, value: String, placeholderText: String = "", onValueChange: (String) -> Unit) {
+fun YetkMultilineTextField(
+    modifier: Modifier = Modifier,
+    value: String,
+    placeholderText: String = "",
+    onValueChange: (String) -> Unit
+) {
     OutlinedTextField(
         modifier = modifier,
         value = value,
@@ -185,11 +204,12 @@ fun YetkMultilineTextField(modifier: Modifier = Modifier, value: String, placeho
                 text = placeholderText
             )
         },
-        colors = TextFieldDefaults.colors(
+        colors =
+        TextFieldDefaults.colors(
             focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             cursorColor = MaterialTheme.colorScheme.primary,
-            focusedLabelColor = MaterialTheme.colorScheme.primary,
-        ),
+            focusedLabelColor = MaterialTheme.colorScheme.primary
+        )
     )
 }
 
@@ -221,9 +241,8 @@ private fun TextFieldPreview() {
                     supportingText = "supportingText",
                     passwordVisible = passwordVisible,
                     onTextChange = {},
-                    onIconClick = {passwordVisible = !passwordVisible}
+                    onIconClick = { passwordVisible = !passwordVisible }
                 )
-
             }
         }
     }

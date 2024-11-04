@@ -17,17 +17,14 @@ import com.yetk.designsystem.icon.YetkIcon
 import com.yetk.designsystem.theme.YetkScheduleTheme
 
 @Composable
-fun YetkFilledButton(
-    text: String,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
+fun YetkFilledButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
         modifier = modifier,
         onClick = {
             onClick()
         },
-        colors = ButtonDefaults.buttonColors(
+        colors =
+        ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         )
@@ -75,8 +72,8 @@ private fun ButtonsPreview() {
     YetkScheduleTheme(dynamicColor = false) {
         Surface {
             Column {
-                YetkFilledButton("text"){}
-                YetkOutlinedButton("text"){}
+                YetkFilledButton("text") {}
+                YetkOutlinedButton("text") {}
                 YetkAddButton {}
             }
         }

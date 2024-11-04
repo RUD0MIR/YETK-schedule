@@ -23,13 +23,14 @@ import com.yetk.designsystem.theme.YetkScheduleTheme
 fun YetkCheckBox(value: Boolean, text: String = "", onValueChange: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(
             checked = value,
             onCheckedChange = { onValueChange() },
-            colors = CheckboxDefaults.colors(
-                checkedColor = MaterialTheme.colorScheme.primary,
+            colors =
+            CheckboxDefaults.colors(
+                checkedColor = MaterialTheme.colorScheme.primary
             )
         )
 
@@ -50,7 +51,7 @@ private fun CheckBoxPreview() {
                 var value by remember {
                     mutableStateOf(true)
                 }
-                YetkCheckBox(value = value) { value = !value}
+                YetkCheckBox(value = value) { value = !value }
             }
         }
     }

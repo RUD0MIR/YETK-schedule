@@ -56,6 +56,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso.core)
 
-    //Reveal swipe
+    // Reveal swipe
     implementation(libs.revealswipe)
 }

@@ -19,6 +19,7 @@ fun YetkLogoImage(modifier: Modifier = Modifier) {
         contentDescription = "УЭТК СГУ"
     )
 }
+
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable

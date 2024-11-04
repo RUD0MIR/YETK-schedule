@@ -31,7 +31,7 @@ fun RowScope.YetkNavigationBarItem(
     selectedIcon: @Composable () -> Unit = icon,
     enabled: Boolean = true,
     label: @Composable (() -> Unit)? = null,
-    alwaysShowLabel: Boolean = true,
+    alwaysShowLabel: Boolean = true
 ) {
     NavigationBarItem(
         selected = selected,
@@ -41,7 +41,8 @@ fun RowScope.YetkNavigationBarItem(
         enabled = enabled,
         label = label,
         alwaysShowLabel = alwaysShowLabel,
-        colors = NavigationBarItemDefaults.colors(
+        colors =
+        NavigationBarItemDefaults.colors(
             selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
             indicatorColor = MaterialTheme.colorScheme.primaryContainer
         )
@@ -49,71 +50,68 @@ fun RowScope.YetkNavigationBarItem(
 }
 
 @Composable
-fun YetkNavigationBar(
-    modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit,
-) {
+fun YetkNavigationBar(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
     NavigationBar(
         modifier = modifier,
         tonalElevation = 0.dp,
-        content = content,
+        content = content
     )
 }
 
 private enum class PreviewTopLevelDestination(
     val icon: ImageVector,
-    val text: String,
+    val text: String
 ) {
     SCHEDULE(
         icon = YetkIcon.Schedule,
-        text = "Расписание",
+        text = "Расписание"
     ),
     HOMEWORK(
         icon = YetkIcon.Homework,
-        text = "Домашнее задание",
+        text = "Домашнее задание"
     ),
     BELLS(
         icon = YetkIcon.BellSchedule,
-        text = "Расписание звонков",
+        text = "Расписание звонков"
     ),
     SUBJECTS(
         icon = YetkIcon.Subjects,
-        text = "Предметы",
-    ),
+        text = "Предметы"
+    )
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun DividerPreview() {
-    val destinations = listOf(
-        PreviewTopLevelDestination.SCHEDULE,
-        PreviewTopLevelDestination.HOMEWORK,
-        PreviewTopLevelDestination.BELLS,
-        PreviewTopLevelDestination.SUBJECTS,
-    )
+    val destinations =
+        listOf(
+            PreviewTopLevelDestination.SCHEDULE,
+            PreviewTopLevelDestination.HOMEWORK,
+            PreviewTopLevelDestination.BELLS,
+            PreviewTopLevelDestination.SUBJECTS
+        )
 
     YetkScheduleTheme(dynamicColor = false) {
         Surface {
             Column {
-                YetkNavigationBar(
-                ) {
+                YetkNavigationBar {
                     destinations.forEach { destination ->
                         var selected by remember {
                             mutableStateOf(false)
                         }
                         YetkNavigationBarItem(
                             selected = selected,
-                            onClick = { selected = !selected},
+                            onClick = { selected = !selected },
                             icon = {
                                 Icon(
                                     modifier = Modifier.size(28.dp),
                                     imageVector = destination.icon,
-                                    contentDescription = null,
+                                    contentDescription = null
                                 )
                             },
                             label = {},
-                            modifier = Modifier,
+                            modifier = Modifier
                         )
                     }
                 }

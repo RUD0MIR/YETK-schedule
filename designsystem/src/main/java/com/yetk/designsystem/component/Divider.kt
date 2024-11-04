@@ -15,10 +15,11 @@ import com.yetk.designsystem.theme.YetkScheduleTheme
 @Composable
 fun YetkDivider() {
     Divider(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .padding(start = 16.dp),
-        thickness = 1.dp,
+        thickness = 1.dp
     )
 }
 

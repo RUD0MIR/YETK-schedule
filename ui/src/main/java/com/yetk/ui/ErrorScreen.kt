@@ -28,7 +28,7 @@ fun ErrorScreen(modifier: Modifier = Modifier, message: String) {
         ) {
             Icon(
                 imageVector = Icons.Filled.Warning,
-                contentDescription = null,
+                contentDescription = null
             )
             Text(
                 modifier = Modifier.width(250.dp),

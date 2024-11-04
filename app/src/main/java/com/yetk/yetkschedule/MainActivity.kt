@@ -8,10 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yetk.designsystem.theme.YetkScheduleTheme
-import com.yetk.for_student.StudentApp
+import com.yetk.forstudent.StudentApp
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "MainActivity"
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

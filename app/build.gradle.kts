@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.google.services)
-    id ("dagger.hilt.android.plugin")
+    alias(libs.plugins.hilt.gradle)
 }
 
 android {
@@ -46,6 +46,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -63,11 +64,11 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
 
-    implementation(projects.forStudent)
+    implementation(projects.forstudent)
     implementation(projects.designsystem)
     implementation(projects.ui)
 
-    //Test & Debug
+    // Test & Debug
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso.core)
@@ -76,10 +77,9 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
 
-    //Dagger - Hilt
+    // Dagger - Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    //Hilt Navigation Compose
     implementation(libs.hilt.navigation.compose)
 
     // Room
@@ -87,17 +87,17 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
-    //Compose navigation
+    // Compose navigation
     implementation(libs.compose.navigation)
 
-    //Pager
+    // Pager
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
 
-    //Swipe actions
+    // Swipe actions
     implementation(libs.swipe)
 
-    //firebase
+    // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
 }

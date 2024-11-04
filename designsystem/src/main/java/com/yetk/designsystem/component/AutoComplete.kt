@@ -51,7 +51,7 @@ fun AutoComplete(
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
     arrowIconContentDescription: String? = null,
-    onValueChange: (String) -> Unit,
+    onValueChange: (String) -> Unit
 ) {
     val height by remember {
         mutableStateOf(55.dp)
@@ -60,14 +60,16 @@ fun AutoComplete(
     var size by remember {
         mutableStateOf(Size.Zero)
     }
-    
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
+
+    val interactionSource =
+        remember {
+            MutableInteractionSource()
+        }
 
     // Category Field
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .clickable(
                 interactionSource = interactionSource,
@@ -78,10 +80,10 @@ fun AutoComplete(
             )
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-
             Row(modifier = Modifier.fillMaxWidth()) {
                 TextField(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .height(height)
                         .onGloballyPositioned { coordinates ->
@@ -93,12 +95,14 @@ fun AutoComplete(
                         onValueChange(it)
                         onExpandedChange(true)
                     },
-                    colors = TextFieldDefaults.colors(
+                    colors =
+                    TextFieldDefaults.colors(
                         focusedIndicatorColor = MaterialTheme.colorScheme.primary,
                         cursorColor = MaterialTheme.colorScheme.primary,
-                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary
                     ),
-                    keyboardOptions = KeyboardOptions(
+                    keyboardOptions =
+                    KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
                     ),
@@ -117,15 +121,15 @@ fun AutoComplete(
 
             AnimatedVisibility(visible = expanded) {
                 Card(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .padding(horizontal = 5.dp)
                         .width(size.width.dp),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     LazyColumn(
-                        modifier = Modifier.heightIn(max = 150.dp),
+                        modifier = Modifier.heightIn(max = 150.dp)
                     ) {
-
                         if (value.isNotEmpty()) {
                             items(
                                 items.filter {
@@ -157,12 +161,10 @@ fun AutoComplete(
 }
 
 @Composable
-fun CategoryItems(
-    title: String,
-    onSelect: (String) -> Unit
-) {
+fun CategoryItems(title: String, onSelect: (String) -> Unit) {
     Row(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .clickable {
                 onSelect(title)
